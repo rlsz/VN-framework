@@ -1,0 +1,15 @@
+.scroll {
+  flex: 1 1 0px;
+  display: flex;
+  flex-direction: column;
+  //overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-width: 100%;
+  > * {
+    flex: 0 0 auto;
+  }
+}
+.mat-dialog-container .scroll {
+  flex-basis: auto;
+}

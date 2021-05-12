@@ -1,0 +1,168 @@
+@ns-form: app-form;
+
+input.@{ns-form}, textarea.@{ns-form} {
+  font-size: 14px;
+  line-height: 22px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #323335;
+  height: 36px;
+  background: #EBEDF3;
+
+  align-self: stretch;
+  flex: 1 1 auto;
+  border-radius: 4px;
+  border: 1px solid #E9ECEE;
+  padding: 0 16px;
+
+  &:focus {
+    outline-offset: 0px;
+    //border: none;
+    outline: 1px solid #3667D4;
+    //& + label {
+    //  color: red;
+    //}
+  }
+  &::-ms-clear {
+    display: none; // capability issue for ie 11, hide default clear icon
+  }
+}
+
+textarea.@{ns-form} {
+  height: auto;
+  min-height: 134px;
+  padding-top: 13px;
+  padding-bottom: 13px;
+}
+
+button.@{ns-form} {
+  height: 36px;
+  background: #3667D4;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  padding: 0 10px;
+
+  font-size: 14px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #FFFFFF;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &[disabled] {
+    cursor: not-allowed;
+    opacity: 0.3;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &.cancel {
+    border-radius: 4px;
+    border: 1px solid #EAEAEA;
+    background-color: unset;
+    color: #323335;
+  }
+}
+label.@{ns-form} {
+  font-size: 14px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #7C7F87;
+  margin-right: 4px;
+
+  display: inline-flex;
+  align-items: center;
+}
+
+mat-select.mat-select {
+  background: #FFFFFF;
+  border-radius: 2px;
+  border: 1px solid #EBEDF3;
+  height: 36px;
+  width: auto;
+
+  font-size: 14px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  line-height: 20px;
+
+  .mat-select-value {
+    color: #7C7F87;
+    padding: 8px 0 8px 12px;
+    //max-width: unset; // capability issue for ie 11, unsupported value 'unset'
+    //width: unset; // capability issue for ie 11, unsupported value 'unset'
+    max-width: none;
+    width: auto;
+  }
+  .mat-select-arrow {
+    margin: 0 7px;
+  }
+  &.ellipse {
+    width: 100px;
+    .mat-select-value {
+      max-width: 0;
+    }
+  }
+}
+
+mat-form-field mat-select {
+  background: inherit;
+  border: unset;
+  font: inherit;
+  line-height: inherit;
+
+  .mat-select-value {
+    color: rgba(0, 0, 0, .87);
+    padding: unset;
+  }
+}
+
+
+
+app-form-field label {
+  color: #323335;
+  margin-right: 0px;
+  margin-left: 16px;
+  flex: 0 0 auto;
+}
+
+mat-dialog-container {
+  form {
+    display: flex;
+    flex-direction: column;
+    padding: 0 40px;
+
+    > * {
+      margin-bottom: 16px;
+    }
+  }
+
+  button {
+    height: 48px;
+  }
+
+  input:not([type=checkbox]):not(.mat-input-element), textarea, mat-select.mat-select {
+    height: 48px;
+    background: inherit;
+  }
+
+  &.mat-dialog-container mat-select.mat-select {
+    display: inline-flex;
+    align-items: center;
+
+    > .mat-select-trigger {
+      flex: 1 1 auto;
+    }
+  }
+
+  app-form-field {
+    background: #F6F7FA;
+  }
+
+}
+

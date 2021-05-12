@@ -1,0 +1,126 @@
+@keyframes log-slide-in-right {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+@keyframes log-slide-in-bottom {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes log-fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes log-slide-down-right {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+@keyframes log-slide-down-bottom {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.app-log-messages {
+  max-height: calc(100% - 2.25rem);
+  overflow: auto;
+  position: fixed;
+  border-radius: 0.5rem;
+  z-index: 9999;
+  display: flex;
+  > * ~ * {
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+  }
+  .message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    > div {
+      //background:rgba(245,247,249,1);
+      //padding: 0.25rem 0.5rem;
+      display: flex;
+      align-items: center;
+
+      background:rgba(0,0,0,1);
+      border-radius:0.5rem;
+      opacity:0.8;
+      font-size:0.94rem;
+      color:rgba(255,255,255,1);
+      line-height:1.31rem;
+      padding: 0.69rem 1rem;
+    }
+    &.error {
+      color: #b34b74;
+      .disappear {
+        animation-delay: 6s;
+      }
+    }
+    &.success{
+      > div:before{
+        content: '';
+        flex: 0 0 auto;
+        width: 1rem;
+        height: 1rem;
+        background: url("../../../assets/public/toast_done_icon.png") center no-repeat;
+        margin: 0 0.44rem;
+      }
+    }
+  }
+
+  .disappear {
+    animation: 1s 3s log-fade-out;
+    animation-fill-mode: forwards;
+  }
+
+  &.right{
+    right: 1rem;
+    top: 1rem;
+    flex-direction: column;
+    align-items: flex-end;
+    .slide-in {
+      animation: 1s log-slide-in-right;
+    }
+
+    .animate-down {
+      animation: 1s log-slide-down-right;
+    }
+  }
+  &.bottom {
+    bottom: 3.56rem;
+    right: 50%;
+    transform: translateX(50%);
+    align-items: center;
+    flex-direction: column-reverse;
+    .slide-in {
+      animation: 1s log-slide-in-bottom;
+    }
+    .animate-down {
+      animation: 1s log-slide-down-bottom;
+    }
+  }
+}

@@ -1,0 +1,245 @@
+i {
+  cursor: pointer;
+
+  &.close {
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+    display: inline-flex;
+    justify-content: center;
+    align-self: center;
+    position: relative;
+
+    &:before, &:after {
+      content: '';
+      background-color: #2c3e50;
+      width: 1px;
+      height: 100%;
+      position: absolute;
+    }
+
+    &:before {
+      transform: rotate(45deg);
+    }
+
+    &:after {
+      transform: rotate(-45deg);
+    }
+  }
+
+  &.close-tiny {
+    width: 0.38rem;
+    height: 0.38rem;
+    padding: 0.1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-self: center;
+
+    &:before, &:after {
+      content: '';
+      background-color: #2c3e50;
+      width: 0.05rem;
+    }
+
+    &:before {
+      transform: translateX(0.05rem) rotate(45deg);
+    }
+
+    &:after {
+      transform: rotate(-45deg);
+    }
+  }
+
+
+  &.no-more {
+    padding: 12px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1 1 auto;
+
+    opacity: 0.3;
+    font-size: 14px;
+    line-height: 20px;
+
+    &:empty:after {
+      content: '下面没有了~';
+    }
+  }
+
+  &.arrow {
+    display: inline-flex;
+    align-items: center;
+    &:after {
+      cursor: pointer;
+      content: "";
+      margin-left: 8px;
+      margin-right: 8px;
+    }
+
+    &.solid {
+      &:after {
+        border-width: 5px 8px;
+        border-style: solid;
+        border-color: transparent;
+        border-left-color: gray;
+      }
+      &.down:after {
+        transform: rotate(90deg) translateX(4px);
+      }
+
+      &.up:after {
+        transform: rotate(-90deg) translateX(4px);
+      }
+
+      &.right:after {
+        transform: rotate(0deg) translateX(4px);
+      }
+
+      &.left:after {
+        transform: rotate(180deg) translateX(4px);
+      }
+    }
+    &:not(.solid) {
+      &:after {
+        border: solid gray;
+        border-width: 0 1px 1px 0;
+        padding: 2px;
+      }
+
+      &.down:after {
+        transform: rotate(45deg) translateY(-2px);
+      }
+
+      &.up:after {
+        transform: rotate(-135deg) translateY(-2px);
+      }
+
+      &.right:after {
+        transform: rotate(-45deg);
+      }
+
+      &.left:after {
+        transform: rotate(135deg);
+      }
+    }
+  }
+
+  &.info{
+    width: 1.5rem;
+    height: 1.5rem;
+    font-style: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0.125rem solid rgba(255, 165, 36, 1);
+    border-radius: 50%;
+    &::after{
+      content: '!';
+    }
+  }
+  &.empty {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    margin: auto;
+
+    font-size: 16px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: #7C7F87;
+    line-height: 26px;
+    &:before {
+      content: '';
+      width: 138px;
+      height: 105px;
+      background: url("../../assets/public/empty_icon.png") center/cover no-repeat;
+    }
+    &:empty:after {
+      content: '暂无内容';
+      //transform: translateY(100%);
+    }
+  }
+  &.no-search {
+    width: 200px;
+    height: 200px;
+    background: url("../../assets/public/no_search.png") center/cover no-repeat;
+    position: relative;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    align-self: center;
+    margin: auto;
+
+    font-size: 14px;
+    color: rgba(155, 155, 155, 1);
+    line-height: 20px;
+    padding-bottom: 9px;
+    &:empty:after {
+      content: '暂无搜索结果';
+    }
+  }
+  &.search-btn {
+    width: 72px;
+    height: 36px;
+    background: #3667D4;
+    border-radius: 4px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    &::after {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      content: "";
+      background: url("../../assets/public/search_icon.png") center/contain no-repeat;
+    }
+  }
+  &.minus-circle {
+    width: 20px;
+    height: 20px;
+    background: url('../../assets/public/icon_minus-circle.png') center/contain no-repeat;
+    cursor: pointer;
+  }
+
+  &.plus-circle {
+    width: 20px;
+    height: 20px;
+    background: url('../../assets/public/icon_plus-circle.png') center/contain no-repeat;
+    cursor: pointer;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

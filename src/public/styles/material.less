@@ -1,0 +1,47 @@
+//.cdk-overlay-pane {
+//  flex-direction: column;
+//  padding: 20px;
+//  .mat-dialog-container {
+//    padding: 0;
+//    border-radius: 8px;
+//  }
+//}
+.cdk-global-overlay-wrapper {
+  padding: 20px 50px;
+  .cdk-overlay-pane {
+    flex-direction: column;
+    .mat-dialog-container {
+      padding: 0;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+      .transparent {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        overflow: hidden;
+      }
+    }
+  }
+}
+.mat-dialog-container > * {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+
+/* IE10+ CSS styles go here
+ * reference: https://philipnewcomer.net/2014/04/target-internet-explorer-10-11-css/
+ */
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  .cdk-global-overlay-wrapper {
+    .cdk-overlay-pane {
+      max-width: 99.9%;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+  }
+}

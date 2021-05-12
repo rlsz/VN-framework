@@ -1,0 +1,45 @@
+
+.van-search {
+  background: inherit;
+  padding: 12px;
+  .van-search__content {
+    height: 40px;
+    opacity: 1;
+    background: #ffffff;
+    border-radius: 8px;
+    padding-right: 12px;
+    .van-cell {
+      align-items: center;
+      padding: 0;
+      .van-field__body input {
+        border: none;
+        padding: 0px;
+      }
+    }
+  }
+}
+
+.van-cell.van-field {
+  background: inherit;
+  padding: 1px 20px 20px;
+  .van-field__body input {
+    border-radius: 8px;
+    background: white;
+    height: 50px;
+  }
+  &:after {
+    display: none;
+  }
+}
+
+.van-toast__text {
+  word-break: break-all;
+}
+
+.dialog-root {
+  .van-overlay {
+    &.transparent ~ .van-popup {
+      background: inherit;
+    }
+  }
+}

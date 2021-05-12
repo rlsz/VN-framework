@@ -1,0 +1,86 @@
+i.loading {
+  &::after{
+    content: '加载中...';
+    animation: loading 2s infinite;
+  }
+}
+
+.v-loading-frame {
+  .v-loading-target {
+    pointer-events: none !important;
+  }
+  &.v-loading-frame-overt .v-loading-target {
+    &:before,&:after {
+      position: absolute;
+      left: 1px;
+      right: 1px;
+      top: 1px;
+      bottom: 1px;
+      content: '';
+    }
+    &::before {
+      background: rgba(0,0,0,0.3);
+    }
+    &::after{
+      background: url("../../assets/public/table-loading.gif") center/auto no-repeat;
+    }
+  }
+}
+.v-loading-independence {
+  pointer-events: none !important;
+  &:before,&:after {
+    position: absolute;
+    left: 1px;
+    right: 1px;
+    top: 1px;
+    bottom: 1px;
+    content: '';
+  }
+  &::before {
+    background: rgba(0,0,0,0.3);
+  }
+  &::after{
+    background: url("../../assets/public/table-loading.gif") center/auto no-repeat;
+  }
+}
+
+i.loading-general {
+  display: inline-block;
+  width: 31px;
+  height: 31px;
+  background: url("../../assets/public/table-loading.gif") center/contain no-repeat;
+}
+
+.loading-container{
+  padding: 32px 16px;
+  flex: 1 1 auto;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  background-color: rgba(255,255,255,0.8);
+  border-radius: 4px;
+}
+.loading-anchor {
+  position: relative;
+  .loading-container{
+    position: absolute;
+    z-index: 1001;
+    margin: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+}
+
+@keyframes loading {
+  0% {
+    content: '加载中.';
+  }
+  50% {
+    content: '加载中..';
+  }
+  100% {
+    content: '加载中...';
+  }
+}

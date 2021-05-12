@@ -1,0 +1,29 @@
+/* 超出显示省略号，有多种兼容性问题，但可以使用一些trick规避。
+* 最常见的问题是标签内的文本截取显示省略号时，多余的内容并没有消失，而是仍然换行显示到了下方，
+* 即使设置了overflow: hidden，如果样式包含padding等设置导致视窗发生变化，将会导致被折叠的文本意外的显示了出来，
+* 使用时需要留意这些问题
+*
+* -webkit-line-clamp: 1样式不加white-space: nowrap的话，qq浏览器、safari单行截取时容器会多几个像素，导致文字下方出现截取后的文字碎片；
+* 加上的话，firefox、qq浏览器会不出现...；而且容器在flex布局下会突破容器宽度，必须添加width:0样式才能防止容器过宽；
+* 最稳定的方案是根据实际显示效果，设置line-height略微多出font-size几个像素，防止出现文字碎片，如果有padding，则添加子元素来截取文本内容。
+*
+*
+*/
+.limit-line-general {
+  //white-space: nowrap; // 能解决一部分问题，但会引起更不可控的问题，不建议使用
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+/* IE10+ CSS styles go here
+ * reference: https://philipnewcomer.net/2014/04/target-internet-explorer-10-11-css/
+ */
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  .limit-line-general {
+    display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}

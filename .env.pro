@@ -1,0 +1,3 @@
+VUE_APP_SERVE =
+VUE_APP_DEBUG = false
+VUE_APP_WX_APP_ID = -

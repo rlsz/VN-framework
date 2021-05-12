@@ -1,0 +1,83 @@
+.el-autocomplete-suggestion li {
+  .limit-line-general {
+    text-overflow: ellipsis;
+  }
+}
+
+.dialog-root {
+  .el-dialog__wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 50px;
+    .el-dialog {
+      max-height: 100%;
+      max-width: 100%;
+      width: auto;
+      margin: 0px !important;
+      .el-dialog__header {
+        display: none;
+      }
+      .el-dialog__body {
+        max-height: 100%;
+        max-width: 100%;
+        padding: 0px;
+        display: flex;
+        flex-direction: column;
+        .bridge-el-dialog {
+          max-height: 100%;
+          max-width: 100%;
+        }
+      }
+      &.transparent {
+        background: inherit;
+        box-shadow: none;
+      }
+    }
+  }
+}
+
+.bridge-el-dialog  {
+  > .header {
+    > :first-child {
+      margin-left: auto;
+    }
+    h1 {
+      font-size: 18px;
+      font-family: PingFangSC-Medium, PingFang SC;
+      font-weight: 500;
+      line-height: 18px;
+      margin: 0;
+    }
+    h2 {
+      font-size: 12px;
+      font-family: PingFangSC-Regular, PingFang SC;
+      font-weight: 400;
+      color: #B1B1B1;
+      line-height: 12px;
+      margin: 8px 0 0;
+    }
+  }
+  > .footer {
+    text-align: right;
+  }
+  &.center {
+    > .footer {
+      text-align: center;
+    }
+  }
+  &.diagonally {
+    > .header {
+      > :first-child {
+        margin-left: 0;
+      }
+    }
+  }
+}
+
+.el-textarea .el-input__count {
+  line-height: 12px;
+  bottom: -5px !important;
+  padding: 0 4px;
+}
