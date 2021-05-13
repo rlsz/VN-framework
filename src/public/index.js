@@ -14,11 +14,13 @@ import {AjaxService, default as base, LocalStorageService, LoadingService, Sessi
 import logger from './logger'
 import dialogs from './dialogs'
 import scroll from './scroll'
+import platform, {PlatformService} from './platform'
 import DependencyInjection from './di.service';
 import {LoggerService} from "./logger";
 import {DialogService, DialogsContainer} from "./dialogs";
 
 export const RootProviders = [
+    {provide: PlatformService, useValue: PlatformService.instance},
     {provide: LoggerService, useValue: LoggerService.instance},
     {provide: DialogService, useValue: DialogService.instance},
     {provide: LoadingService, useValue: LoadingService.instance},
@@ -62,6 +64,7 @@ function AppendComponentToRoot(Vue, comp) {
 }
 
 export default function (Vue, router) {
+    Vue.use(platform)
     Vue.use(adapter)
     Vue.use(DependencyInjection)
     Vue.use(base)

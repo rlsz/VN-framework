@@ -1,7 +1,12 @@
 <template>
-  <div id="app" class="flex">
-    <app-menu :value="menu"></app-menu>
+  <div id="app" class="flex" v-platform>
+    <app-menu :value="menu" v-if="!inner"></app-menu>
     <div class="flex fill-content vertical">
+      <span v-if="inner" class="flex cross-center">
+        <i class="arrow left"></i>
+        <span v-link="'/'">后退</span>
+        <span style="margin: auto;">{{title}}</span>
+      </span>
       <router-view/>
     </div>
   </div>
@@ -12,6 +17,7 @@
 import {AppService} from "./app.service";
 import appMenu from './app-menu.vue'
 import {menus} from "./router";
+import {Platform, PlatformService} from "@/public/platform";
 
 export default {
   name: 'App',
@@ -21,12 +27,21 @@ export default {
       {provide: AppService, useValue: AppService.instance}
     ],
     inject: {
-      as: AppService
+      as: AppService,
+      ps: PlatformService
     }
   },
   data() {
     return {
       menu: menus
+    }
+  },
+  computed: {
+    inner() {
+      return this.ps.platform === Platform.mobile && this.$route.matched && this.$route.matched.length
+    },
+    title() {
+      return this.$route.meta?.title || ''
     }
   },
   created() {
@@ -67,18 +82,18 @@ export default {
   }
 }
 
-@media (max-width: 800px) {
-  #app {
-    flex-direction: column;
-    > .fill-content {
-      width: auto;
-    }
-    .app-menu {
-      flex-basis: auto;
-      flex-direction: row;
-      overflow-y: hidden;
-      overflow-x: auto;
-    }
-  }
-}
+//@media (max-width: 800px) {
+//  #app {
+//    flex-direction: column;
+//    > .fill-content {
+//      width: auto;
+//    }
+//    .app-menu {
+//      flex-basis: auto;
+//      flex-direction: row;
+//      overflow-y: hidden;
+//      overflow-x: auto;
+//    }
+//  }
+//}
 </style>
