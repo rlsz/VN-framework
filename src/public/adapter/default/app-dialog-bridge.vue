@@ -5,7 +5,7 @@
       <slot name="title">
         <span>{{title}}</span>
       </slot>
-      <span v-if="config.tip" class="tip">{{config.tip}}</span>
+      <span v-if="config && config.tip" class="tip">{{config.tip}}</span>
       <span v-if="model===Model.float" class="close" @click="close"></span>
     </div>
     <div class="body"><slot></slot></div>

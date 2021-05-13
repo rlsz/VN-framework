@@ -50,8 +50,8 @@ export default {
   methods: {
     onClick(event) {
       if (event.target === event.currentTarget) {
-        const disableClose = this.options.instance.config['close-on-click-overlay']
-        if (disableClose === undefined || disableClose) {
+        const enableOverlayClose = this.options.instance.config && this.options.instance.config['close-on-click-overlay']
+        if (enableOverlayClose === undefined || enableOverlayClose) {
           this.options.instance.close()
         }
       }

@@ -2,9 +2,9 @@
   <app-dialog-bridge>
     <span slot="title">title</span>
     <span>dialog content</span>
-    <span slot="footer">
-        <el-button v-loading-target type="primary" @click="submit">确 定</el-button>
-        <el-button @click="dialog.close()">取 消</el-button>
+    <span slot="footer" style="text-align: right;">
+      <button class="app-form" @click="dialog.close()">取 消</button>
+      <button class="app-form" @click="submit" v-loading-target>确 定</button>
     </span>
   </app-dialog-bridge>
 </template>
@@ -47,5 +47,9 @@ export default {
 <style lang="less" scoped>
 .bridge-el-dialog {
   min-width: 400px;
+}
+button {
+  display: inline-block;
+  margin: 0px 5px;
 }
 </style>
