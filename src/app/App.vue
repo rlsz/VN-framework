@@ -1,12 +1,11 @@
 <template>
   <div id="app" class="flex" v-platform>
     <app-menu :value="menu" v-if="!inner"></app-menu>
-    <div class="flex fill-content vertical">
-      <span v-if="inner" class="flex cross-center">
-        <i class="arrow left"></i>
-        <span v-link="'/'">后退</span>
-        <span style="margin: auto;">{{title}}</span>
-      </span>
+    <span v-if="inner" class="flex cross-center" style="padding: 8px 4px;">
+      <i v-link="'/'" class="arrow left"></i>
+      <span style="margin: auto;">{{title}}</span>
+    </span>
+    <div class="flex fill-content vertical" v-show="inner">
       <router-view/>
     </div>
   </div>
@@ -79,6 +78,15 @@ export default {
 
   .container {
     flex: 1 1 0px;
+  }
+  &.mobile {
+    flex-direction: column;
+    .app-menu-root {
+      flex: 1 1 0px;
+    }
+    > .fill-content {
+      width: auto;
+    }
   }
 }
 
