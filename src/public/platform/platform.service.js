@@ -21,11 +21,7 @@ export class PlatformService {
 
     platform
 
-    constructor(p) {
-        if (p) {
-            this.platform = p
-        } else {
-            this.platform = mobileCheck() ? Platform.mobile : Platform.pc
-        }
+    constructor() {
+        this.platform = mobileCheck() ? Platform.mobile : Platform.pc
     }
 }
