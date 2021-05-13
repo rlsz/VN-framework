@@ -11,6 +11,9 @@ function mobileCheck() {
 
 let singleton = null
 
+/** platform detection service
+ * todo: support resize window, treating small viewport as mobile platform
+ */
 export class PlatformService {
     static get instance() {
         if (!singleton) {
