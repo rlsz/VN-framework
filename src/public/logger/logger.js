@@ -105,6 +105,11 @@ export class Log {
     if (c?.code && c?.message) {
       return c.message;
     }
+
+    if (c?.status && c?.message) {
+      return c.message;
+    }
+
     return c;
   }
 
