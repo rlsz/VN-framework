@@ -74,6 +74,7 @@ export default {
 
   .dialog-panel {
     max-height: 100%;
+    max-width: 100%;
     display: flex;
     flex-direction: column;
     background: rgba(255, 255, 255, 1);
@@ -99,7 +100,7 @@ export default {
     padding: 0;
 
     > * {
-      flex: 1 1 0;
+      flex: 1 1 0px;
     }
 
     .dialog-panel {
