@@ -193,6 +193,10 @@
       <span>test highlight:</span>
       <span v-html="$options.filters.highlight(test, ['text'])"></span>
     </div>
+    <div>
+      <span>test highlight 111:</span>
+      <span v-html="highlight(test)"></span>
+    </div>
   </div>
 </template>
 
@@ -287,6 +291,12 @@ export default {
         id: 3,
         name: 'test 3'
       }]
+    },
+    highlight(str) {
+      // return this.$options.filters.highlight(str, ['text'], '-aaa-$&-bbb-')
+      return this.$options.filters.highlight(str, ['text', 'line'], (text) => {
+        return `<span style="color:green;">${text} + ${text}</span>`
+      })
     }
   }
 }

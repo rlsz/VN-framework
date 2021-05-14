@@ -1,6 +1,6 @@
 import axios from 'axios'
 import {LoggerService} from "../../logger/logger.service";
-import {LoadingService} from "@/public/base";
+import {LoadingService} from "../../base/services/loading.service";
 
 const virtual_a = document.createElement('a')
 
@@ -48,7 +48,7 @@ export class AjaxService {
     get(url, params, config) {
         return this.interceptor(headers => axios.get(
             this.getUrl(url),
-            {params, headers}
+            {...config, params, headers}
         ), config)
     }
 
@@ -56,7 +56,7 @@ export class AjaxService {
         return this.interceptor(headers => axios.post(
             this.getUrl(url),
             data,
-            {headers}
+            {...config, headers}
         ), config)
     }
 
@@ -85,6 +85,9 @@ export class AjaxService {
             }
             return res.data
         }).then(res => {
+            if(res instanceof Blob || res instanceof File) {
+                return res
+            }
             if (res.code === this.errorCode.LoginTimeout) {
                 return this.openLogin().then(isSuccess => {
                     if (!isSuccess) {
@@ -100,6 +103,9 @@ export class AjaxService {
             }
         })
         return temp().then(res => {
+            if(res instanceof Blob || res instanceof File) {
+                return res
+            }
             if (res.code !== this.errorCode.Success) {
                 throw res
             }

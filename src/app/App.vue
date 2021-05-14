@@ -1,11 +1,11 @@
 <template>
   <div id="app" class="flex" v-platform>
-    <app-menu :value="menu" v-if="!inner"></app-menu>
-    <span v-if="inner" class="flex cross-center" style="padding: 8px 4px;">
+    <app-menu :value="menu" v-if="showMenu"></app-menu>
+    <span v-if="!showMenu && showInner" class="flex cross-center" style="padding: 8px 4px;">
       <i v-link="'/'" class="arrow left"></i>
       <span style="margin: auto;">{{title}}</span>
     </span>
-    <div class="flex fill-content vertical" v-show="inner">
+    <div class="flex fill-content vertical" v-show="showInner">
       <router-view/>
     </div>
   </div>
@@ -36,8 +36,17 @@ export default {
     }
   },
   computed: {
-    inner() {
-      return this.ps.platform === Platform.mobile && this.$route.matched && this.$route.matched.length
+    showMenu() {
+      if(this.ps.platform === Platform.mobile && this.$route.matched && this.$route.matched.length) {
+        return false
+      }
+      return true
+    },
+    showInner() {
+      if(this.ps.platform === Platform.mobile && this.$route.matched && this.$route.matched.length === 0) {
+        return false
+      }
+      return true
     },
     title() {
       return this.$route.meta?.title || ''
