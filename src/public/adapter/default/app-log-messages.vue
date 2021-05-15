@@ -33,7 +33,7 @@ export default {
   },
   computed: {
     position(){
-      return PlatformService.instance.platform === Platform.pc ? 'right' : 'bottom';
+      return PlatformService.instance.platform === Platform.pc ? 'right' : 'top';
     }
   },
   created() {
@@ -71,11 +71,13 @@ export default {
       switch (event.animationName) {
         case 'log-slide-in-right':
         case 'log-slide-in-bottom':
+        case 'log-slide-in-top':
           log.slidein = false
           log.fadeout = true;
           break;
         case 'log-slide-down-right':
         case 'log-slide-down-bottom':
+        case 'log-slide-down-top':
           log.slidedown = false
           break;
         case 'log-fade-out':

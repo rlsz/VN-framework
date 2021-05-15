@@ -204,7 +204,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /*border: 0.06rem solid rgba(234, 234, 234, 1);*/
+  /*border: 1px solid rgba(234, 234, 234, 1);*/
 
   font-size: 14px;
   font-family: PingFangSC-Regular, PingFang SC;

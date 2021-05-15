@@ -96,11 +96,11 @@
   align-items: center;
   &::before {
     content: ' ';
-    width:0.63rem;
-    height:0.63rem;
+    width:10px;
+    height:10px;
     background:rgba(216,216,216,1);
     border-radius: 50%;
-    margin-right: 0.94rem;
+    margin-right: 15px;
     flex: 0 0 auto;
   }
 }
@@ -116,6 +116,8 @@
 .frame-padding {
   padding-left: calc(50% - 600px);
   padding-right: calc(50% - 600px);
+  max-width: 100%;
+  min-width: 0px;
 }
 
 .invisible {

@@ -85,9 +85,6 @@ export default {
   overflow: hidden;
   color: rgba(51, 51, 51, 1);
 
-  .container {
-    flex: 1 1 0px;
-  }
   &.mobile {
     flex-direction: column;
     .app-menu-root {

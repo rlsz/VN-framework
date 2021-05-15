@@ -91,7 +91,7 @@ export default {
     }
 
     .dialog-panel {
-      //padding: 1.5rem;
+      //padding: 24px;
     }
   }
 
@@ -107,11 +107,11 @@ export default {
       border-radius: 0;
 
       .header {
-        padding: 1rem 3rem;
+        padding: 16px 48px;
 
         span.back {
-          left: 1.125rem;
-          top: 1.125rem;
+          left: 18px;
+          top: 18px;
         }
       }
     }

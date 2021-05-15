@@ -8,9 +8,21 @@
     opacity: 1;
   }
 }
+
 @keyframes log-slide-in-bottom {
   0% {
     transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes log-slide-in-top {
+  0% {
+    transform: translateY(-100%);
     opacity: 0;
   }
   100% {
@@ -36,6 +48,7 @@
     transform: translateY(0);
   }
 }
+
 @keyframes log-slide-down-bottom {
   0% {
     transform: translateY(100%);
@@ -45,49 +58,65 @@
   }
 }
 
+@keyframes log-slide-down-top {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
 .app-log-messages {
-  max-height: calc(100% - 2.25rem);
-  overflow: auto;
+  max-height: calc(100% - 36px);
+  //overflow: auto;
+  overflow: hidden;
   position: fixed;
-  border-radius: 0.5rem;
+  border-radius: 8px;
   z-index: 9999;
   display: flex;
+
   > * ~ * {
-    margin-top: 0.25rem;
-    margin-bottom: 0.25rem;
+    margin-top: 4px;
+    margin-bottom: 4px;
   }
+
   .message {
     display: flex;
     align-items: center;
     justify-content: center;
+
     > div {
       //background:rgba(245,247,249,1);
-      //padding: 0.25rem 0.5rem;
+      //padding: 4px 8px;
       display: flex;
       align-items: center;
 
-      background:rgba(0,0,0,1);
-      border-radius:0.5rem;
-      opacity:0.8;
-      font-size:0.94rem;
-      color:rgba(255,255,255,1);
-      line-height:1.31rem;
-      padding: 0.69rem 1rem;
+      background: rgba(0, 0, 0, 1);
+      border-radius: 8px;
+      opacity: 0.8;
+      font-size: 15px;
+      color: rgba(255, 255, 255, 1);
+      line-height: 21px;
+      padding: 11px 16px;
     }
+
     &.error {
       color: #b34b74;
+
       .disappear {
         animation-delay: 6s;
       }
     }
-    &.success{
-      > div:before{
+
+    &.success {
+      > div:before {
         content: '';
         flex: 0 0 auto;
-        width: 1rem;
-        height: 1rem;
+        width: 16px;
+        height: 16px;
         background: url("../../../assets/public/toast_done_icon.png") center no-repeat;
-        margin: 0 0.44rem;
+        margin: 0 7px;
       }
     }
   }
@@ -97,11 +126,12 @@
     animation-fill-mode: forwards;
   }
 
-  &.right{
-    right: 1rem;
-    top: 1rem;
+  &.right {
+    right: 16px;
+    top: 16px;
     flex-direction: column;
     align-items: flex-end;
+
     .slide-in {
       animation: 1s log-slide-in-right;
     }
@@ -110,17 +140,36 @@
       animation: 1s log-slide-down-right;
     }
   }
+
   &.bottom {
-    bottom: 3.56rem;
+    bottom: 30px;
     right: 50%;
     transform: translateX(50%);
     align-items: center;
     flex-direction: column-reverse;
+
     .slide-in {
       animation: 1s log-slide-in-bottom;
     }
+
     .animate-down {
       animation: 1s log-slide-down-bottom;
+    }
+  }
+
+  &.top {
+    top: 30px;
+    right: 50%;
+    transform: translateX(50%);
+    align-items: center;
+    flex-direction: column;
+
+    .slide-in {
+      animation: 1s log-slide-in-top;
+    }
+
+    .animate-down {
+      animation: 1s log-slide-down-top;
     }
   }
 }
