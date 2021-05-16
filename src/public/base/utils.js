@@ -1,5 +1,3 @@
-import {Source} from "@/public/logger";
-
 export function GetQuery(str) {
     const query = {};
     const search = str || location.search;

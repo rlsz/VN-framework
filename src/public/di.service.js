@@ -107,27 +107,6 @@ class DependencyInjection {
 
 }
 
-export class PersistenceServiceBase {
-    injector
-
-    constructor(injector) { // called in beforeCreated lifecycle
-        this.injector = injector
-        // todo: restore storage to initialize property
-    }
-
-    diCreated(vm) {
-        console.log(vm)
-    }
-
-    diMounted() {
-
-    }
-
-    diDestroyed() {
-        // todo: save properties to storage
-    }
-}
-
 /** 在vue组件配置如下参数:
  * di: {
  *     providers: [
