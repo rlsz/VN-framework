@@ -28,8 +28,10 @@ import {Table} from './fixTableBug'
 
 Vue.component('el-table', Table);
 
-export {default as DialogItem} from './dialog-item.vue'
-export {default as DialogBridge} from './app-dialog-bridge.vue'
+// export {default as DialogItem} from './dialog-item.vue'
+// export {default as DialogBridge} from './app-dialog-bridge.vue'
+export {default as DialogItem} from '../default/dialog-item.vue'
+export {default as DialogBridge} from '../default/app-dialog-bridge.vue'
 
 
 import {throttle} from '../../base/utils'

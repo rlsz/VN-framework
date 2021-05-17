@@ -3,7 +3,7 @@
     <div class="header">
       <span v-if="model===Model.fillAvailable" class="back" @click="close"></span>
       <slot name="title">
-        <span>{{title}}</span>
+        <span class="default-title">{{title}}</span>
       </slot>
       <span v-if="config && config.tip" class="tip">{{config.tip}}</span>
       <span v-if="model===Model.float" class="close" @click="close"></span>

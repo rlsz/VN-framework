@@ -267,8 +267,8 @@ vue过滤器，类似于angular的pipe
 ###### services
 公共服务
 
-> AjaxService 基于axios的ajax服务设计，依赖di系统进行使用，默认以process.env.VUE_APP_SERVE作为服务地址，默认在main.js中通过RootProviders引入
-> LocalStorageService indexDB对接服，可以用于存储任意javascript类型的数据，但有循环引用的数据会报错
+> AjaxService 基于axios的ajax服务设计，依赖di系统进行使用，默认以process.env.VUE_APP_SERVE作为服务地址，默认在main.js中通过RootProviders引入  
+> LocalStorageService indexDB对接服，可以用于存储任意javascript类型的数据，但有循环引用的数据会报错  
 ```
 // app/main/index.vue
   // AjaxService可被子模块自己的class覆盖
@@ -360,7 +360,8 @@ di: {
     this.ls.info('LoginComponent dialog closed:', res);
   });
 ```
-> DialogService的open方法第一个参数为vue组件，第二个参数的内容作为config可以在组件内以及el-dialog、van-popup中使用  
+> DialogService的open方法第一个参数为vue组件，第二个参数的内容作为config可以在组件内以及el-dialog、van-popup中使用   
+
 config使用示例
 ```
 // app/test/components/TestDialog.vue

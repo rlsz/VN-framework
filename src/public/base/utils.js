@@ -450,6 +450,17 @@ export function timer(span) {
     })
 }
 
+// time unit: s
+export function Tick(time, onTick) {
+    if (onTick) {
+        onTick(time)
+    }
+    if (time <= 0) {
+        return true
+    }
+    return timer(1000).then(() => Tick(time - 1, onTick))
+}
+
 export function CreateKeepAliveRouter(cacheRouters, noCacheRouters = []) {
     if(GetJsType(cacheRouters) !== 'Array') {
         cacheRouters = [cacheRouters]

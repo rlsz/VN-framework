@@ -79,6 +79,7 @@ export default {
     flex-direction: column;
     background: rgba(255, 255, 255, 1);
     border-radius: 4px;
+    overflow: hidden;
     box-shadow: 0px 3px 8px 0px rgba(255, 255, 255, 0.2);
   }
 
