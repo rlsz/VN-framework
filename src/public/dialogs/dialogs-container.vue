@@ -45,3 +45,10 @@ export default {
   }
 }
 </script>
+<style lang="less" scoped>
+.dialog-root {
+  > :not(:last-child) {
+    opacity: 0;
+  }
+}
+</style>

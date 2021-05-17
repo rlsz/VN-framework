@@ -9,7 +9,7 @@
       <span v-if="model===Model.float" class="close" @click="close"></span>
     </div>
     <div class="body"><slot></slot></div>
-    <div class="footer"><slot name="footer"></slot></div>
+    <div class="footer" v-if="!noFooter"><slot name="footer"></slot></div>
   </div>
 </template>
 
@@ -50,6 +50,9 @@ export default {
         model = PlatformService.instance.platform === Platform.pc ? Model.float : Model.fillAvailable
       }
       return model
+    },
+    noFooter() {
+      return !this.$slots.footer
     }
   },
   methods: {
