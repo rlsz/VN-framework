@@ -24,16 +24,14 @@ export default {
         return;
       }
       const canSend = this.beforeSend ? Promise.resolve(this.beforeSend()) : Promise.resolve(true)
-      canSend.then(res => {
-        if (res) {
-          this.$emit('tick-start')
-          this.tick = Tick(60, time => {
-            this.time = time
-          }).then(() => {
-            this.tick = null
-            this.$emit('tick-end')
-          })
-        }
+      canSend.then(() => {
+        this.$emit('tick-start')
+        this.tick = Tick(60, time => {
+          this.time = time
+        }).then(() => {
+          this.tick = null
+          this.$emit('tick-end')
+        })
       })
     }
   }
