@@ -28,6 +28,49 @@ export function CombineValidators(...args) {
     })
 }
 
+// export function TriggerValidator(form, rules) {
+//     const pArr = Object.keys(rules).map(key => {
+//         const rule = rules[key]
+//         const value = form[key]
+//         return Promise.all(
+//             rule.map(item => {
+//                 return new Promise((r, j) => {
+//                     item.validator({
+//                         field: key,
+//                         fullField: key,
+//                         type: typeof value,
+//                         validator: rule.validator
+//                     }, value, err => {
+//                         if (err) {
+//                             j(err)
+//                         } else {
+//                             r()
+//                         }
+//                     })
+//                 })
+//             })
+//         )
+//     })
+//     return Promise.all(pArr)
+// }
+export function TriggerValidator(formRef, props) {
+    if(typeof props === "string") {
+        props = [props]
+    }
+    const pArr = props.map(prop => {
+        return new Promise((r, j) => {
+            formRef.validateField(prop, err => {
+                if (err) {
+                    j(err)
+                } else {
+                    r()
+                }
+            })
+        })
+    })
+    return Promise.all(pArr)
+}
+
 /** 通用校验规则
  * trigger： blur - 输入框，change - 选择框
  */
