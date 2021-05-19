@@ -1,4 +1,5 @@
 import {DialogService} from "./../../dialogs/dialog.service";
+import {Model} from "./../../dialogs/dialog";
 
 let singleton = null
 const loadingClass = 'v-loading-frame'
@@ -37,7 +38,7 @@ export class LoadingService {
                     return h('i', {class: 'loading-general'})
                 }
             }, {
-                transparent: true
+                model: Model.transparent
             })
 
             this.loadingInstance.afterClosed().then(() => {

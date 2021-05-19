@@ -128,6 +128,7 @@ export default {
 
     .dialog-panel {
       background: none;
+      box-shadow: none;
 
       > .header {
         display: none;
