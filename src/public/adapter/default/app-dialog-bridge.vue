@@ -1,7 +1,7 @@
 <template>
   <div class="page-frame bridge-default-dialog" :class="{center:center}">
     <div class="header">
-      <span v-if="model===Model.fillAvailable" class="back" @click="close"></span>
+      <i class="arrow left large" v-if="model===Model.fillAvailable" @click="close"></i>
       <slot name="title">
         <span class="default-title">{{title}}</span>
       </slot>
@@ -84,15 +84,8 @@ export default {
       margin-left: 8px;
       flex: 1 1 auto;
     }
-
-    span.back {
-      position: absolute;
-      left: 8px;
-      top: 20px;
-
-      width: 10px;
-      height: 18px;
-      background: url("../../../assets/public/general_back_icon.png") center/cover no-repeat;
+    i.arrow.left {
+      margin-left: -10px;
     }
 
     span.close {
