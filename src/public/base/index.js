@@ -5,6 +5,7 @@ export * from './services/session-storage.service'
 export * from './services/persistence-base'
 export * from './services/ajax.service'
 export * from './services/loading.service'
+export * from './services/cookie-storage.service'
 export {default as ImgPreview} from './directives/v-img-preview/img-preview.vue'
 
 import fileSelector from './components/app-file-selector.vue'

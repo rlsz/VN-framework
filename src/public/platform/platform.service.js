@@ -25,6 +25,24 @@ export class PlatformService {
     platform
 
     constructor() {
-        this.platform = mobileCheck() ? Platform.mobile : Platform.pc
+        if (mobileCheck()) {
+            this.platform = Platform.mobile
+        } else {
+            this.detection()
+            window.addEventListener('resize', this.detection.bind(this));
+        }
+    }
+
+    detection() {
+        const {clientWidth} = document.body
+        if (clientWidth < 800) {
+            if (this.platform != Platform.mobile) {
+                this.platform = Platform.mobile
+            }
+        } else {
+            if (this.platform != Platform.pc) {
+                this.platform = Platform.pc
+            }
+        }
     }
 }

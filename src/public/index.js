@@ -10,7 +10,14 @@ import "./base/directives/v-img-preview/img-preview.less"
 
 import adapter from './adapter'
 
-import {AjaxService, default as base, LocalStorageService, LoadingService, SessionStorageService} from './base'
+import {
+    AjaxService,
+    default as base,
+    LocalStorageService,
+    LoadingService,
+    SessionStorageService,
+    CookieStorageService
+} from './base'
 import logger from './logger'
 import dialogs from './dialogs'
 import scroll from './scroll'
@@ -26,6 +33,7 @@ export const RootProviders = [
     {provide: LoadingService, useValue: LoadingService.instance},
     LocalStorageService,
     SessionStorageService,
+    CookieStorageService,
     AjaxService
 ]
 
