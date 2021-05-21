@@ -2,13 +2,12 @@
   <div class="test2-root">
     <div class="flex">
       <!-- 后端给的html内容中含有样式链接，会污染页面样式(例如导致所有页面a链接失效)，所以使用v-html-new来把样式内容处理掉 -->
-<!--      <span class="test-box-1 html-new-general" v-html="$options.filters.highlight(test1)"></span>-->
+      <!--      <span class="test-box-1 html-new-general" v-html="$options.filters.highlight(test1)"></span>-->
       <span class="test-box-1" v-html-new="$options.filters.highlight(test1)"></span>
     </div>
     <div>
       <span>test multi select of el-select</span>
       <multi-select-bridge
-          style="width: 378px;"
           v-model="multiValue1"
           placeholder="多选选择"
           :remote-method="queryOptions"
@@ -19,7 +18,6 @@
         </template>
       </multi-select-bridge>
       <multi-select-bridge
-          style="width: 378px;"
           v-model="multiValue2"
           placeholder="单选选择"
           :remote-method="queryOptions"
@@ -34,7 +32,7 @@
     <div @click="testFunc">
       <span>{{as.test2 || '-'}}</span>
     </div>
-<!--    <div class="test-abc">center</div>-->
+    <!--    <div class="test-abc">center</div>-->
     <div>
       <compParent>
         <compChild></compChild>
