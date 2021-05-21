@@ -225,8 +225,8 @@ export default {
   display: flex;
   overflow-x: auto;
 
-  padding-bottom: 18px;
-  margin-bottom: -18px;
+  padding-bottom: 30px;
+  margin-bottom: -30px;
 }
 
 .start-sentinel, .end-sentinel {
