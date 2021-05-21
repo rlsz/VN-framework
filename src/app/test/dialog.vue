@@ -5,8 +5,7 @@
     <button class="app-form" @click="info()">info dialog</button>
     <button class="app-form" type="button" @click="multiDialog">multi dialog</button>
     <button class="app-form" @click="simpleComp()">简单组件</button>
-    <button class="app-form" @click="loading.open()" v-loading-target>打开loading弹窗</button>
-    <button class="app-form" @click="loading.close()">关闭loading弹窗</button>
+    <button class="app-form" @click="openLoading()" v-loading-target>打开loading弹窗</button>
     <button class="app-form" @click="ajaxSimulator()" v-loading-target>模拟接口请求</button>
   </div>
 </template>
@@ -122,6 +121,15 @@ export default {
         this.loading.decrease()
         this.ls.debug('decrease loading')
       }, 3000)
+    },
+    openLoading() {
+      this.ds.open({
+        render(h) {
+          return h('i', {class: 'loading-general'})
+        }
+      }, {
+        model: Model.transparent
+      })
     }
   }
 }

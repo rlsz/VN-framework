@@ -89,7 +89,7 @@ export class AjaxService {
                 return res
             }
             if (res.code === this.errorCode.LoginTimeout) {
-                return this.openLogin().then(isSuccess => {
+                return this.reLogin().then(isSuccess => {
                     if (!isSuccess) {
                         throw res
                     }
@@ -119,7 +119,7 @@ export class AjaxService {
     }
 
     // @returns: Promise<boolean>
-    openLogin() {
-        throw new Error('openLogin unimplemented')
+    reLogin() {
+        throw new Error('reLogin unimplemented')
     }
 }

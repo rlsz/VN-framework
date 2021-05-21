@@ -82,6 +82,13 @@ export default {
             }
         },
         {
+            path: 'cookieTest',
+            component: () => import(/* webpackChunkName: "test" */ './cookieTest.vue'),
+            meta: {
+                title: 'cookie测试'
+            }
+        },
+        {
             path: 'persistenceTest',
             component: () => import(/* webpackChunkName: "test" */ './persistenceTest.vue'),
             meta: {

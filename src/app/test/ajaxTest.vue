@@ -72,7 +72,7 @@ class MockAjaxService extends AjaxService {
     }, config)
   }
 
-  openLogin() {
+  reLogin() {
     return DialogService.instance.info({
       message: '点击确定按钮表示登录成功，点击背景或关闭图标表示登录失败',
       title: '登录测试',
@@ -82,7 +82,7 @@ class MockAjaxService extends AjaxService {
 }
 
 class MockAjaxService1 extends MockAjaxService {
-  openLogin() {
+  reLogin() {
     router.push('/main/home')
     return Promise.reject('登录过期')
   }

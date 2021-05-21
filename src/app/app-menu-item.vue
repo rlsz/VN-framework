@@ -1,6 +1,6 @@
 <template>
   <div :key="value.path" class="app-menu-item">
-    <router-link :to="value.path">{{ value.text }}</router-link>
+    <router-link :to="value.path">{{ value.title }}</router-link>
     <app-menu v-if="value.children && value.children.length"
               :value="value.children"
               :level="level + 1"
