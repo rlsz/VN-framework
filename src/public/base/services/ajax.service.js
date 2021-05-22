@@ -80,6 +80,8 @@ export class AjaxService {
         }).finally(() => {
             config.loading && this.loading.decrease()
         }).then(res => {
+            return this.responseAdapter(res)
+        }).then(res => {
             if (res.status !== 200) {
                 throw res
             }
@@ -121,5 +123,10 @@ export class AjaxService {
     // @returns: Promise<boolean>
     reLogin() {
         throw new Error('reLogin unimplemented')
+    }
+
+    // response: {status, message, data}
+    responseAdapter(response) {
+        return response
     }
 }

@@ -4,6 +4,10 @@ import {TIME_ALERT} from './tokens';
 import {initUIMessage} from '../adapter'
 
 let singleton = null
+
+/**
+ * Uncaught promise: https://stackoverflow.com/questions/53505159/prevent-of-uncaught-in-promise-warning-how-to-avoid-of-catch-block-es6-p
+ */
 export class LoggerService {
     static get instance() {
         if (!singleton) {
@@ -38,6 +42,11 @@ export class LoggerService {
                 ]);
             }
         });
+
+        // window.addEventListener('unhandledrejection', event => {
+        //     event.preventDefault();
+        //     this.error(event.reason)
+        // });
     }
 
     initGlobalLog() {
@@ -45,6 +54,10 @@ export class LoggerService {
             this.error(Source.application, messageOrEvent, source, lineno, colno, error);
             return true;
         };
+
+        window.addEventListener('unhandledrejection', event => {
+            event.preventDefault();
+        });
     }
 
     initUIMessage() {

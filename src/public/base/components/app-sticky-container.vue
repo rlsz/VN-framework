@@ -17,6 +17,8 @@
             :key="'sticky-bottom-tip-key-'+index"
             :class="{active:activeIndex===index}"></span>
     </div>
+    <img v-platform class="action left" src="../../../assets/public/banner_left_hover_icon.png" @click="scrollToPrev()"/>
+    <img v-platform class="action right" src="../../../assets/public/banner_right_hover_icon.png" @click="scrollToNext()"/>
   </div>
 </template>
 
@@ -46,7 +48,8 @@ export default {
       autoScrollTimer: null,
       children: null,
       activeIndex: 0,
-      lastHtml: ''
+      lastHtml: '',
+      sequence: 0,
     }
   },
   computed: {
@@ -58,7 +61,7 @@ export default {
       }
     },
     loopProp() {
-      return this.loop !== undefined
+      return this.loop !== undefined && this.loop !== false
     }
   },
   created() {
@@ -136,13 +139,18 @@ export default {
       return this.getChildren().find(c => c.visible)
     },
     scrollToTarget(target) {
-      return new Promise(r => {
+      this.sequence++
+      const currentSeq = this.sequence
+      return new Promise((r, j) => {
         target = target || this.getVisibleTarget()
         if (target) {
           const scroll = this.$refs.scroll
           let distance = target.distance
           let step = Math.max(Math.ceil(Math.abs(distance) / 16), 16)
           const animate = () => {
+            if(currentSeq !== this.sequence) {
+              return j('cancel')
+            }
             // console.log(distance, step, scroll.scrollLeft)
             if (distance > step) {
               scroll.scrollLeft += step
@@ -166,18 +174,43 @@ export default {
         }
       })
     },
-    scrollToNext(loop = false) {
+    fixIndex(i, len) {
+      const index = i % len;
+      if (index < 0) {
+        return index + len;
+      } else {
+        return index;
+      }
+    },
+    scrollToNext() {
+      const loop = this.loopProp
       const children = this.getChildren()
       const current = children.find(c => c.visible)
       if (current) {
-        let nextIndex = current.index + 1
-        if (!loop && nextIndex >= children.length) {
+        let newIndex = current.index + 1
+        if (!loop && newIndex >= children.length) {
           return;
         }
-        nextIndex = nextIndex % children.length
-        const next = children[nextIndex]
-        if (next) {
-          this.scrollToTarget(next)
+        newIndex = this.fixIndex(newIndex, children.length)
+        const newTarget = children[newIndex]
+        if (newTarget) {
+          this.scrollToTarget(newTarget)
+        }
+      }
+    },
+    scrollToPrev() {
+      const loop = this.loopProp
+      const children = this.getChildren()
+      const current = children.find(c => c.visible)
+      if (current) {
+        let newIndex = current.index - 1
+        if (!loop && newIndex < 0) {
+          return;
+        }
+        newIndex = this.fixIndex(newIndex, children.length)
+        const newTarget = children[newIndex]
+        if (newTarget) {
+          this.scrollToTarget(newTarget)
         }
       }
     },
@@ -189,7 +222,7 @@ export default {
         clearTimeout(this.autoScrollTimer)
       }
       this.autoScrollTimer = setTimeout(() => {
-        this.scrollToNext(this.loopProp)
+        this.scrollToNext()
       }, this.autoScroll)
     },
     handleScroll() {
@@ -255,6 +288,27 @@ export default {
       background: #3667D4;
       opacity: 1;
     }
+  }
+}
+.action {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.3;
+  max-height: 30%;
+  min-height: 30px;
+  &.mobile {
+    display: none;
+  }
+  &.left {
+    left: 16px;
+  }
+
+  &.right {
+    right: 16px;
+  }
+  &:hover {
+    opacity: 1;
   }
 }
 </style>
