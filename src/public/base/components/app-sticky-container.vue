@@ -276,7 +276,7 @@ export default {
   .bottom-tip {
     width: 8px;
     height: 3px;
-    background: #FFFFFF;
+    background: #3667D4;
     opacity: 0.5;
 
     &:not(:first-of-type) {
@@ -301,11 +301,11 @@ export default {
     display: none;
   }
   &.left {
-    left: 16px;
+    left: 0px;
   }
 
   &.right {
-    right: 16px;
+    right: 0px;
   }
   &:hover {
     opacity: 1;
