@@ -14,6 +14,11 @@
       <div class="test-inner">2222</div>
       <div class="test-inner">3333</div>
     </app-sticky-container>
+    <app-sticky-container class="test-sticky-container" :auto-scroll="3000">
+      <div class="test-inner">1111</div>
+      <div class="test-inner">2222</div>
+      <div class="test-inner">3333</div>
+    </app-sticky-container>
   </div>
 </template>
 
@@ -48,6 +53,7 @@ export default {
   width: calc(100% - 40px);
   margin: 0 3px;
   height: 200px;
+  opacity: 0.6;
   &:nth-child(odd) {
     background: green;
   }

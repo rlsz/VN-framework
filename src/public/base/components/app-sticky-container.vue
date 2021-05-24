@@ -17,8 +17,18 @@
             :key="'sticky-bottom-tip-key-'+index"
             :class="{active:activeIndex===index}"></span>
     </div>
-    <img v-platform class="action left" src="../../../assets/public/banner_left_hover_icon.png" @click="scrollToPrev()"/>
-    <img v-platform class="action right" src="../../../assets/public/banner_right_hover_icon.png" @click="scrollToNext()"/>
+    <img class="action left"
+         src="../../../assets/public/banner_left_hover_icon.png"
+         @click="scrollToPrev()"
+         v-if="loopProp || children && activeIndex > 0"
+         v-platform
+    />
+    <img class="action right"
+         src="../../../assets/public/banner_right_hover_icon.png"
+         @click="scrollToNext()"
+         v-if="loopProp || children && activeIndex < children.length - 1"
+         v-platform
+    />
   </div>
 </template>
 
