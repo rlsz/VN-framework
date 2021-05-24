@@ -1,8 +1,7 @@
 import {Directive, DirectiveContext} from "../directive-base";
 import ImgPreview from './img-preview'
 import {DialogService} from "../../../dialogs/dialog.service";
-
-const virtual_a = document.createElement('a')
+import {Model} from "../../../dialogs/dialog";
 
 class VImgPreviewDirective extends DirectiveContext {
     src
@@ -32,7 +31,8 @@ class VImgPreviewDirective extends DirectiveContext {
 
     onClick() {
         this.ds.open(ImgPreview, {
-            src: this.src || ''
+            src: this.src || '',
+            model: Model.float
         });
     }
 }

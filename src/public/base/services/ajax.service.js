@@ -48,7 +48,14 @@ export class AjaxService {
     get(url, params, config) {
         return this.interceptor(headers => axios.get(
             this.getUrl(url),
-            {...config, params, headers}
+            {
+                validateStatus: function (status) {
+                    return status < 500; // Resolve only if the status code is less than 500
+                },
+                ...config,
+                params,
+                headers
+            }
         ), config)
     }
 
@@ -56,7 +63,13 @@ export class AjaxService {
         return this.interceptor(headers => axios.post(
             this.getUrl(url),
             data,
-            {...config, headers}
+            {
+                validateStatus: function (status) {
+                    return status < 500; // Resolve only if the status code is less than 500
+                },
+                ...config,
+                headers
+            }
         ), config)
     }
 
