@@ -5,10 +5,6 @@ import {LoadingService} from "../../base/services/loading.service";
 const virtual_a = document.createElement('a')
 
 export class AjaxService {
-    errorCode = {
-        Success: 200,
-        LoginTimeout: 401
-    }
 
     ls
     host
@@ -56,7 +52,7 @@ export class AjaxService {
                 params,
                 headers
             }
-        ), config)
+        ), config, params)
     }
 
     post(url, data, config) {
@@ -70,76 +66,84 @@ export class AjaxService {
                 ...config,
                 headers
             }
-        ), config)
+        ), config, data)
     }
 
     // ajax: headers => Promise<{status: number, data: any}>
-    interceptor(ajax, config) {
-        config = Object.assign({
+    interceptor(ajax, originalConfig, data) {
+        return this.interceptorBefore(originalConfig, data).then(config => {
+            const temp = () => Promise.resolve(config.headers)
+                .then(headers => {
+                    config.loading && this.loading.increase()
+                    return ajax(headers)
+                }).finally(() => {
+                    config.loading && this.loading.decrease()
+                }).then(res => {
+                    return this.interceptorAfter(res, temp, config)
+                })
+            return temp().then(res => {
+                if (res.status !== 200) {
+                    throw res
+                }
+                return res.data
+            }).then(res => {
+                if (res instanceof Blob || res instanceof File) {
+                    return res
+                }
+                if (res.code !== 200) {
+                    throw res
+                }
+                return res.data
+            }).catch(err => {
+                if (config.log) {
+                    this.ls.error(err)
+                }
+                throw err
+            })
+        })
+    }
+
+    /** config => config
+     *
+     * @param config
+     * @param data
+     * @returns {Promise<{headers: {...}}>}
+     */
+    // eslint-disable-next-line no-unused-vars
+    interceptorBefore(config, data) {
+        return Promise.resolve({
             log: true,
             popupLog: false,
             token: true,
             retry: true,
             reportProgress: false,
             withCredentials: false,
-            loading: true
-        }, config);
-        const temp = () => Promise.resolve({
-            'Content-Type': 'application/json;charset=UTF-8',
-            ...config.headers
-        }).then(headers => {
-            config.loading && this.loading.increase()
-            return ajax(headers)
-        }).finally(() => {
-            config.loading && this.loading.decrease()
-        }).then(res => {
-            return this.responseAdapter(res)
-        }).then(res => {
-            if (res.status !== 200) {
-                throw res
+            loading: true,
+            ...config,
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                ...config?.headers
             }
-            return res.data
-        }).then(res => {
-            if(res instanceof Blob || res instanceof File) {
-                return res
-            }
-            if (res.code === this.errorCode.LoginTimeout) {
-                return this.reLogin().then(isSuccess => {
-                    if (!isSuccess) {
-                        throw res
-                    }
-                    if (config.retry) {
-                        return temp()
-                    }
-                    throw new Error('请重新操作');
-                })
-            } else {
-                return res
-            }
-        })
-        return temp().then(res => {
-            if(res instanceof Blob || res instanceof File) {
-                return res
-            }
-            if (res.code !== this.errorCode.Success) {
-                throw res
-            }
-            return res.data
-        }).catch(err => {
-            if (config.log) {
-                this.ls.error(err)
-            }
-            throw err
         })
     }
 
-    // @returns: Promise<boolean>
-    reLogin() {
-        throw new Error('reLogin unimplemented')
-    }
-
-    // response: {status, message, data}
-    responseAdapter(response) {
-        return response
+    /** response => response
+     *
+     * @param response:       {
+     *                          status,
+     *                          message,
+     *                          data: {
+     *                              code,
+     *                              message,
+     *                              data
+     *                          }
+     *                        }
+     * @param retryCallback:  () => callback()
+     * @param config
+     * @returns {Promise<*>}
+     */
+    // eslint-disable-next-line no-unused-vars
+    interceptorAfter(response, retryCallback, config) {
+        return Promise.resolve(response)
     }
 }

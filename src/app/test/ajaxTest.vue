@@ -72,6 +72,25 @@ class MockAjaxService extends AjaxService {
     }, config)
   }
 
+  interceptorAfter(response, retryCallback, config) {
+    return super.interceptorAfter(response, retryCallback, config)
+        .then(res => {
+          if (res.data?.code === 401) {
+            return this.reLogin().then(isSuccess => {
+              if (!isSuccess) {
+                throw res.data
+              }
+              if (config.retry) {
+                return retryCallback()
+              }
+              throw new Error('请重新操作');
+            })
+          } else {
+            return res
+          }
+        })
+  }
+
   reLogin() {
     return DialogService.instance.info({
       message: '点击确定按钮表示登录成功，点击背景或关闭图标表示登录失败',
