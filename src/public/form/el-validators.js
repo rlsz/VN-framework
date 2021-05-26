@@ -81,6 +81,9 @@ export class ElFormValidators {
                 if (!value && value !== 0) {
                     return callback(new Error(label + '不能为空'))
                 }
+                if(typeof value === 'string' && /^\s*$/gi.test(value)) {
+                    return callback(new Error(label + '不能为空'))
+                }
                 return callback()
             },
             trigger: 'blur'

@@ -1,5 +1,5 @@
 <template>
-  <span class="app-send-sms-code" @click="onSend">{{ tick ? time + 's后可再次发送' : '获取验证码' }}</span>
+  <span class="app-send-sms-code" :class="{disabled: disabled || tick || validating}" @click="onSend">{{ tick ? time + 's后可再次发送' : '获取验证码' }}</span>
 </template>
 
 <script>
@@ -12,7 +12,8 @@ export default {
     return {
       disabled: false,
       tick: null,
-      time: 0
+      time: 0,
+      validating: false
     }
   },
   created() {
@@ -20,11 +21,14 @@ export default {
   },
   methods: {
     onSend() {
-      if (this.disabled || this.tick) {
+      if (this.disabled || this.tick || this.validating) {
         return;
       }
       const canSend = this.beforeSend ? Promise.resolve(this.beforeSend()) : Promise.resolve(true)
-      canSend.then(() => {
+      this.validating = true
+      canSend.finally(() => {
+        this.validating = false
+      }).then(() => {
         this.$emit('tick-start')
         this.tick = Tick(60, time => {
           this.time = time

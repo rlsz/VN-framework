@@ -71,35 +71,36 @@ export class AjaxService {
 
     // ajax: headers => Promise<{status: number, data: any}>
     interceptor(ajax, originalConfig, data) {
-        return this.interceptorBefore(originalConfig, data).then(config => {
-            const temp = () => Promise.resolve(config.headers)
-                .then(headers => {
-                    config.loading && this.loading.increase()
-                    return ajax(headers)
-                }).finally(() => {
-                    config.loading && this.loading.decrease()
-                }).then(res => {
-                    return this.interceptorAfter(res, temp, config)
-                })
-            return temp().then(res => {
-                if (res.status !== 200) {
-                    throw res
-                }
-                return res.data
+        let config
+        const temp = () => this.interceptorBefore(originalConfig, data)
+            .then(res => {
+                config = res
+            }).then(() => {
+                config.loading && this.loading.increase()
+                return ajax(config.headers)
+            }).finally(() => {
+                config.loading && this.loading.decrease()
             }).then(res => {
-                if (res instanceof Blob || res instanceof File) {
-                    return res
-                }
-                if (res.code !== 200) {
-                    throw res
-                }
-                return res.data
-            }).catch(err => {
-                if (config.log) {
-                    this.ls.error(err)
-                }
-                throw err
+                return this.interceptorAfter(res, temp, config)
             })
+        return temp().then(res => {
+            if (res.status !== 200) {
+                throw res
+            }
+            return res.data
+        }).then(res => {
+            if (res instanceof Blob || res instanceof File) {
+                return res
+            }
+            if (res.code !== 200) {
+                throw res
+            }
+            return res.data
+        }).catch(err => {
+            if (config.log) {
+                this.ls.error(err)
+            }
+            throw err
         })
     }
 
