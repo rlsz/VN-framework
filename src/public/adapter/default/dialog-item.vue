@@ -47,6 +47,9 @@ export default {
       h('div', {class: 'dialog-panel'}, [h(this.options.vueComponent)])
     ])
   },
+  mounted() {
+    this.options.instance.setOpen();
+  },
   methods: {
     onClick(event) {
       if (event.target === event.currentTarget) {
