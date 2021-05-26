@@ -110,7 +110,7 @@ export default {
   methods: {
     refresh() {
       const content = this.$refs.scroll && this.$refs.scroll.innerHTML
-      if(this.lastHtml !== content){
+      if (this.lastHtml !== content) {
         this.lastHtml = content
         this.init()
       }
@@ -123,6 +123,9 @@ export default {
     },
     getChildren() {
       const target = this.$refs.scroll
+      if (!target) {
+        return []
+      }
       const {width: viewWidth, left: viewLeft} = target.getBoundingClientRect()
       let visibleChild = null
       const children = this.children.map((c, index) => {
@@ -158,7 +161,7 @@ export default {
           let distance = target.distance
           let step = Math.max(Math.ceil(Math.abs(distance) / 16), 16)
           const animate = () => {
-            if(currentSeq !== this.sequence) {
+            if (currentSeq !== this.sequence) {
               return j('cancel')
             }
             // console.log(distance, step, scroll.scrollLeft)
@@ -300,6 +303,7 @@ export default {
     }
   }
 }
+
 .action {
   position: absolute;
   top: 50%;
@@ -307,9 +311,11 @@ export default {
   opacity: 0.3;
   max-height: 30%;
   min-height: 30px;
+
   &.mobile {
     display: none;
   }
+
   &.left {
     left: 0px;
   }
@@ -317,6 +323,7 @@ export default {
   &.right {
     right: 0px;
   }
+
   &:hover {
     opacity: 1;
   }
