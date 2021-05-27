@@ -36,7 +36,7 @@
   display: flex;
   > .fill-content {
     flex: 1 1 0px;
-    width: 0;
+    min-width: 0;
   }
   > .right {
     margin-left: auto;
@@ -60,7 +60,7 @@
   &.vertical {
     flex-direction: column;
     > .fill-content {
-      width: auto;
+      min-height: 0;
     }
   }
   &.main-center {
