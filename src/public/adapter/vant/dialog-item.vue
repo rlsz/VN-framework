@@ -52,6 +52,7 @@ export default {
   //   })
   // },
   mounted() {
+    this.options.instance.setOpen(this);
     // this.$nextTick(() => {
     //   this.$refs.container.parentElement.appendChild(this.createDom(this.options));
     //   this.options.instance.setOpen();

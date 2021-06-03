@@ -19,6 +19,7 @@ export class Dialog {
     _state;
     _result;
     config;
+    _vm;
 
     constructor(config) {
         this.id = NewID()
@@ -40,7 +41,8 @@ export class Dialog {
         }
     }
 
-    setOpen() {
+    setOpen(vm) {
+        this._vm = vm
         this._state.next(State.opened)
     }
 

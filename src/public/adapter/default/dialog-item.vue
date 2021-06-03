@@ -48,7 +48,7 @@ export default {
     ])
   },
   mounted() {
-    this.options.instance.setOpen();
+    this.options.instance.setOpen(this);
   },
   methods: {
     onClick(event) {
