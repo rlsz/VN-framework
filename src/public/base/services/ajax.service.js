@@ -69,6 +69,20 @@ export class AjaxService {
         ), config, data)
     }
 
+    delete(url, params, config) {
+        return this.interceptor(headers => axios.delete(
+            this.getUrl(url),
+            {
+                validateStatus: function () {
+                    return true
+                },
+                ...config,
+                params,
+                headers
+            }
+        ), config, params)
+    }
+
     // ajax: headers => Promise<{status: number, data: any}>
     interceptor(ajax, originalConfig, data) {
         let config
