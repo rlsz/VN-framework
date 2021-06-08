@@ -1,15 +1,16 @@
 <template>
-    <div class="dialog-root">
-        <template v-for="(dialog) in dialogs">
-          <dialog-item :options="dialog" :key="dialog.instance.id"></dialog-item>
-        </template>
-    </div>
+  <div class="dialog-root">
+    <template v-for="(dialog) in dialogs">
+      <dialog-item :options="dialog" :key="dialog.instance.id"></dialog-item>
+    </template>
+  </div>
 </template>
 
 <script>
 import {DialogItem} from '../adapter'
 import {LoggerService} from "../logger";
 import {DialogService} from "./dialog.service";
+
 export default {
   name: "dialogs-container",
   components: {
@@ -29,7 +30,14 @@ export default {
   },
   created() {
     this.dialogSub = this.ds.dialog.subscribe(d => {
-      this.dialogs.push(d)
+      if (d.instance.config?.anchor) {
+        this.dialogs.filter(c => c.instance.config?.anchor).map(c => c.instance.close())
+        this.$nextTick(() => {
+          this.dialogs.push(d)
+        })
+      } else {
+        this.dialogs.push(d)
+      }
       d.instance.afterClosed().then(() => {
         this.dialogs.splice(this.dialogs.indexOf(d), 1)
       })
