@@ -54,6 +54,13 @@ export default {
             }
         },
         {
+            path: 'popupTest',
+            component: () => import(/* webpackChunkName: "test" */ './popupTest.vue'),
+            meta: {
+                title: '弹层测试'
+            }
+        },
+        {
             path: 'scroll',
             component: () => import(/* webpackChunkName: "test" */ './scroll.vue'),
             meta: {

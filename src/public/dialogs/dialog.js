@@ -3,7 +3,15 @@ import {GeneratorFactory, SimpleSubject} from "../base/utils";
 export const Model = {
     float: 'float',
     fillAvailable: 'fill-available',
-    transparent: 'transparent'
+    transparent: 'transparent',
+    positionByAnchor: 'position-by-anchor'
+}
+
+export const Position = {
+    left: 'left',
+    top: 'top',
+    bottom: 'bottom',
+    right: 'right'
 }
 
 export const State = {

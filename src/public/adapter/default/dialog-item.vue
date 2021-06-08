@@ -1,7 +1,8 @@
 <script>
-import {Dialog, Model} from "../../dialogs/dialog";
+import {Dialog, Model, Position} from "../../dialogs/dialog";
 import {PlatformService} from '../../platform/platform.service'
 import {Platform} from '../../platform/platform'
+import {getScrollParent, debounceTime} from '../../base/utils'
 
 export default {
   name: "dialog-item",
@@ -14,41 +15,66 @@ export default {
       }
     }]
   },
+  data() {
+    return {
+      transform: {x: 0, y: 0},
+      listener: null
+    }
+  },
   computed: {
-    modelClass(){
+    model() {
       const config = this.options.instance.config
+      if (config && config.anchor) {
+        return Model.positionByAnchor
+      }
       if (config && config.model) {
         return config.model
-      } else {
-        return PlatformService.instance.platform === Platform.pc ? Model.float : Model.fillAvailable
       }
+      return PlatformService.instance.platform === Platform.pc ? Model.float : Model.fillAvailable
+    },
+    position() {
+      const config = this.options.instance.config
+      if (config && config.position) {
+        return config.position
+      }
+      return Position.bottom
     }
   },
   // https://vuejs.org/v2/guide/render-function.html#createElement-Arguments
   render(h) {
+    let transform = ''
+    if (this.model === Model.positionByAnchor) {
+      transform = `translateX(${this.transform.x}px) translateY(${this.transform.y}px)`
+    }
     return h('div', {
       class: {
         'dialog-container': true,
-        [this.modelClass]: true
+        [this.model]: true
       },
       on: {
         click: this.onClick
       }
-      // props: {
-      //   title: 'placeholder',
-      //   ...this.options.instance.config,
-      //   visible: true,
-      //   'before-close': () => {
-      //     this.options.instance.close()
-      //   },
-      //   'custom-class': this.options.instance.config?.transparent ? 'transparent' : ''
-      // }
     }, [
-      h('div', {class: 'dialog-panel'}, [h(this.options.vueComponent)])
+      h('div', {
+        class: 'dialog-panel',
+        ref: 'dialogPanel',
+        style: {
+          transform
+        }
+      }, [h(this.options.vueComponent)])
     ])
   },
   mounted() {
     this.options.instance.setOpen(this);
+    this.fixPositionByAnchor()
+  },
+  updated() {
+    this.fixPositionByAnchor()
+  },
+  destroyed() {
+    if (this.listener) {
+      this.listener.target.removeEventListener('scroll', this.listener.onScroll)
+    }
   },
   methods: {
     onClick(event) {
@@ -58,6 +84,61 @@ export default {
           this.options.instance.close()
         }
       }
+    },
+    fixPositionByAnchor() {
+      if (this.model !== Model.positionByAnchor) {
+        return
+      }
+      if(!this.options.instance.config?.anchor) {
+        this.transform = {x: 0, y: 0}
+        return
+      }
+      if (!this.listener) {
+        const target = getScrollParent(this.options.instance.config.anchor)
+        this.listener = {
+          target: target,
+          onScroll: this.onAnchorMove.bind(this),
+        }
+        target.addEventListener('scroll', this.listener.onScroll)
+      }
+      const anchor = this.options.instance.config.anchor.getBoundingClientRect() // a, ax, ay, aw, ah
+      const self = this.$refs.dialogPanel?.getBoundingClientRect() // s, sx, sy, sw, sh
+      let translateX = 0
+      let translateY = 0
+      if (this.position === Position.bottom) {
+        // x = -((sx + sw/2) - (ax + aw/2))
+        translateX = anchor.x + anchor.width / 2 - self.x - self.width / 2
+        // y = -(sy - ay - ah)
+        translateY = anchor.y + anchor.height - self.y
+      }
+      if (this.position === Position.top) {
+        // x = -((sx + sw/2) - (ax + aw/2))
+        translateX = anchor.x + anchor.width / 2 - self.x - self.width / 2
+        // y = -(sy + sh - ay)
+        translateY = anchor.y - self.y - self.height
+      }
+      if (this.position === Position.left) {
+        // x = - (sx + sw - ax)
+        translateX = anchor.x - self.x - self.width
+        // y = - ((sy + sh/2) - (ay + ah/2))
+        translateY = anchor.y + anchor.height / 2 - self.y - self.height / 2
+      }
+      if (this.position === Position.right) {
+        // x = - (sx - ax - aw)
+        translateX = anchor.x + anchor.width - self.x
+        // y = - ((sy + sh/2) - (ay + ah/2))
+        translateY = anchor.y + anchor.height / 2 - self.y - self.height / 2
+      }
+      // console.log('positionAnchor', JSON.stringify(anchor))
+      // console.log('positionSelf', JSON.stringify(self))
+      // console.log('transform', {translateX, translateY})
+      if(Math.abs(translateX) > 1 || Math.abs(translateY) > 1) {
+        const {x, y} = this.transform
+        this.transform = {x: x + translateX, y: y + translateY}
+      }
+    },
+    onAnchorMove() {
+      this.fixPositionByAnchor()
     }
   }
 }
@@ -140,6 +221,20 @@ export default {
       > .body {
         margin: 0;
       }
+    }
+  }
+
+  &.position-by-anchor {
+    pointer-events: none;
+    align-items: center;
+
+    > * {
+      margin: auto;
+    }
+
+    .dialog-panel {
+      pointer-events: auto;
+      border: 1px solid rgba(0, 0, 0, 0.1);
     }
   }
 }
