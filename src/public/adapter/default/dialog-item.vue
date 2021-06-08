@@ -129,9 +129,11 @@ export default {
         // y = - ((sy + sh/2) - (ay + ah/2))
         translateY = anchor.y + anchor.height / 2 - self.y - self.height / 2
       }
-      // console.log('positionAnchor', JSON.stringify(anchor))
-      // console.log('positionSelf', JSON.stringify(self))
-      // console.log('transform', {translateX, translateY})
+      const body = document.body.getBoundingClientRect()
+      translateY = Math.min(body.height - self.height - self.y, translateY)
+      translateY = Math.max(-self.y, translateY)
+      translateX = Math.min(body.width - self.width - self.x, translateX)
+      translateX = Math.max(-self.x, translateX)
       if(Math.abs(translateX) > 1 || Math.abs(translateY) > 1) {
         const {x, y} = this.transform
         this.transform = {x: x + translateX, y: y + translateY}
