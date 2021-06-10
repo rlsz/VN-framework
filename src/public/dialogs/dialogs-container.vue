@@ -31,10 +31,15 @@ export default {
   created() {
     this.dialogSub = this.ds.dialog.subscribe(d => {
       if (d.instance.config?.anchor) {
-        this.dialogs.filter(c => c.instance.config?.anchor).map(c => c.instance.close())
-        this.$nextTick(() => {
+        const targets = this.dialogs.filter(c => c.instance.config?.anchor)
+        if(targets.length) {
+          Promise.all(targets.map(c => c.instance.afterClosed())).then(() => {
+            this.dialogs.push(d)
+          })
+          targets.forEach(c => c.instance.close())
+        } else {
           this.dialogs.push(d)
-        })
+        }
       } else {
         this.dialogs.push(d)
       }
