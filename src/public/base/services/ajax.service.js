@@ -69,6 +69,20 @@ export class AjaxService {
         ), config, data)
     }
 
+    put(url, data, config) {
+        return this.interceptor(headers => axios.put(
+            this.getUrl(url),
+            data,
+            {
+                validateStatus: function () {
+                    return true
+                },
+                ...config,
+                headers
+            }
+        ), config, data)
+    }
+
     delete(url, params, config) {
         return this.interceptor(headers => axios.delete(
             this.getUrl(url),

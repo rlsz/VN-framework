@@ -26,7 +26,7 @@
                    :current-page="page + 1"
                    @current-change="skip"
                    @size-change="handleSizeChange"
-                   :layout="layout || 'prev, pager, next, sizes, jumper, slot'"
+                   :layout="layout || 'total, prev, pager, next, sizes, jumper, slot'"
                    :page-size="pageSize"
                    :page-sizes="pageSizeList"
                    :total="total"

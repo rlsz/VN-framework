@@ -85,6 +85,7 @@ export default {
         }
       }
     },
+    // todo: close dialog when click out of the dialog, which can be config by 'close-on-click-overlay'
     fixPositionByAnchor() {
       if (this.model !== Model.positionByAnchor) {
         return

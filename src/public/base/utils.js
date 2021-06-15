@@ -581,3 +581,12 @@ export function getStyleComputedProperty(element, property) {
     return css[property];
 }
 
+export function truncateText(str, len = 100) {
+    if (typeof str !== 'string') {
+        return str;
+    }
+    if (str.length <= len) {
+        return str;
+    }
+    return str.substr(0, len) + '...';
+}
