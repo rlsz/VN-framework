@@ -23,10 +23,10 @@ export default function (Vue) {
         if (!words) {
             return value;
         }
+        words = words.filter(c => c)
         if (!words.length) {
             return value;
         }
-        words = words.filter(c => c)
         words.sort((l, r) => {
             if (l.length < r.length) return 1;
             if (l.length > r.length) return -1;

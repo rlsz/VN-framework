@@ -38,6 +38,10 @@ export default {
         return config.position
       }
       return Position.bottom
+    },
+    enableOverlayClose() {
+      const enableOverlayClose = this.options.instance.config && this.options.instance.config['close-on-click-overlay']
+      return enableOverlayClose === undefined || enableOverlayClose
     }
   },
   // https://vuejs.org/v2/guide/render-function.html#createElement-Arguments
@@ -52,7 +56,7 @@ export default {
         [this.model]: true
       },
       on: {
-        click: this.onClick
+        click: this.onOverlayClick
       }
     }, [
       h('div', {
@@ -73,19 +77,23 @@ export default {
   },
   destroyed() {
     if (this.listener) {
+      document.body.removeEventListener('click', this.onBodyClick);
       this.listener.target.removeEventListener('scroll', this.listener.onScroll)
     }
   },
   methods: {
-    onClick(event) {
+    onOverlayClick(event) {
       if (event.target === event.currentTarget) {
-        const enableOverlayClose = this.options.instance.config && this.options.instance.config['close-on-click-overlay']
-        if (enableOverlayClose === undefined || enableOverlayClose) {
+        if (this.enableOverlayClose) {
           this.options.instance.close()
         }
       }
     },
-    // todo: close dialog when click out of the dialog, which can be config by 'close-on-click-overlay'
+    onBodyClick(event) {
+      if(!this.$el.contains(event.target) && this.enableOverlayClose) {
+        this.options.instance.close()
+      }
+    },
     fixPositionByAnchor() {
       if (this.model !== Model.positionByAnchor) {
         return
@@ -101,6 +109,9 @@ export default {
           onScroll: this.onAnchorMove.bind(this),
         }
         target.addEventListener('scroll', this.listener.onScroll)
+        setTimeout(() => {
+          document.body.addEventListener('click', this.onBodyClick, false);
+        }, 0)
       }
       const anchor = this.options.instance.config.anchor.getBoundingClientRect() // a, ax, ay, aw, ah
       const self = this.$refs.dialogPanel?.getBoundingClientRect() // s, sx, sy, sw, sh
@@ -142,7 +153,8 @@ export default {
     },
     onAnchorMove() {
       this.fixPositionByAnchor()
-    }
+    },
+
   }
 }
 </script>

@@ -72,7 +72,7 @@ export default {
     //padding: 20px 20px 10px;
     //background: white;
 
-    padding: 20px 20px 10px 44px;
+    padding: 20px 20px 10px 20px;
     font-weight: bolder;
     z-index: 1;
     box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.07);
