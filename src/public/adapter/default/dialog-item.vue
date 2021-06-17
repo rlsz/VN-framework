@@ -90,7 +90,12 @@ export default {
       }
     },
     onBodyClick(event) {
-      if(!this.$el.contains(event.target) && this.enableOverlayClose) {
+      if(
+          this.enableOverlayClose &&
+          event.target &&
+          !this.$el.contains(event.target) &&
+          document.body.querySelector('#app').contains(event.target)
+      ) {
         this.options.instance.close()
       }
     },
@@ -115,6 +120,10 @@ export default {
       }
       const anchor = this.options.instance.config.anchor.getBoundingClientRect() // a, ax, ay, aw, ah
       const self = this.$refs.dialogPanel?.getBoundingClientRect() // s, sx, sy, sw, sh
+      if(!anchor || !self) {
+        this.transform = {x: 0, y: 0}
+        return
+      }
       let translateX = 0
       let translateY = 0
       if (this.position === Position.bottom) {
