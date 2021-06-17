@@ -328,7 +328,8 @@
         currentPlaceholder: '',
         menuVisibleOnFocus: false,
         isOnComposition: false,
-        isSilentBlur: false
+        isSilentBlur: false,
+        latestOptions: null
       };
     },
 
@@ -467,6 +468,9 @@
         this.hoverIndex = -1;
         if (this.multiple && this.filterable) {
           this.$nextTick(() => {
+            if(!this.$refs.input) {
+              return
+            }
             const length = this.$refs.input.value.length * 15 + 20;
             this.inputLength = this.collapseTags ? Math.min(50, length) : length;
             this.managePlaceholder();
@@ -859,7 +863,6 @@
     },
 
     mounted() {
-      console.log('mounted')
       if (this.multiple && Array.isArray(this.value) && this.value.length > 0) {
         this.currentPlaceholder = '';
       }
@@ -884,6 +887,17 @@
         }
       });
       this.setSelected();
+    },
+
+    updated() {
+      if(this.multiple) {
+        if(this.latestOptions !== this.$slots.default) {
+          this.latestOptions = this.$slots.default
+          if(this.$slots.default) {
+            this.resetInputHeight();
+          }
+        }
+      }
     },
 
     beforeDestroy() {

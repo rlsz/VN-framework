@@ -17,8 +17,8 @@ Vue.use(ElementUI);
 
  暂时先不改getScrollParent方法，而是通过调整样式框架满足该方法的搜索逻辑
  */
-// import Select from './select';
-// Vue.component('test-select', Select);
+import Select from './select';
+Vue.component('el-select', Select);
 
 /** el-table组件当数据中含有hasChildren字段时，会干扰正常的lazy处理，
  * 需要修改table/src/store/tree文件中的normalize方法以及table/src/util中的walkTreeNode方法进行修正
