@@ -81,3 +81,22 @@
   bottom: -5px !important;
   padding: 0 4px;
 }
+
+.el-select {
+  .el-select__tags {
+    .el-tag {
+      max-width: 100%;
+      display: inline-flex;
+      align-items: center;
+      .el-select__tags-text {
+        flex: 1 1 0px;
+        min-width: 0px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+      .el-tag__close {
+        flex: 0 0 auto;
+      }
+    }
+  }
+}
