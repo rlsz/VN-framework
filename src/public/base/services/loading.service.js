@@ -15,6 +15,7 @@ export class LoadingService {
     delay = 200
     count = 0
     openTimer = null
+    closeTimer = null
     loadingInstance = null
     ds
 
@@ -67,6 +68,10 @@ export class LoadingService {
     refresh() {
         if (this.count > 0) {
             document.body.classList.add(loadingClass)
+            if(this.closeTimer) {
+                clearTimeout(this.closeTimer)
+                this.closeTimer = null
+            }
             if (!this.openTimer) {
                 this.openTimer = setTimeout(() => {
                     this.openTimer = null
@@ -79,7 +84,12 @@ export class LoadingService {
                 clearTimeout(this.openTimer)
                 this.openTimer = null
             }
-            this.close()
+            if (!this.closeTimer) {
+                this.closeTimer = setTimeout(() => {
+                    this.closeTimer = null
+                    this.close()
+                }, this.delay)
+            }
         }
     }
 }
