@@ -163,6 +163,13 @@ export default {
                     }
                 ])
             ]
-        }
+        },
+        {
+            path: 'diTest',
+            component: () => import(/* webpackChunkName: "test" */ './diTest.vue'),
+            meta: {
+                title: '依赖注入状态测试'
+            }
+        },
     ]
 }
