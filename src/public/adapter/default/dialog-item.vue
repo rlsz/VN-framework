@@ -18,7 +18,8 @@ export default {
   data() {
     return {
       transform: {x: 0, y: 0},
-      listener: null
+      listener: null,
+      maxHeight: null
     }
   },
   computed: {
@@ -63,7 +64,8 @@ export default {
         class: 'dialog-panel',
         ref: 'dialogPanel',
         style: {
-          transform
+          transform,
+          maxHeight: this.maxHeight ? this.maxHeight + 'px' : null
         }
       }, [h(this.options.vueComponent)])
     ])
@@ -90,7 +92,7 @@ export default {
       }
     },
     onBodyClick(event) {
-      if(
+      if (
           this.enableOverlayClose &&
           event.target &&
           !this.$el.contains(event.target) &&
@@ -103,7 +105,7 @@ export default {
       if (this.model !== Model.positionByAnchor) {
         return
       }
-      if(!this.options.instance.config?.anchor) {
+      if (!this.options.instance.config?.anchor) {
         this.transform = {x: 0, y: 0}
         return
       }
@@ -120,13 +122,13 @@ export default {
       }
       const anchor = this.options.instance.config.anchor.getBoundingClientRect() // a, ax, ay, aw, ah
       const self = this.$refs.dialogPanel?.getBoundingClientRect() // s, sx, sy, sw, sh
-      if(!anchor || !self) {
+      if (!anchor || !self) {
         this.transform = {x: 0, y: 0}
         return
       }
       let translateX = 0
       let translateY = 0
-      if (this.position === Position.bottom) {
+      if ([Position.bottom, Position.bottomStrict].indexOf(this.position) >= 0) {
         // x = -((sx + sw/2) - (ax + aw/2))
         translateX = anchor.x + anchor.width / 2 - self.x - self.width / 2
         // y = -(sy - ay - ah)
@@ -155,7 +157,11 @@ export default {
       translateY = Math.max(-self.y, translateY)
       translateX = Math.min(body.width - self.width - self.x, translateX)
       translateX = Math.max(-self.x, translateX)
-      if(Math.abs(translateX) > 1 || Math.abs(translateY) > 1) {
+      if (this.position === Position.bottomStrict) {
+        translateY = Math.max(anchor.y + anchor.height - self.y, translateY)
+        this.maxHeight = body.height - anchor.y - anchor.height - 4
+      }
+      if (Math.abs(translateX) > 1 || Math.abs(translateY) > 1) {
         const {x, y} = this.transform
         this.transform = {x: x + translateX, y: y + translateY}
       }

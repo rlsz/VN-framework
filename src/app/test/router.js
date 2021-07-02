@@ -178,5 +178,12 @@ export default {
                 title: '富文本编辑测试'
             }
         },
+        {
+            path: 'formTest',
+            component: () => import(/* webpackChunkName: "test" */ './formTest.vue'),
+            meta: {
+                title: '表单测试'
+            }
+        },
     ]
 }
