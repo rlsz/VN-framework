@@ -171,5 +171,12 @@ export default {
                 title: '依赖注入状态测试'
             }
         },
+        {
+            path: 'richText',
+            component: () => import(/* webpackChunkName: "test" */ './richText.vue'),
+            meta: {
+                title: '富文本编辑测试'
+            }
+        },
     ]
 }

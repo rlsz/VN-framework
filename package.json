@@ -16,6 +16,7 @@
     "vconsole": "^3.4.0",
     "vue": "^2.6.11",
     "vue-cropperjs": "^4.2.0",
+    "vue-quill-editor": "^3.0.6",
     "vue-router": "^3.2.0"
   },
   "devDependencies": {
