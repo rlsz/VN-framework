@@ -21,6 +21,7 @@ import {
 import logger from './logger'
 import dialogs from './dialogs'
 import scroll from './scroll'
+import form, {TabsService} from './form'
 import platform, {PlatformService} from './platform'
 import DependencyInjection from './di.service';
 import {LoggerService} from "./logger";
@@ -34,7 +35,8 @@ export const RootProviders = [
     LocalStorageService,
     SessionStorageService,
     CookieStorageService,
-    AjaxService
+    AjaxService,
+    TabsService
 ]
 
 function FindVueRoot() {
@@ -79,6 +81,7 @@ export default function (Vue, router) {
     Vue.use(logger)
     Vue.use(dialogs)
     Vue.use(scroll, {hold: router})
+    Vue.use(form)
     AppendComponentToRoot(Vue, DialogsContainer)
     Vue.prototype.$ls = LoggerService.instance
 }
