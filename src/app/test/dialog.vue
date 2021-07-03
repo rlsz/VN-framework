@@ -4,6 +4,7 @@
     <button class="app-form" @click="success()">success dialog</button>
     <button class="app-form" @click="info()">info dialog</button>
     <button class="app-form" type="button" @click="multiDialog">multi dialog</button>
+    <button class="app-form" type="button" @click="multiDialog1">multi dialog in same time</button>
     <button class="app-form" @click="simpleComp()">简单组件</button>
     <button class="app-form" @click="openLoading()" v-loading-target>打开loading弹窗</button>
     <button class="app-form" @click="ajaxSimulator()" v-loading-target>模拟接口请求</button>
@@ -113,6 +114,10 @@ export default {
           this.ls.success('multi dialog success')
         }
       })
+    },
+    multiDialog1() {
+      this.ds.info('dialog 1dialog 1dialog 1dialog 1dialog 1dialog 1dialog 1dialog 1dialog 1dialog 1dialog 1dialog 1dialog 1')
+      this.ds.info('dialog 2')
     },
     ajaxSimulator() {
       this.loading.increase()

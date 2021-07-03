@@ -46,6 +46,11 @@ export default {
       d.instance.afterClosed().then(() => {
         this.dialogs.splice(this.dialogs.indexOf(d), 1)
       })
+      this.dialogs.filter(c => !c.instance.config?.anchor).forEach((item, index, arr) => {
+        item.instance.afterOpened().then(() => {
+          item.instance._vm.hide = index !== arr.length - 1
+        })
+      })
     })
   },
   mounted() {
@@ -60,8 +65,8 @@ export default {
 </script>
 <style lang="less" scoped>
 .dialog-root {
-  > :not(:last-child) {
-    opacity: 0;
-  }
+  //> :not(:last-child) {
+  //  opacity: 0;
+  //}
 }
 </style>

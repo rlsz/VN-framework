@@ -13,13 +13,17 @@ export default {
       useFactory() {
         return this.$options.propsData.options.instance
       }
-    }]
+    }],
+    inject: {
+      dialog: Dialog
+    }
   },
   data() {
     return {
       transform: {x: 0, y: 0},
       listener: null,
-      maxHeight: null
+      maxHeight: null,
+      hide: false
     }
   },
   computed: {
@@ -58,6 +62,9 @@ export default {
       },
       on: {
         click: this.onOverlayClick
+      },
+      style: {
+        'opacity': this.hide ? '0' : '1'
       }
     }, [
       h('div', {

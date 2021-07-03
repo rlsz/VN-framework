@@ -10,6 +10,9 @@
         <span v-if="form.tags">（{{form.tags.length}}/5）</span>
       </app-option-input>
     </app-multi-select>
+    <span class="test test-1">111</span>
+    <span class="test test-2">222</span>
+    <span class="test test-3">333</span>
   </div>
 </template>
 
@@ -41,5 +44,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
+//.test-2 {
+//  color: red;
+//}
 </style>
