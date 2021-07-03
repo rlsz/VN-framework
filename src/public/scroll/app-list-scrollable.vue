@@ -15,7 +15,7 @@
   </div>
   <div v-else class="no-result flex center">
     <slot name="empty">
-      <span>暂无数据</span>
+      <span class="padding flex center">暂无数据</span>
     </slot>
   </div>
 </template>
