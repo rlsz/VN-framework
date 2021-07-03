@@ -7,6 +7,7 @@ import multiSelect from './multi-select/app-multi-select'
 import optionEmpty from './multi-select/app-option-empty'
 import optionInput from './multi-select/app-option-input'
 import option from './multi-select/app-option'
+import optionDropdown from './multi-select/app-option-dropdown'
 
 export default function (Vue) {
     Vue.component(tabs.name, tabs)
@@ -15,4 +16,5 @@ export default function (Vue) {
     Vue.component(optionEmpty.name, optionEmpty)
     Vue.component(optionInput.name, optionInput)
     Vue.component(option.name, option)
+    Vue.component(optionDropdown.name, optionDropdown)
 }

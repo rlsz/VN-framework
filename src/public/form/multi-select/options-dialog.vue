@@ -1,18 +1,27 @@
-<template>
-  <div class="options-dialog scroll" :style="{minWidth: minWidth+'px'}">
-    <span class="option" :class="{active: config.mss.isActive(item)}" v-for="(item,index) in options" :key="'option-index-'+index" @click="submit(item)">
-      {{item.label}}
-    </span>
-  </div>
-</template>
+<!--<template>-->
+<!--  <div class="options-dialog scroll" :style="{minWidth: minWidth+'px'}">-->
+<!--    <span class="option" :class="{active: mss.isActive(item)}" v-for="(item,index) in options" :key="'option-index-'+index" @click="submit(item)">-->
+<!--      {{item.label}}-->
+<!--    </span>-->
+<!--    <dropdownContent></dropdownContent>-->
+<!--  </div>-->
+<!--</template>-->
 
 <script>
 import {Dialog} from "../../dialogs/dialog";
+import {MultiSelectService} from "./multi-select.service";
 
 export default {
   di: {
+    providers: [{
+      provide: MultiSelectService,
+      useFactory(injector) {
+        return injector.get(Dialog).config?.mss || null
+      }
+    }],
     inject: {
-      dialog: Dialog
+      dialog: Dialog,
+      mss: MultiSelectService
     }
   },
   data() {
@@ -24,7 +33,7 @@ export default {
       return this.dialog.config
     },
     options() {
-      return this.config.mss.allOptions
+      return this.mss.allOptions
     },
     minWidth() {
       if(!this.config.anchor) {
@@ -34,6 +43,19 @@ export default {
       return width
     }
   },
+  render(h) {
+    const options = this.mss.allOptions.map((c, i) => this.mss.dropdownOption({
+      value: c,
+      index: i,
+      active: this.mss.isActive(c)
+    }))
+    return h('div', {
+      class: 'options-dialog scroll',
+      style: {
+        minWidth: this.minWidth+'px'
+      }
+    }, options)
+  },
   watch: {
     options() {
       this.$nextTick(() => {
@@ -41,6 +63,19 @@ export default {
       })
     }
   },
+  // beforeCreate() {
+  //   const _this = this
+  //   this.$options.components.dropdownContent = {
+  //     render(h) {
+  //       // console.log('*****', _this.mss.dropdownOption)
+  //       // return _this.mss.dropdownOption
+  //       return h('div', null, _this.mss.dropdownOption)
+  //     },
+  //     mounted() {
+  //       console.log(this.$el)
+  //     }
+  //   }
+  // },
   created() {
   },
   methods: {

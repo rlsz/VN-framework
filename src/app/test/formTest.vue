@@ -3,7 +3,10 @@
     <span>多选测试:</span>
     <app-multi-select v-model="form.tags" :remote-method="query" value-key="value">
       <template v-slot:default="{value}">
-        <app-option :option="value" :key="value.value">{{ value.label }}</app-option>
+        <app-option :option="value" :key="'app-multi-select-option-' + value.value">{{ value.label }}</app-option>
+      </template>
+      <template v-slot:dropdown-option="{value}">
+        <app-option-dropdown :option="value" :key="'app-multi-select-dropdown-option-' + value.value">{{ value.label }}</app-option-dropdown>
       </template>
       <app-option-input slot="suffix" placeholder="请输入话题名称">
         +添加话题

@@ -23,9 +23,11 @@ class DependencyInjection {
         return data
     }
 
-    get ownProviders() {
-        return Object.getOwnPropertySymbols(this.instanceMap).map(c => this.instanceMap[c])
-    }
+    ownProviders = []
+    // 使用instanceMap生成的ownProviders无法排除useValue/useFactory等方式添加的provide，所以改成使用new关键词生成的时候调用
+    // get ownProviders() {
+    //     return Object.getOwnPropertySymbols(this.instanceMap).map(c => this.instanceMap[c])
+    // }
 
     constructor(vm) {
         this.vm = vm
@@ -63,6 +65,7 @@ class DependencyInjection {
         if (typeof provider === 'function') {
             token = provider
             value = new token(this)
+            this.ownProviders.push(value)
         } else {
             if (!provider.provide && provider.provider) {
                 throw new Error(`configuration error: please use provide instead of provider`)
@@ -72,6 +75,7 @@ class DependencyInjection {
                 value = provider.useValue
             } else if (provider.useClass) {
                 value = new provider.useClass(this)
+                this.ownProviders.push(value)
             } else if (provider.useExisting) {
                 value = this.get(provider.useExisting)
             } else if (provider.useFactory) {

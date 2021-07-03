@@ -20,7 +20,7 @@ export default {
   },
   methods: {
     onDel() {
-      console.log(this.option)
+      this.mss.onSelectOption(this.option)
     }
   }
 }

@@ -6,6 +6,7 @@ export class MultiSelectService {
     valueOptions
     allOptions
     loading = false
+    dropdownOption = null
 
     get multiple() {
         if(this.vm.multiple === undefined) {

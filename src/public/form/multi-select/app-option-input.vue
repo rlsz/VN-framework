@@ -36,15 +36,18 @@ export default {
   },
   destroyed() {
     document.body.removeEventListener('click', this.onBodyClick);
+    if(this.optionsDialog) {
+      this.optionsDialog.close()
+    }
   },
   methods: {
     onBodyClick(event) {
       if(
           this.optionsDialog &&
           event.target &&
+          document.body.contains(event.target) &&
           !this.$el.contains(event.target) &&
-          !this.optionsDialog._vm.$el.contains(event.target) &&
-          document.body.querySelector('#app').contains(event.target)
+          !this.optionsDialog._vm.$el.contains(event.target)
       ) {
         this.optionsDialog.close()
       }

@@ -1,10 +1,10 @@
 <template>
   <span class="flex wrap cross-center app-multi-select">
     <slot name="prefix"></slot>
-    <slot v-bind:value="item" v-bind:index="index" v-bind:active="mss.isActive(item)" v-for="(item,index) in mss.valueOptions">
-      use slotProps.value to access row data in slot template,
-      https://vuejs.org/v2/guide/components-slots.html#Scoped-Slots
-    </slot>
+    <slot v-bind:value="item" v-bind:index="index" v-bind:active="mss.isActive(item)" v-for="(item,index) in mss.valueOptions"></slot>
+    <span ref="dropdownContent" class="dropdown-content">
+      <slot name="dropdown-option" v-bind:value="item" v-bind:index="index" v-bind:active="mss.isActive(item)" v-for="(item,index) in mss.allOptions"></slot>
+    </span>
     <slot name="suffix"></slot>
   </span>
 </template>
@@ -20,6 +20,10 @@ export default {
     inject: {
       mss: MultiSelectService
     }
+  },
+  mounted() {
+    this.mss.dropdownOption = this.$scopedSlots['dropdown-option']
+    // this.$refs.dropdownContent.remove()
   }
 }
 </script>
@@ -27,5 +31,8 @@ export default {
 <style lang="less" scoped>
 .app-multi-select {
 
+}
+.dropdown-content {
+  display: none;
 }
 </style>
