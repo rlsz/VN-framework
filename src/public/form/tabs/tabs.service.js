@@ -29,6 +29,10 @@ export class TabsService {
     }
 
     onSelectTab(option) {
+        if(option === null) {
+            this.vm.$emit('input', null)
+            return
+        }
         if(this.multiple) {
             if(!this.value) {
                 this.vm.$emit('input', [option])
@@ -56,6 +60,13 @@ export class TabsService {
         }
     }
     isActive(option) {
+        if(option === null) {
+            if(this.multiple) {
+                return !this.value || !this.value.length
+            } else {
+                return !this.value
+            }
+        }
         if(!this.value) {
             return false
         }
