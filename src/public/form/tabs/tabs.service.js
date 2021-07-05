@@ -6,6 +6,16 @@ export class TabsService {
     get value() {
         return this.vm.value
     }
+    get multiple() {
+        if(this.vm.multiple === '') {
+            return true
+        } else {
+            return !!this.vm.multiple
+        }
+    }
+    get valueKey() {
+        return this.vm.valueKey
+    }
 
     diCreated(vm) {
         this.vm = vm
@@ -19,10 +29,47 @@ export class TabsService {
     }
 
     onSelectTab(option) {
-        if(this.value === option) {
-            this.vm.$emit('input', null)
+        if(this.multiple) {
+            if(!this.value) {
+                this.vm.$emit('input', [option])
+            } else {
+                let target = this.value.find(c => {
+                    if(this.valueKey) {
+                        return c[this.valueKey] === option[this.valueKey]
+                    } else {
+                        return c === option
+                    }
+                })
+                if(target) {
+                    this.value.splice(this.value.indexOf(target), 1)
+                } else {
+                    this.value.push(option)
+                }
+                this.vm.$emit('input', this.value)
+            }
         } else {
-            this.vm.$emit('input', option)
+            if(this.value === option) {
+                this.vm.$emit('input', null)
+            } else {
+                this.vm.$emit('input', option)
+            }
+        }
+    }
+    isActive(option) {
+        if(!this.value) {
+            return false
+        }
+        if(this.multiple) {
+            let target = this.value.find(c => {
+                if(this.valueKey) {
+                    return c[this.valueKey] === option[this.valueKey]
+                } else {
+                    return c === option
+                }
+            })
+            return !!target
+        } else {
+            return this.value === option
         }
     }
 }
