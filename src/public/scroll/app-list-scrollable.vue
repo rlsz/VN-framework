@@ -92,7 +92,7 @@ export default {
         if (currentSeq !== this.sequence) {
           return
         }
-        this.ls.error(err.message)
+        // this.ls.error(err.message)
         this.page = Math.max(this.page - 1, 0);
       })
     },
