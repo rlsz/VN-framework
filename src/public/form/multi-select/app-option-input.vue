@@ -81,7 +81,7 @@ export default {
       })
     },
     onEnter(e) {
-      this.mss.search()
+      this.mss.search(this.text)
       this.onFocus(e.target)
     }
   }

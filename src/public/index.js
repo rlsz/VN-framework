@@ -54,6 +54,7 @@ function FindVueRoot() {
     // Array.from(document.body.children).find(c => c.__vue__)
 }
 
+let instanceList = []
 function AppendComponentToRoot(Vue, comp) {
     Vue.nextTick(() => {
         const Component = Vue.extend({
@@ -70,6 +71,18 @@ function AppendComponentToRoot(Vue, comp) {
         });
         instance.$mount()
         document.body.appendChild(instance.$el)
+        instanceList.push(instance)
+    })
+}
+export function ChangeRoot(vm) {
+    instanceList.forEach(instance => {
+        Object.defineProperty(instance, '$parent', {
+            get() {
+                return vm;
+            },
+            enumerable: true,
+            configurable: true
+        });
     })
 }
 

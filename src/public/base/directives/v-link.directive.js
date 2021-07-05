@@ -29,7 +29,6 @@ class VLinkDirective extends DirectiveContext {
     }
 
     unbind() {
-        console.log('unbind', this.value)
         super.unbind(...arguments);
         if (this.unwatch) {
             this.unwatch()
