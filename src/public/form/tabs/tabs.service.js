@@ -9,13 +9,13 @@ export class TabsService {
 
     diCreated(vm) {
         this.vm = vm
-        vm.$watch('options', val => {
-            if(val && val.length) {
-                this.onSelectTab(val[0])
-            }
-        }, {
-            immediate: true
-        })
+        // vm.$watch('options', val => {
+        //     if(val && val.length) {
+        //         this.onSelectTab(val[0])
+        //     }
+        // }, {
+        //     immediate: true
+        // })
     }
 
     onSelectTab(option) {
