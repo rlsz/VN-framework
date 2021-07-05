@@ -70,6 +70,7 @@ export default {
       }
     },
     onFocus(e) {
+      this.mss.search(this.text)
       this.showDialog(e.target)
     },
     onAdd() {
@@ -81,7 +82,6 @@ export default {
       })
     },
     onEnter(e) {
-      this.mss.search(this.text)
       this.onFocus(e.target)
     }
   }
