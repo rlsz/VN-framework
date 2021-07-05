@@ -1,5 +1,8 @@
 <template>
-  <span class="app-tab" @click="tabs.onSelectTab(option)" :class="{active: tabs.active === option}">
+  <span class="app-tab"
+        @click="tabs.onSelectTab(option)"
+        :class="{active: tabs.value === option, disabled: disabled}"
+  >
     <slot>{{option}}</slot>
   </span>
 </template>
@@ -9,10 +12,23 @@ import {TabsService} from "./tabs.service";
 
 export default {
   name: "app-tab",
-  props: ['option'],
+  props: ['option', 'cancelable'],
   di: {
     inject: {
       tabs: TabsService
+    }
+  },
+  computed: {
+    disabled() {
+      let cancelable = !!this.cancelable
+      if(this.cancelable === '') {
+        cancelable = true
+      }
+      if(cancelable) {
+        return false
+      } else {
+        return this.tabs.value === this.option
+      }
     }
   }
 }
@@ -21,7 +37,7 @@ export default {
 <style lang="less" scoped>
 .app-tab {
   cursor: pointer;
-  &.active {
+  &.disabled {
     pointer-events: none;
   }
   &:hover {

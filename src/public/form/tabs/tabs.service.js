@@ -3,7 +3,7 @@ export class TabsService {
     get options() {
         return this.vm.options
     }
-    get active() {
+    get value() {
         return this.vm.value
     }
 
@@ -19,6 +19,10 @@ export class TabsService {
     }
 
     onSelectTab(option) {
-        this.vm.$emit('input', option)
+        if(this.value === option) {
+            this.vm.$emit('input', null)
+        } else {
+            this.vm.$emit('input', option)
+        }
     }
 }

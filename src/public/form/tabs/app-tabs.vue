@@ -1,6 +1,6 @@
 <template>
   <span class="app-tabs">
-    <slot v-bind:value="item" v-bind:active="tabs.active === item" v-for="(item,index) in options">
+    <slot v-bind:value="item" v-bind:active="tabs.value === item" v-for="(item,index) in options">
       use slotProps.value to access row data in slot template,
       https://vuejs.org/v2/guide/components-slots.html#Scoped-Slots
     </slot>
