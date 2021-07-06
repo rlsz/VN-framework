@@ -69,6 +69,7 @@ function AppendComponentToRoot(Vue, comp) {
             enumerable: true,
             configurable: true
         });
+        instance._routerRoot = (instance.$parent && instance.$parent._routerRoot) || instance;
         instance.$mount()
         document.body.appendChild(instance.$el)
         instanceList.push(instance)

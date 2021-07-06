@@ -20,11 +20,13 @@
 import {menuAdapter} from "../menuAdapter";
 import router from "./router";
 import {PlatformService, Platform} from "@/public/platform";
+import {DialogService} from "@/public/dialogs";
 
 export default {
   di: {
     inject: {
-      ps: PlatformService
+      ps: PlatformService,
+      ds: DialogService
     }
   },
   data() {
@@ -41,6 +43,8 @@ export default {
     }
   },
   created() {
+    // window.test2 = this
+    // this.ds.open(require('./components/testRouterDialog.vue').default)
   }
 }
 </script>
