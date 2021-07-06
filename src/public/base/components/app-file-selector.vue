@@ -141,7 +141,7 @@ export default {
               if (this.mime && this.mime !== img.type) {
                 const mime = MIME_TYPE.find(mimeType => mimeType.mime === this.mime);
                 if (mime) {
-                  fileName = fileName.replace(/\.[^.]+/, mime.extension);
+                  fileName = fileName.replace(/\.[^.]+$/, mime.extension);
                 }
               }
               blob.name = fileName;

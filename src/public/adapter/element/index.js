@@ -1,6 +1,5 @@
 console.warn('******* element adapter imported *********')
 
-import {Level} from "../../logger/logger";
 import Vue from 'vue'
 import './element.less'
 import ElementUI from 'element-ui';

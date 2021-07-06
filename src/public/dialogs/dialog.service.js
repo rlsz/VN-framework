@@ -1,4 +1,4 @@
-import {SimpleSubject} from "../base";
+import {SimpleSubject} from "../base/utils";
 import {Dialog} from "./dialog";
 import {confirm} from '../adapter'
 import SuccessComponent from './dialog-success.vue'

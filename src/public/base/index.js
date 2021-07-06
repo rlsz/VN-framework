@@ -7,6 +7,7 @@ export * from './services/ajax.service'
 export * from './services/loading.service'
 export * from './services/cookie-storage.service'
 export {default as ImgPreview} from './directives/v-img-preview/img-preview.vue'
+export {default as ImgUploader} from './components/img-uploader.vue'
 
 import fileSelector from './components/app-file-selector.vue'
 import emotion from './components/app-emotion.vue'

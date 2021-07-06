@@ -112,6 +112,7 @@ export default {
           }, this.croppedConfig.type);
     },
     cropperReady() {
+      console.log('cropperReady')
       const cropper = this.$refs.cropper
       this.currentScale = 0
       this.changeScale()
