@@ -22,13 +22,18 @@ export function GetRandomNumber(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
-export function GetRandomString(len = 32) {
+export function GetRandomString(len = 32, exists = []) {
     // 去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1:'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'
     const $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890';
     const maxPos = $chars.length;
     let pwd = '';
     for (let i = 0; i < len; i++) {
         pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+    }
+    if(exists && exists.length) {
+        if(exists.indexOf(pwd) >= 0) {
+            return GetRandomString(len, exists)
+        }
     }
     return pwd;
 }
@@ -461,6 +466,16 @@ export function Tick(time, onTick) {
     return timer(1000).then(() => Tick(time - 1, onTick))
 }
 
+/**  使用show状态强制刷新的做法会引发router的某种bug：
+ * 假设路由被CreateKeepAliveRouter划分为A(外)、B(缓存)、C(内部不缓存)三个区域，
+ * 正常情况如下：
+ * 1、B1 -> B2 -> B1 -> B2时，B1、B2有缓存效果
+ * 2、B -> C -> B -> C时，B有缓存效果而C没有
+ * 3、A -> B -> A -> B时，A、B均无缓存效果
+ * 但实际上 B -> C -> B -> A 的路由引导会造成router.push完全失效，所以需要放弃状态强制刷新的做法，改为使用exclude；
+ * exclude的做法需要满足一个条件：router必须配置name，且component的name必须与router的name相同；
+ * 因此需要为noCacheRouters的同步/异步路由创建随机name，需要注意的是路由组件可能存在异步场景，所以exclude并不是在路由返回时初始化完成的，但可以保证在组件创建时初始化完成
+ */
 export function CreateKeepAliveRouter(cacheRouters, noCacheRouters = []) {
     if(GetJsType(cacheRouters) !== 'Array') {
         cacheRouters = [cacheRouters]
@@ -468,48 +483,75 @@ export function CreateKeepAliveRouter(cacheRouters, noCacheRouters = []) {
     if(GetJsType(noCacheRouters) !== 'Array') {
         noCacheRouters = [noCacheRouters]
     }
+    let exclude = []
+    if(noCacheRouters.length) {
+        const temp = noCacheRouters.map(r => {
+            if(typeof r.component === 'function') {
+                return r.component().then(res => {
+                    return {
+                        ...r,
+                        component: res.default
+                    }
+                })
+            } else {
+                return Promise.resolve(r)
+            }
+        })
+        Promise.all(temp).then(routers => {
+            routers.forEach(r => {
+                if(!r.name) {
+                    r.name = GetRandomString(exclude)
+                }
+                r.component.name = r.name
+                exclude.push(r.name)
+            })
+        })
+    }
     return {
         path: '',
         component: {
             render(h) {
-                return h('keep-alive', {}, [
+                return h('keep-alive', {
+                    props: {exclude}
+                }, [
                     h('router-view')
                 ])
             }
         },
         children: [
             ...cacheRouters,
-            {
-                path: '',
-                component: {
-                    data() {
-                        return {
-                            show: null
-                        }
-                    },
-                    activated() {
-                        this.show = false
-                        this.$nextTick(() => {
-                            if (this.show === false) {
-                                this.show = true
-                            }
-                        })
-                    },
-                    deactivated() {
-                        this.show = null
-                    },
-                    render(h) {
-                        if (this.show) {
-                            return h('router-view')
-                        } else {
-                            return ''
-                        }
-                    }
-                },
-                children: [
-                    ...noCacheRouters
-                ]
-            }
+            ...noCacheRouters
+            // {
+            //     path: '',
+            //     component: {
+            //         data() {
+            //             return {
+            //                 show: null
+            //             }
+            //         },
+            //         activated() {
+            //             this.show = false
+            //             this.$nextTick(() => {
+            //                 if (this.show === false) {
+            //                     this.show = true
+            //                 }
+            //             })
+            //         },
+            //         deactivated() {
+            //             this.show = null
+            //         },
+            //         render(h) {
+            //             if (this.show) {
+            //                 return h('router-view')
+            //             } else {
+            //                 return ''
+            //             }
+            //         }
+            //     },
+            //     children: [
+            //         ...noCacheRouters
+            //     ]
+            // }
         ]
     }
 }
