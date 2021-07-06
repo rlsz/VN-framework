@@ -33,6 +33,7 @@ export default {
       if(state) {
         this.ds.open(ImgUploader, {
           'close-on-click-overlay': false,
+          backgroundCover: false,
           'before-close': (done, image) => {
             if(image && this.upload) {
               this.upload(image).then(() => {

@@ -10,6 +10,7 @@
 import {DialogItem} from '../adapter'
 import {LoggerService} from "../logger";
 import {DialogService} from "./dialog.service";
+import {State} from "./dialog";
 
 export default {
   name: "dialogs-container",
@@ -26,6 +27,11 @@ export default {
     inject: {
       ls: LoggerService,
       ds: DialogService
+    }
+  },
+  watch: {
+    dialogs() {
+      this.refreshHiddenStatus()
     }
   },
   created() {
@@ -46,11 +52,6 @@ export default {
       d.instance.afterClosed().then(() => {
         this.dialogs.splice(this.dialogs.indexOf(d), 1)
       })
-      this.dialogs.filter(c => !c.instance.config?.anchor).forEach((item, index, arr) => {
-        item.instance.afterOpened().then(() => {
-          item.instance._vm.hide = index !== arr.length - 1
-        })
-      })
     })
   },
   mounted() {
@@ -59,6 +60,30 @@ export default {
   destroyed() {
     if (this.dialogSub) {
       this.dialogSub.unsubscribe()
+    }
+  },
+  methods: {
+    refreshHiddenStatus() {
+      this.dialogs.filter(c => {
+        if(!c.instance.config) {
+          return true
+        }
+        if(c.instance.config.backgroundCover !== undefined) {
+          return !!c.instance.config.backgroundCover
+        }
+        if(c.instance.config.anchor) {
+          return false
+        }
+        return true
+      }).forEach((item, index, arr) => {
+        if(item.instance._state._value === State.opened) {
+          item.instance._vm.hide = index !== arr.length - 1
+        } else {
+          item.instance.afterOpened().then(() => {
+            item.instance._vm.hide = index !== arr.length - 1
+          })
+        }
+      })
     }
   }
 }

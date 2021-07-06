@@ -97,7 +97,8 @@ export class Dialog {
 //     title?: string; // dialog title
 //     tip?: string; // dialog title tip
 //     buttons?: Button<T>[];
-//     disableClose?: boolean; // Whether the user can use escape or clicking on the backdrop to close the modal.
+//     disableClose?: boolean; // Whether the user can use escape or clicking on the backdrop to close the modal, same to 'close-on-click-overlay'
 //     model?: Model;
 //     hideHead?: false;
+//     backgroundCover: null; // null - auto cover: anchor position - no cover, others - cover; true - cover always; false - no cover always
 // }

@@ -45,8 +45,16 @@ export default {
       return Position.bottom
     },
     enableOverlayClose() {
-      const enableOverlayClose = this.options.instance.config && this.options.instance.config['close-on-click-overlay']
-      return enableOverlayClose === undefined || enableOverlayClose
+      if(!this.options.instance.config) {
+        return true
+      }
+      if(this.options.instance.config['close-on-click-overlay'] !== undefined) {
+        return this.options.instance.config['close-on-click-overlay']
+      }
+      if(this.options.instance.config.disableClose !== undefined) {
+        return this.options.instance.config.disableClose
+      }
+      return true
     }
   },
   // https://vuejs.org/v2/guide/render-function.html#createElement-Arguments
