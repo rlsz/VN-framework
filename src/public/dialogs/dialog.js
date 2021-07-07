@@ -38,8 +38,8 @@ export class Dialog {
     }
 
     close(dialogResult) {
-        const tempClose = () => {
-            this._result = dialogResult
+        const tempClose = newResult => {
+            this._result = newResult === undefined ? dialogResult : newResult
             this._state.next(State.closed)
             this._state.complete()
         }

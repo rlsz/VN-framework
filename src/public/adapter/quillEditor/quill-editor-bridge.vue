@@ -13,6 +13,7 @@
  */
 import {DialogService} from "../../dialogs/dialog.service";
 import ImgUploader from "../../base/components/img-uploader.vue";
+import * as Quill from 'quill'
 
 export default {
   name: "quill-editor-bridge",
@@ -31,17 +32,22 @@ export default {
   methods: {
     imgHandler(state) {
       if(state) {
+        const addRange = this.$refs.myQuillEditor.quill.getSelection()
         this.ds.open(ImgUploader, {
           'close-on-click-overlay': false,
           backgroundCover: false,
           'before-close': (done, image) => {
             if(image && this.upload) {
-              this.upload(image).then(() => {
-                done()
+              this.upload(image).then(url => {
+                done(url)
               })
             } else {
               done()
             }
+          }
+        }).afterClosed().then(url => {
+          if (url) {
+            this.$refs.myQuillEditor.quill.insertEmbed(addRange !== null ? addRange.index : 0, 'image', url, Quill.sources.USER)   // 调用编辑器的 insertEmbed 方法，插入URL
           }
         })
       }
