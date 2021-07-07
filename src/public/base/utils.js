@@ -1,3 +1,5 @@
+import {MIME_TYPE} from "./mime/mime-type";
+
 export function GetQuery(str) {
     const query = {};
     const search = str || location.search;
@@ -631,4 +633,34 @@ export function truncateText(str, len = 100) {
         return str;
     }
     return str.substr(0, len) + '...';
+}
+
+// https://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
+export function ConvertBase64ImageToBlob(imgStr, fileName, sliceSize = 512) {
+    if(/^data:(image\/.+);base64,([^,]+)$/g.test(imgStr)) {
+        const type = RegExp.$1
+        const data = RegExp.$2
+        const byteCharacters = atob(data);
+        const byteArrays = [];
+        for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+            const slice = byteCharacters.slice(offset, offset + sliceSize);
+            const byteNumbers = new Array(slice.length);
+            for (let i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            byteArrays.push(byteArray);
+        }
+        const blob = new Blob(byteArrays, {type});
+
+        fileName = fileName || GetRandomString(16) + '.png';
+        const mime = MIME_TYPE.find(mimeType => mimeType.mime === type);
+        if (mime) {
+            fileName = fileName.replace(/\.[^.]+$/, mime.extension);
+        }
+        blob.name = fileName;
+        return blob;
+    } else {
+        throw new Error('invalid image string')
+    }
 }

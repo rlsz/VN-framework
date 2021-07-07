@@ -113,6 +113,11 @@ export default {
       }
     }
   },
+  created() {
+    if(this.dialog.config?.image) {
+      this.file = this.dialog.config?.image
+    }
+  },
   methods: {
     startCrop() {
       this.status = CropStatus.cropping
