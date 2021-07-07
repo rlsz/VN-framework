@@ -30,7 +30,6 @@
           dragMode="move"
           class="cropper"
           @ready="cropperReady"
-          :style="{width: imgInfo.w + 'px', height: imgInfo.h + 'px'}"
       ></vue-cropper>
       <app-scale-bar v-model="currentScale" @input="changeScale"></app-scale-bar>
     </div>

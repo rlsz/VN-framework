@@ -13,6 +13,7 @@
  */
 import {DialogService} from "../../dialogs/dialog.service";
 import ImgUploader from "../../base/components/img-uploader.vue";
+import VideoUploader from "../../base/components/video-uploader.vue";
 import * as Quill from 'quill'
 
 export default {
@@ -53,7 +54,26 @@ export default {
       }
     },
     videoHandler(state) {
-      console.log('videoHandler', state)
+      if(state) {
+        const addRange = this.$refs.myQuillEditor.quill.getSelection()
+        this.ds.open(VideoUploader, {
+          'close-on-click-overlay': false,
+          backgroundCover: false,
+          'before-close': (done, video) => {
+            if(video && this.upload) {
+              this.upload(video).then(url => {
+                done(url)
+              })
+            } else {
+              done()
+            }
+          }
+        }).afterClosed().then(url => {
+          if (url) {
+            this.$refs.myQuillEditor.quill.insertEmbed(addRange !== null ? addRange.index : 0, 'video', url, Quill.sources.USER)   // 调用编辑器的 insertEmbed 方法，插入URL
+          }
+        })
+      }
     }
   }
 }
