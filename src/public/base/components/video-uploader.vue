@@ -6,9 +6,8 @@
                        capture="user"
     >
       <div class="flex vertical center video-box">
-        <video controls v-if="fileUrl">
-          <source :src="fileUrl" :type="file.type">
-          Sorry, your browser doesn't support embedded videos.
+        <video v-if="fileUrl" controls :src="fileUrl">
+          <p>Your browser doesn't support HTML5 video. Here is a <a :href="fileUrl" target="_blank">link to the video</a> instead.</p>
         </video>
         <span v-else>选择视频</span>
       </div>
@@ -22,6 +21,9 @@
 <script>
 import {Dialog} from "../../dialogs/dialog";
 
+/** https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video
+ * 测试发现使用source播放视频时，vue双向绑定功能检测到状态变化时无法正确更新source标签视频内容，所以直接食用video播放视频
+ */
 export default {
   di: {
     inject: {
