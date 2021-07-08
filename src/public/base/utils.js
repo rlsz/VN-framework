@@ -577,7 +577,7 @@ export function CreateKeepAliveRouter(cacheRouters, noCacheRouters = []) {
         Promise.all(temp).then(routers => {
             routers.forEach(r => {
                 if(!r.name) {
-                    r.name = GetRandomString(exclude)
+                    r.name = GetRandomString(16, exclude)
                 }
                 r.component.name = r.name
                 exclude.push(r.name)
