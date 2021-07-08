@@ -1,7 +1,7 @@
 <template>
   <app-dialog-bridge class="img-uploader">
     <span slot="title">上传图片</span>
-    <div v-if="status === CropStatus.init || status === CropStatus.ready" style="align-self: center;">
+    <div v-if="status === CropStatus.init || status === CropStatus.ready" class="flex vertical cross-centercontainer-box">
       <app-file-selector class="photo-selector"
                          v-model="file"
                          accept="image/*"
@@ -14,8 +14,9 @@
           <span v-else>选择图片</span>
         </div>
       </app-file-selector>
+      <app-scale-bar v-model="imgScale"></app-scale-bar>
     </div>
-    <div v-if="status === CropStatus.cropping" style="align-self: center;max-width: 100%;" class="flex vertical cross-center">
+    <div v-if="status === CropStatus.cropping" class="flex vertical cross-center container-box">
       <vue-cropper
           ref="cropper"
           :cropBoxMovable="true"
@@ -33,12 +34,9 @@
       ></vue-cropper>
       <app-scale-bar v-model="currentScale" @input="changeScale"></app-scale-bar>
     </div>
-    <div v-if="status === CropStatus.cropped" class="flex vertical center image-box">
-      <img :src="croppedFileUrl" :style="{width: croppedImgInfo.w+'px',height:croppedImgInfo.h+'px'}"/>
-    </div>
     <span class="flex" slot="footer" style="align-self: flex-end;">
       <button class="app-form" @click="startCrop" v-if="status === CropStatus.ready">剪裁</button>
-      <button class="app-form" @click="cancelCrop" v-if="status === CropStatus.cropping || status === CropStatus.cropped">取消剪裁</button>
+      <button class="app-form" @click="cancelCrop" v-if="status === CropStatus.cropping">取消剪裁</button>
       <button class="app-form" @click="finishCrop" v-if="status === CropStatus.cropping">预览</button>
       <button class="app-form" @click="onSubmit" :disabled="status === CropStatus.cropping || status === CropStatus.init">上传</button>
     </span>
@@ -48,14 +46,13 @@
 <script>
 import VueCropper from 'vue-cropperjs';
 import 'cropperjs/dist/cropper.css';
-import {GetImageInfo} from "../../base/utils";
+import {ConvertCanvasToBlob, ConvertImageToCanvas, GetImageInfo, ReadImage} from "../../base/utils";
 import {Dialog} from "../../dialogs/dialog";
 
 const CropStatus = {
   init: 1,
   ready: 2,
-  cropping: 3,
-  cropped: 4
+  cropping: 3
 }
 export default {
   components: {
@@ -70,7 +67,6 @@ export default {
     return {
       file: null,
       currentScale: 0,
-      croppedFile: null,
       croppedConfig: {
         width: 100,
         height: 100,
@@ -79,38 +75,55 @@ export default {
       imgInfo: null,
       croppedImgInfo: null,
       CropStatus,
-      status: CropStatus.init
+      status: CropStatus.init,
+      imgScale: 0.9
     }
   },
   computed: {
     fileUrl() {
       return this.file ? URL.createObjectURL(this.file) : null
-    },
-    croppedFileUrl() {
-      return this.croppedFile ? URL.createObjectURL(this.croppedFile) : null
     }
   },
   watch: {
-    file(val) {
-      if(val) {
-        GetImageInfo(val).then(res => {
-          this.imgInfo = res
-          this.$nextTick(() => {
-            if (this.file && this.$refs.cropper) {
-              this.$refs.cropper.replace(this.fileUrl);
-            }
+    file: {
+      handler(val) {
+        if(val) {
+          GetImageInfo(val).then(res => {
+            this.imgInfo = res
+            this.$nextTick(() => {
+              if (this.file && this.$refs.cropper) {
+                this.$refs.cropper.replace(this.fileUrl);
+              }
+            })
+            this.status = CropStatus.ready
           })
-          this.status = CropStatus.ready
-        })
-      }
+        }
+      },
+      immediate: true
     },
-    croppedFile(val) {
-      if(val) {
-        GetImageInfo(val).then(res => {
-          this.croppedImgInfo = res
-          this.status = CropStatus.cropped
-        })
+    imgScale(val, lastVal) {
+      let scale
+      if(val > lastVal) {
+        scale = (val - lastVal) * 10 + 1
+      } else {
+        scale = 1 / ((lastVal - val) * 10 + 1)
       }
+      ReadImage(this.file).then(img => {
+        return ConvertImageToCanvas(img, {
+          width: Math.round(this.imgInfo.w * scale),
+          height: Math.round(this.imgInfo.h * scale)
+        })
+      }).then(img => {
+        return ConvertCanvasToBlob(
+            img,
+            this.file.name,
+            this.file.type
+        )
+      }).then(newFile => {
+        this.file = newFile
+      }).catch(err => {
+        console.error(err)
+      })
     }
   },
   created() {
@@ -133,7 +146,6 @@ export default {
     },
     finishCrop() {
       if (!this.file) {
-        this.croppedFile = null;
         return;
       }
       /** 插件getCroppedCanvas方法的maxWidth和maxHeight参数会导致crop box位置出现偏差，
@@ -150,14 +162,13 @@ export default {
             blob.name = this.file?.name;
             blob.lastModifiedDate = new Date();
 
-            this.croppedFile = blob
+            this.file = blob
+            this.status = CropStatus.ready
           }, this.croppedConfig.type);
     },
     onSubmit() {
       if(this.status === CropStatus.ready) {
         this.dialog.close(this.file)
-      } else if(this.status === CropStatus.cropped) {
-        this.dialog.close(this.croppedFile)
       }
     },
     cropperReady() {
@@ -194,8 +205,8 @@ button {
   border: 1px solid #e3e3e3;
   position: relative;
   img {
-    width: 100%;
-    height: 100%;
+    max-width: 100%;
+    //height: 100%;
   }
 }
 .cropper {
@@ -215,6 +226,11 @@ button {
 .scale-bar {
   max-width: 300px;
   align-self: center;
+}
+
+.container-box {
+  align-self: center;
+  max-width: 100%;
 }
 
 </style>

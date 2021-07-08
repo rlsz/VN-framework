@@ -167,6 +167,7 @@ export default {
       border-radius: 50%;
       box-shadow: 0 0 4px 0 rgba(255, 114, 65, 0.5);
       content: '';
+      transform: translateX(-50%);
     }
   }
 }
