@@ -3,7 +3,8 @@
     <span slot="title">上传图片</span>
     <div v-if="status === CropStatus.init || status === CropStatus.ready" class="flex vertical cross-centercontainer-box">
       <app-file-selector class="photo-selector"
-                         v-model="file"
+                         :value="file"
+                         @input="onChangeFile($event)"
                          accept="image/*"
                          :zip="{ maxWidth: 2048, maxHeight: 2048 }"
                          capture="user"
@@ -37,7 +38,7 @@
     <span class="flex" slot="footer" style="align-self: flex-end;">
       <button class="app-form" @click="startCrop" v-if="status === CropStatus.ready">剪裁</button>
       <button class="app-form" @click="cancelCrop" v-if="status === CropStatus.cropping">取消剪裁</button>
-      <button class="app-form" @click="finishCrop" v-if="status === CropStatus.cropping">预览</button>
+      <button class="app-form" @click="finishCrop" v-if="status === CropStatus.cropping">完成</button>
       <button class="app-form" @click="onSubmit" :disabled="status === CropStatus.cropping || status === CropStatus.init">上传</button>
     </span>
   </app-dialog-bridge>
@@ -65,6 +66,7 @@ export default {
   },
   data() {
     return {
+      originalFile: null,
       file: null,
       currentScale: 0,
       croppedConfig: {
@@ -76,7 +78,7 @@ export default {
       croppedImgInfo: null,
       CropStatus,
       status: CropStatus.init,
-      imgScale: 0.9
+      imgScale: 0.5
     }
   },
   computed: {
@@ -108,14 +110,14 @@ export default {
       } else {
         scale = 1 / ((lastVal - val) * 10 + 1)
       }
-      ReadImage(this.file).then(img => {
+      ReadImage(this.originalFile).then(img => {
         return ConvertImageToCanvas(img, {
           width: Math.round(this.imgInfo.w * scale),
           height: Math.round(this.imgInfo.h * scale)
         })
-      }).then(img => {
+      }).then(canvas => {
         return ConvertCanvasToBlob(
-            img,
+            canvas,
             this.file.name,
             this.file.type
         )
@@ -128,10 +130,14 @@ export default {
   },
   created() {
     if(this.dialog.config?.image) {
-      this.file = this.dialog.config?.image
+      this.onChangeFile(this.dialog.config.image)
     }
   },
   methods: {
+    onChangeFile(file) {
+      this.file = file
+      this.originalFile = file
+    },
     startCrop() {
       this.status = CropStatus.cropping
       this.$nextTick(() => {
@@ -162,7 +168,7 @@ export default {
             blob.name = this.file?.name;
             blob.lastModifiedDate = new Date();
 
-            this.file = blob
+            this.onChangeFile(blob)
             this.status = CropStatus.ready
           }, this.croppedConfig.type);
     },
