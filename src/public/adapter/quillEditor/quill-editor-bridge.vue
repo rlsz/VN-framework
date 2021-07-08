@@ -4,6 +4,7 @@
       v-bind="{...$props, ...$attrs}"
       v-on="{...$listeners}"
       @change="onEditorChange($event)"
+      @dblclick.native="onDbClick"
   />
 </template>
 
@@ -16,7 +17,7 @@ import {DialogService} from "../../dialogs/dialog.service";
 import ImgUploader from "../../base/components/img-uploader.vue";
 import VideoUploader from "../../base/components/video-uploader.vue";
 import * as Quill from 'quill'
-import {ConvertBase64ImageToBlob} from "../../base/utils";
+import {ConvertBase64ImageToBlob, ConvertImageToCanvas, ConvertCanvasToBlob} from "../../base/utils";
 
 export default {
   name: "quill-editor-bridge",
@@ -45,6 +46,34 @@ export default {
     }
   },
   methods: {
+    onDbClick(e) {
+      const target = e.target
+      if(target instanceof HTMLImageElement) {
+        target.crossOrigin='anonymous'
+        ConvertImageToCanvas(target).then(temp => {
+          return ConvertCanvasToBlob(temp, target.src.split(/\/|\\/).pop())
+        }).then(img => {
+          this.ds.open(ImgUploader, {
+            image: img,
+            'close-on-click-overlay': false,
+            backgroundCover: false,
+            'before-close': (done, image) => {
+              if(image && this.upload) {
+                this.upload(image).then(url => {
+                  done(url)
+                })
+              } else {
+                done()
+              }
+            }
+          }).afterClosed().then(url => {
+            if(url) {
+              target.src = url
+            }
+          })
+        })
+      }
+    },
     onEditorChange(event) {
 
     },

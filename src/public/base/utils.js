@@ -145,6 +145,7 @@ export function GetJsType(val) {
     return Object.prototype.toString.apply(val).match(/\[object\s([a-zA-Z]+)\]/)[1];
 }
 
+// img: Blob、File
 export function ReadImage(img) {
     return new Promise((r, j) => {
         try {
@@ -166,6 +167,80 @@ export function ReadImage(img) {
             j(e)
         } finally {
             // todo: dispose
+        }
+    })
+}
+
+// https://stackoverflow.com/questions/1977871/check-if-an-image-is-loaded-no-errors-with-jquery
+export function IsImageOk(img) {
+    // During the onload event, IE correctly identifies any images that
+    // weren’t downloaded as not complete. Others should too. Gecko-based
+    // browsers act like NS4 in that they report this incorrectly.
+    if (!img.complete) {
+        return false;
+    }
+
+    // However, they do have two very useful properties: naturalWidth and
+    // naturalHeight. These give the true size of the image. If it failed
+    // to load, either of these should be zero.
+    if (img.naturalWidth === 0) {
+        return false;
+    }
+
+    // No other way of checking: assume it’s ok.
+    return true;
+}
+
+// img: HTMLImageElement、Image
+export function ConvertImageToCanvas(imgTag, outputSize) {
+    return new Promise(r => {
+        if(IsImageOk(imgTag)) {
+            r(imgTag)
+        } else {
+            imgTag.onload = () => {
+                r(imgTag)
+            }
+        }
+    }).then(img => {
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        const {width, height} = outputSize || img
+        canvas.width = width;
+        canvas.height = height;
+        context.fillStyle = '#fff';
+        context.fillRect(0, 0, width, height);
+        context.drawImage(
+            img,
+            0,
+            0,
+            width,
+            height
+        );
+        return canvas;
+    })
+}
+
+export function ConvertCanvasToBlob(canvas, fileName, mime, quality) {
+    return new Promise((r, j) => {
+        try {
+            canvas.toBlob((blob) => {
+                if (!blob) {
+                    j(new Error('no blob'));
+                    return;
+                }
+
+                fileName = fileName || GetRandomString(16) + '.png';
+                const temp = MIME_TYPE.find(mimeType => mimeType.mime === (mime || blob.type));
+                if (temp) {
+                    fileName = fileName.replace(/\.[^.]+$/, temp.extension);
+                }
+
+                blob.name = fileName;
+                blob.lastModifiedDate = new Date();
+                r(blob);
+            }, mime, quality);
+        } catch (e) {
+            j(e);
         }
     })
 }

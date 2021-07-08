@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import {ReadImage} from "../utils";
+import {ReadImage, ConvertImageToCanvas, ConvertCanvasToBlob} from "../utils";
 import {MIME_TYPE} from '../mime/mime-type';
 import {LoggerService} from "../../logger";
 
@@ -106,52 +106,21 @@ export default {
             img.size
         );
         this.ls.debug('size change',
-            {
+            JSON.stringify({
               width: c.width,
               height: c.height
-            }, '=>', target
+            }), '=>', JSON.stringify(target)
         );
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-        canvas.width = target.width;
-        canvas.height = target.height;
-        if (!context) {
-          throw new Error('no canvas context 2d');
-        }
-        context.fillStyle = '#fff';
-        context.fillRect(0, 0, target.width, target.height);
-        context.drawImage(
-            c,
-            0,
-            0,
-            target.width,
-            target.height
-        );
-        return canvas;
+        return ConvertImageToCanvas(c, target)
       }).then(c => {
-        return new Promise((r, j) => {
-          try {
-            c.toBlob((blob) => {
-              if (!blob) {
-                j(new Error('no blob'));
-                return;
-              }
-
-              let fileName = img.name;
-              if (this.mime && this.mime !== img.type) {
-                const mime = MIME_TYPE.find(mimeType => mimeType.mime === this.mime);
-                if (mime) {
-                  fileName = fileName.replace(/\.[^.]+$/, mime.extension);
-                }
-              }
-              blob.name = fileName;
-              blob.lastModifiedDate = new Date();
-              r(blob);
-            }, this.mime || img.type, this.quality);
-          } catch (e) {
-            j(e);
+        let fileName = img.name;
+        if (this.mime && this.mime !== img.type) {
+          const mime = MIME_TYPE.find(mimeType => mimeType.mime === this.mime);
+          if (mime) {
+            fileName = fileName.replace(/\.[^.]+$/, mime.extension);
           }
-        })
+        }
+        return ConvertCanvasToBlob(c, fileName, this.mime || img.type, this.quality)
       })
     },
     getTarget(w, h, size) {
