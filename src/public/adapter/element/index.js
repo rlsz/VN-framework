@@ -34,12 +34,22 @@ export {default as DialogBridge} from '../default/app-dialog-bridge.vue'
 
 import {DialogService} from "../../dialogs/dialog.service";
 import {PopupManager} from 'element-ui/lib/utils/popup';
+import {PopupManager as PopupManagerSrc} from 'element-ui/src/utils/popup';
 DialogService.instance.dialog.subscribe(dialog => {
     dialog.instance.afterOpened().then(() => {
         dialog.instance._vm.$el.style.zIndex = PopupManager.nextZIndex()
     })
 })
-
+const originalDescLib = Object.getOwnPropertyDescriptor(PopupManager, 'zIndex')
+Object.defineProperty(PopupManagerSrc, 'zIndex', {
+    configurable: true,
+    get() {
+        return originalDescLib.get()
+    },
+    set(value) {
+        originalDescLib.set(value)
+    }
+})
 
 import {throttle} from '../../base/utils'
 export function initUIMessage(subject) {
