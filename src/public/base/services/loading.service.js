@@ -39,7 +39,8 @@ export class LoadingService {
                     return h('i', {class: 'loading-general'})
                 }
             }, {
-                model: Model.transparent
+                model: Model.transparent,
+                backgroundCover: false
             })
 
             this.loadingInstance.afterClosed().then(() => {
