@@ -2,7 +2,15 @@
 import {Dialog, Model, Position} from "../../dialogs/dialog";
 import {PlatformService} from '../../platform/platform.service'
 import {Platform} from '../../platform/platform'
-import {getScrollParent, debounceTime} from '../../base/utils'
+import {getScrollParent} from '../../base/utils'
+
+function round(num) {
+  if(num >= 0) {
+    return Math.round(num)
+  } else {
+    return -Math.round(-num)
+  }
+}
 
 export default {
   name: "dialog-item",
@@ -176,6 +184,9 @@ export default {
         translateY = Math.max(anchor.y + anchor.height - self.y, translateY)
         this.maxHeight = body.height - anchor.y - anchor.height - 4
       }
+
+      translateX = round(translateX)
+      translateY = round(translateY)
       if (Math.abs(translateX) > 1 || Math.abs(translateY) > 1) {
         const {x, y} = this.transform
         this.transform = {x: x + translateX, y: y + translateY}
