@@ -12,6 +12,58 @@ function round(num) {
   }
 }
 
+function calcTransform(anchorEl, targetEl, position) {
+  if (!anchorEl || !targetEl) {
+    return null
+  }
+  const anchor = anchorEl.getBoundingClientRect() // a, ax, ay, aw, ah
+  const self = targetEl.getBoundingClientRect() // s, sx, sy, sw, sh
+  if (!anchor || !self) {
+    return null
+  }
+  let translateX = 0
+  let translateY = 0
+  if ([Position.bottom, Position.bottomStrict].indexOf(position) >= 0) {
+    // x = -((sx + sw/2) - (ax + aw/2))
+    translateX = anchor.x + anchor.width / 2 - self.x - self.width / 2
+    // y = -(sy - ay - ah)
+    translateY = anchor.y + anchor.height - self.y
+  }
+  if (position === Position.top) {
+    // x = -((sx + sw/2) - (ax + aw/2))
+    translateX = anchor.x + anchor.width / 2 - self.x - self.width / 2
+    // y = -(sy + sh - ay)
+    translateY = anchor.y - self.y - self.height
+  }
+  if (position === Position.left) {
+    // x = - (sx + sw - ax)
+    translateX = anchor.x - self.x - self.width
+    // y = - ((sy + sh/2) - (ay + ah/2))
+    translateY = anchor.y + anchor.height / 2 - self.y - self.height / 2
+  }
+  if (position === Position.right) {
+    // x = - (sx - ax - aw)
+    translateX = anchor.x + anchor.width - self.x
+    // y = - ((sy + sh/2) - (ay + ah/2))
+    translateY = anchor.y + anchor.height / 2 - self.y - self.height / 2
+  }
+  const body = document.body.getBoundingClientRect()
+  translateY = Math.min(body.height - self.height - self.y, translateY)
+  translateY = Math.max(-self.y, translateY)
+  translateX = Math.min(body.width - self.width - self.x, translateX)
+  translateX = Math.max(-self.x, translateX)
+
+  let maxHeight = null
+  if (position === Position.bottomStrict) {
+    translateY = Math.max(anchor.y + anchor.height - self.y, translateY)
+    maxHeight = body.height - anchor.y - anchor.height - 4
+  }
+
+  translateX = round(translateX)
+  translateY = round(translateY)
+  return {x: translateX, y: translateY, maxHeight}
+}
+
 export default {
   name: "dialog-item",
   props: ['options'],
@@ -29,6 +81,7 @@ export default {
   data() {
     return {
       transform: {x: 0, y: 0},
+      transformPointer: {x: 0, y: 0},
       listener: null,
       maxHeight: null,
       hide: false
@@ -67,9 +120,10 @@ export default {
   },
   // https://vuejs.org/v2/guide/render-function.html#createElement-Arguments
   render(h) {
-    let transform = ''
+    let transform = '', transformPointer = ''
     if (this.model === Model.positionByAnchor) {
       transform = `translateX(${this.transform.x}px) translateY(${this.transform.y}px)`
+      transformPointer = `translateX(${this.transformPointer.x}px) translateY(${this.transformPointer.y}px)`
     }
     return h('div', {
       class: {
@@ -90,7 +144,17 @@ export default {
           transform,
           maxHeight: this.maxHeight ? this.maxHeight + 'px' : null
         }
-      }, [h(this.options.vueComponent)])
+      }, [h(this.options.vueComponent)]),
+      h('i', {
+        class: {
+          'dialog-anchor-pointer': true,
+          [this.position]: true
+        },
+        ref: 'dialogAnchorPointer',
+        style: {
+          transform: transformPointer
+        }
+      })
     ])
   },
   mounted() {
@@ -143,53 +207,36 @@ export default {
           document.body.addEventListener('click', this.onBodyClick, false);
         }, 0)
       }
-      const anchor = this.options.instance.config.anchor.getBoundingClientRect() // a, ax, ay, aw, ah
-      const self = this.$refs.dialogPanel?.getBoundingClientRect() // s, sx, sy, sw, sh
-      if (!anchor || !self) {
+
+      const transform = calcTransform(
+          this.options.instance.config.anchor,
+          this.$refs.dialogPanel,
+          this.position
+      )
+      if(!transform) {
         this.transform = {x: 0, y: 0}
         return
       }
-      let translateX = 0
-      let translateY = 0
-      if ([Position.bottom, Position.bottomStrict].indexOf(this.position) >= 0) {
-        // x = -((sx + sw/2) - (ax + aw/2))
-        translateX = anchor.x + anchor.width / 2 - self.x - self.width / 2
-        // y = -(sy - ay - ah)
-        translateY = anchor.y + anchor.height - self.y
+      if(transform.maxHeight !== this.maxHeight) {
+        this.maxHeight = transform.maxHeight
       }
-      if (this.position === Position.top) {
-        // x = -((sx + sw/2) - (ax + aw/2))
-        translateX = anchor.x + anchor.width / 2 - self.x - self.width / 2
-        // y = -(sy + sh - ay)
-        translateY = anchor.y - self.y - self.height
-      }
-      if (this.position === Position.left) {
-        // x = - (sx + sw - ax)
-        translateX = anchor.x - self.x - self.width
-        // y = - ((sy + sh/2) - (ay + ah/2))
-        translateY = anchor.y + anchor.height / 2 - self.y - self.height / 2
-      }
-      if (this.position === Position.right) {
-        // x = - (sx - ax - aw)
-        translateX = anchor.x + anchor.width - self.x
-        // y = - ((sy + sh/2) - (ay + ah/2))
-        translateY = anchor.y + anchor.height / 2 - self.y - self.height / 2
-      }
-      const body = document.body.getBoundingClientRect()
-      translateY = Math.min(body.height - self.height - self.y, translateY)
-      translateY = Math.max(-self.y, translateY)
-      translateX = Math.min(body.width - self.width - self.x, translateX)
-      translateX = Math.max(-self.x, translateX)
-      if (this.position === Position.bottomStrict) {
-        translateY = Math.max(anchor.y + anchor.height - self.y, translateY)
-        this.maxHeight = body.height - anchor.y - anchor.height - 4
+      if (Math.abs(transform.x) > 1 || Math.abs(transform.y) > 1) {
+        const {x, y} = this.transform
+        this.transform = {x: x + transform.x, y: y + transform.y}
       }
 
-      translateX = round(translateX)
-      translateY = round(translateY)
-      if (Math.abs(translateX) > 1 || Math.abs(translateY) > 1) {
-        const {x, y} = this.transform
-        this.transform = {x: x + translateX, y: y + translateY}
+      const transformPointer = calcTransform(
+          this.options.instance.config.anchor,
+          this.$refs.dialogAnchorPointer,
+          this.position
+      )
+      if(!transformPointer) {
+        this.transformPointer = {x: 0, y: 0}
+        return
+      }
+      if (Math.abs(transformPointer.x) > 1 || Math.abs(transformPointer.y) > 1) {
+        const {x, y} = this.transformPointer
+        this.transformPointer = {x: x + transformPointer.x, y: y + transformPointer.y}
       }
     },
     onAnchorMove() {
@@ -292,6 +339,38 @@ export default {
       pointer-events: auto;
       border: 1px solid rgba(0, 0, 0, 0.1);
     }
+  }
+}
+i.dialog-anchor-pointer {
+  display: inline-flex;
+  align-items: center;
+  &:after {
+    cursor: pointer;
+    content: "";
+    border: solid rgba(0, 0, 0, 0.1);
+    border-width: 0 1px 1px 0;
+    padding: 2px;
+    background: white;
+  }
+
+  &.top:after {
+    margin-bottom: -3px;
+    transform: rotate(45deg) translateY(-2px);
+  }
+
+  &.bottom:after, &.bottomStrict:after {
+    margin-top: -3px;
+    transform: rotate(-135deg) translateY(-2px);
+  }
+
+  &.left:after {
+    margin-right: -3px;
+    transform: rotate(-45deg);
+  }
+
+  &.right:after {
+    margin-left: -3px;
+    transform: rotate(135deg);
   }
 }
 </style>
