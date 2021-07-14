@@ -13,16 +13,26 @@
         <span v-if="form.tags">（{{form.tags.length}}/5）</span>
       </app-option-input>
     </app-multi-select>
-    <span class="test test-1">111</span>
-    <span class="test test-2">222</span>
-    <span class="test test-3">333</span>
+    <div>
+      <app-textarea v-model="form.text"></app-textarea>
+    </div>
+    <div>
+      <button class="app-form" @click="openDialog">弹窗表单测试</button>
+    </div>
   </div>
 </template>
 
 <script>
+import formTestDialog from "./components/formTestDialog";
+import {DialogService} from "@/public/dialogs";
 let i = 1
 export default {
   name: "formTest",
+  di: {
+    inject: {
+      ds: DialogService
+    }
+  },
   data() {
     return {
       form: {
@@ -30,7 +40,8 @@ export default {
           {label: 'test' + i, value: i++},
           {label: 'test' + i, value: i++},
           {label: 'test' + i, value: i++}
-        ]
+        ],
+        text: 'test'
       }
     }
   },
@@ -41,6 +52,9 @@ export default {
         {label: 'test' + i, value: i++},
         {label: 'test' + i, value: i++}
       ])
+    },
+    openDialog(e) {
+      this.ds.open(formTestDialog)
     }
   }
 }

@@ -1,7 +1,12 @@
 <template>
   <app-dialog-bridge>
-    <span slot="title">title</span>
-    <span>dialog content</span>
+    <span slot="title">form test</span>
+    <div class="flex vertical">
+      <app-textarea v-model="form.text"
+                    :maxlength="1000"
+                    placeholder="请输入内容"
+      ></app-textarea>
+    </div>
     <span slot="footer" style="text-align: right;">
       <button class="app-form" @click="dialog.close()">取 消</button>
       <button class="app-form" @click="submit" v-loading-target>确 定</button>
@@ -12,7 +17,7 @@
 <script>
 import {Dialog} from "@/public/dialogs";
 import {LoggerService} from "@/public/logger";
-import {AjaxService} from "@/public/base";
+import {AjaxService, timer} from "@/public/base";
 
 export default {
   di: {
@@ -24,7 +29,9 @@ export default {
   },
   data() {
     return {
-
+      form: {
+        text: ''
+      }
     }
   },
   computed: {
@@ -33,6 +40,9 @@ export default {
     }
   },
   created() {
+    timer(1000).then(res => {
+      this.form.text = 'refresh()refresh()refresh()refresh()refresh()refresh()refresh()refresh()refresh()refresh()refresh()refresh()refresh()refresh()refresh()'
+    })
   },
   methods: {
     submit() {

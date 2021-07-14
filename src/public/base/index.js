@@ -14,6 +14,7 @@ import emotion from './components/app-emotion.vue'
 import scaleBar from './components/app-scale-bar.vue'
 import stickyContainer from './components/app-sticky-container.vue'
 import sendSmsCode from './components/app-send-sms-code.vue'
+import textarea from './components/app-textarea.vue'
 import vCopy from './directives/v-copy.directive'
 import vLimitLine from './directives/v-limit-line.directive'
 import vLink from './directives/v-link.directive'
@@ -32,6 +33,7 @@ export default function (Vue) {
     Vue.component(emotion.name, emotion)
     Vue.component(stickyContainer.name, stickyContainer)
     Vue.component(sendSmsCode.name, sendSmsCode)
+    Vue.component(textarea.name, textarea)
     Vue.use(vCopy)
     Vue.use(vLimitLine)
     Vue.use(vLink)
