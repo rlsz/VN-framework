@@ -145,7 +145,7 @@ export default {
           maxHeight: this.maxHeight ? this.maxHeight + 'px' : null
         }
       }, [h(this.options.vueComponent)]),
-      h('i', {
+      transformPointer ? h('i', {
         class: {
           'dialog-anchor-pointer': true,
           [this.position]: true
@@ -154,7 +154,7 @@ export default {
         style: {
           transform: transformPointer
         }
-      })
+      }) : null
     ])
   },
   mounted() {
