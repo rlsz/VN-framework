@@ -173,6 +173,24 @@ export class AjaxService {
      */
     // eslint-disable-next-line no-unused-vars
     interceptorAfter(response, retryCallback, config) {
-        return Promise.resolve(response)
+        if(response.data instanceof Blob && response.data.type === "application/json") {
+            // axios请求的responseType为blob时，即使服务端响应失败，response.data也会被强制转成blob，必须检测特定的blob并通过FileReader再转回json
+            return new Promise((r, j) => {
+                const reader = new FileReader();
+                reader.addEventListener('abort', j)
+                reader.addEventListener('error', j)
+                reader.addEventListener('loadend', () => {
+                    r(JSON.parse(reader.result))
+                })
+                reader.readAsText(response.data);
+            }).then(data => {
+                return {
+                    ...response,
+                    data
+                }
+            })
+        } else {
+            return Promise.resolve(response)
+        }
     }
 }
