@@ -6,6 +6,7 @@
          :style="{transform: sentinelTransform}"
     >下拉刷新</div>
     <div class="scroll"
+         :class="innerClass"
          :style="{transform: scrollTransform}"
          ref="scroll"
          :id="hold!==undefined && 'position-holder'"
@@ -33,7 +34,7 @@ const TouchType = {
 
 export default {
   name: 'app-scroll',
-  props: ['hold'],
+  props: ['hold', 'innerClass'],
   di: {
     providers: [ScrollService],
     inject: {

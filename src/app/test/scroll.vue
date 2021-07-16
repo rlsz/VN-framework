@@ -3,7 +3,7 @@
     <div>frozen things,
       <button @click="refresh()">change query condition</button>
     </div>
-    <app-scroll hold>
+    <app-scroll hold inner-class="test-inner-class">
       <app-list-scrollable class="data-list" :query="query" :size="50">
         <template v-slot:default="{value}">
           <div class="row-item">{{ value }}</div>
