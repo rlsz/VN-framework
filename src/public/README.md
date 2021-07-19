@@ -11,7 +11,7 @@ Vue.use(publicModule, router)
 公共服务需要在创建Vue根实例时把RootProviders注册到di中：
 ```
 // main.js
-import "@/public/styles/global.less" // 全局样式在旧页面中应该注释掉(会影响已有页面样式)，新项目可以使用
+import "@/public/styles/global.less" // 全局样式在旧项目中应该注释掉(会影响已有页面样式)，新项目可以使用
 import publicModule, {RootProviders} from '@/public'
 new Vue({
   di: {
