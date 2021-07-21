@@ -26,6 +26,8 @@ import platform, {PlatformService} from './platform'
 import DependencyInjection from './di.service';
 import {LoggerService} from "./logger";
 import {DialogService, DialogsContainer} from "./dialogs";
+import {ConfigService} from "./config.service";
+export * from './config.service'
 
 export const RootProviders = [
     {provide: PlatformService, useValue: PlatformService.instance},
@@ -36,7 +38,7 @@ export const RootProviders = [
     SessionStorageService,
     CookieStorageService,
     AjaxService,
-    TabsService
+    ConfigService
 ]
 
 function FindVueRoot() {

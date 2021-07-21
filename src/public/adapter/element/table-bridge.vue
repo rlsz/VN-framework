@@ -46,10 +46,16 @@
  * emit selection-change will be delayed for 50ms due to tree selection problems
  */
 import {flattenTreeToArray, debounceTime, Distinct} from "../../base/utils";
+import {ConfigService} from "../../config.service";
 
 export default {
   name: "table-bridge",
   props: ['query', 'size', 'layout', 'tree-props'],
+  di: {
+    inject: {
+      defaultConfig: ConfigService
+    }
+  },
   data() {
     return {
       list: [],
@@ -113,7 +119,7 @@ export default {
       return "background: #F8F8FA;color:#565659;font-size:12px;"
     },
     handleSizeChange(val) {
-      this.pageSize = val || Number(this.size) || 20;
+      this.pageSize = val || Number(this.size) || this.defaultConfig.tablePageSize || 20;
       this.page = 0;
       this.list = [];
       this.getData();
