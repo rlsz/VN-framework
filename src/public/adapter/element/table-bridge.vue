@@ -86,6 +86,9 @@ export default {
       return arr
     },
     showPagination() {
+      if(this.defaultConfig.tableAlwaysShowPagination) {
+        return true
+      }
       if (this.size === 0 || this.size === '0') {
         return false
       }
