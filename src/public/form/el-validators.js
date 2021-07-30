@@ -139,6 +139,17 @@ export class ElFormValidators {
             trigger: 'blur'
         }
     }
+    static regexp(msg, reg) {
+        return {
+            validator: (rule, value, callback) => {
+                if (reg.test(value)) {
+                    return callback(new Error(msg))
+                }
+                return callback()
+            },
+            trigger: 'blur'
+        }
+    }
 
     static phone(label) {
         return CombineValidators(
