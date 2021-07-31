@@ -49,7 +49,7 @@ export default {
       } else {
         this.dialogs.push(d)
       }
-      d.instance.afterClosed().then(() => {
+      d.instance.afterClosed().finally(() => {
         this.dialogs.splice(this.dialogs.indexOf(d), 1)
       })
     })

@@ -50,6 +50,10 @@ export class Dialog {
         }
     }
 
+    error(msg) {
+        this._state.error(msg)
+    }
+
     setOpen(vm) {
         this._vm = vm
         this._state.next(State.opened)
@@ -63,6 +67,8 @@ export class Dialog {
                         sub.unsubscribe()
                         r(undefined)
                     }
+                }, err => {
+                    j(err)
                 })
             } catch (e) {
                 j(e)
@@ -78,6 +84,8 @@ export class Dialog {
                         sub.unsubscribe()
                         r(this._result)
                     }
+                }, err => {
+                    j(err)
                 })
             } catch (e) {
                 j(e)

@@ -57,6 +57,7 @@ function FindVueRoot() {
 }
 
 let instanceList = []
+let dialogRoot
 function AppendComponentToRoot(Vue, comp) {
     Vue.nextTick(() => {
         const Component = Vue.extend({
@@ -75,6 +76,7 @@ function AppendComponentToRoot(Vue, comp) {
         instance.$mount()
         document.body.appendChild(instance.$el)
         instanceList.push(instance)
+        dialogRoot = instance
     })
 }
 export function ChangeRoot(vm) {
@@ -87,6 +89,13 @@ export function ChangeRoot(vm) {
             configurable: true
         });
     })
+}
+export function ClearAllDialogs() {
+    if(dialogRoot && dialogRoot.$children[0]) {
+        dialogRoot.$children[0].dialogs.map(c => c).forEach(c => {
+            c.instance.error('clear')
+        })
+    }
 }
 
 export default function (Vue, router) {
