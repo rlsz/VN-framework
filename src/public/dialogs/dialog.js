@@ -43,8 +43,9 @@ export class Dialog {
             this._state.next(State.closed)
             this._state.complete()
         }
-        if(this.config && this.config['before-close']) {
-            this.config['before-close'](tempClose, dialogResult)
+        const beforeClose = this.config && (this.config['before-close'] || this.config['beforeClose'])
+        if(beforeClose) {
+            beforeClose.call(this.config, tempClose, dialogResult)
         } else {
             tempClose()
         }
@@ -105,6 +106,8 @@ export class Dialog {
 //     title?: string; // dialog title
 //     tip?: string; // dialog title tip
 //     buttons?: Button<T>[];
+//     beforeClose: (done, data) => void;
+//     'before-close': (done, data) => void;
 //     disableClose?: boolean; // Whether the user can use escape or clicking on the backdrop to close the modal, same to 'close-on-click-overlay'
 //     model?: Model;
 //     hideHead?: false;
