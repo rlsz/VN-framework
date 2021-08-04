@@ -41,7 +41,7 @@ export const RootProviders = [
     ConfigService
 ]
 
-function FindVueRoot() {
+export function FindVueRoot() {
     const defautRoot = document.getElementById('app')
     return defautRoot && defautRoot.__vue__
     // console.log(1,defautRoot)
