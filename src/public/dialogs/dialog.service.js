@@ -1,21 +1,20 @@
 import {SimpleSubject} from "../base/utils";
 import {Dialog} from "./dialog";
-import {confirm} from '../adapter'
 import SuccessComponent from './dialog-success.vue'
 import InfoComponent from './dialog-info.vue'
 
 let singleton = null
 /**
-  export interface OptionsBase {
+ export interface OptionsBase {
     message: string;
     title?: string;
     subTitle?: string;
   }
-  export interface SuccessOption extends OptionsBase {
+ export interface SuccessOption extends OptionsBase {
     subMessage?: string;
     button?: string;
   }
-  export interface InfoOption extends OptionsBase {
+ export interface InfoOption extends OptionsBase {
     button?: string;
   }
  */
@@ -65,6 +64,6 @@ export class DialogService {
   }
 
   confirm(option) {
-    return confirm(option)
+    return require('../adapter').confirm(option)
   }
 }
