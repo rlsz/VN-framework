@@ -185,5 +185,12 @@ export default {
                 title: '表单测试'
             }
         },
+        {
+            path: 'mixinTest',
+            component: () => import(/* webpackChunkName: "test" */ './mixinTest.vue'),
+            meta: {
+                title: 'mixin测试'
+            }
+        },
     ]
 }

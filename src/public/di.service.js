@@ -1,3 +1,5 @@
+import Vue from "vue";
+
 class DependencyInjection {
     vm
     instanceMap = {}
@@ -151,6 +153,14 @@ class DependencyInjection {
  * @returns {{}}
  */
 export default function (Vue) {
+    Vue.config.optionMergeStrategies.di = function (toVal, fromVal) {
+        if (!toVal) return fromVal
+        if (!fromVal) return toVal
+        return {
+            providers: [...toVal.providers||[], ...fromVal.providers||[]].distinct(),
+            inject: {...toVal.inject||{}, ...fromVal.inject||{}}
+        }
+    }
     Vue.mixin({
         beforeCreate() {
             this.$injector = new DependencyInjection(this)
