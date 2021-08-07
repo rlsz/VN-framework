@@ -36,19 +36,19 @@ export default {
   },
   created() {
     this.dialogSub = this.ds.dialog.subscribe(d => {
-      if (d.instance.config?.anchor) {
-        const targets = this.dialogs.filter(c => c.instance.config?.anchor)
-        if(targets.length) {
-          Promise.all(targets.map(c => c.instance.afterClosed())).then(() => {
-            this.dialogs.push(d)
-          })
-          targets.forEach(c => c.instance.close())
-        } else {
-          this.dialogs.push(d)
-        }
-      } else {
+      // if (d.instance.config?.anchor) {
+      //   const targets = this.dialogs.filter(c => c.instance.config?.anchor)
+      //   if(targets.length) {
+      //     Promise.all(targets.map(c => c.instance.afterClosed())).then(() => {
+      //       this.dialogs.push(d)
+      //     })
+      //     targets.forEach(c => c.instance.close())
+      //   } else {
+      //     this.dialogs.push(d)
+      //   }
+      // } else {
         this.dialogs.push(d)
-      }
+      // }
       d.instance.afterClosed().finally(() => {
         this.dialogs.splice(this.dialogs.indexOf(d), 1)
       })

@@ -166,8 +166,10 @@ export default {
   },
   destroyed() {
     if (this.listener) {
-      document.body.removeEventListener('click', this.onBodyClick);
       this.listener.target.removeEventListener('scroll', this.listener.onScroll)
+      setTimeout(() => {
+        document.body.removeEventListener('click', this.onBodyClick);
+      }, 0)
     }
   },
   methods: {
