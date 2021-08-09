@@ -38,17 +38,28 @@ export class Dialog {
     }
 
     close(dialogResult) {
-        const tempClose = newResult => {
-            this._result = newResult === undefined ? dialogResult : newResult
-            this._state.next(State.closed)
-            this._state.complete()
-        }
-        const beforeClose = this.config && (this.config['before-close'] || this.config['beforeClose'])
-        if(beforeClose) {
-            beforeClose.call(this.config, tempClose, dialogResult)
-        } else {
-            tempClose()
-        }
+        return new Promise((r,j) => {
+            try {
+                const tempClose = newResult => {
+                    try {
+                        this._result = newResult === undefined ? dialogResult : newResult
+                        this._state.next(State.closed)
+                        this._state.complete()
+                        r()
+                    } catch (err1) {
+                        j(err1)
+                    }
+                }
+                const beforeClose = this.config && (this.config['before-close'] || this.config['beforeClose'])
+                if(beforeClose) {
+                    beforeClose.call(this.config, tempClose, dialogResult)
+                } else {
+                    tempClose()
+                }
+            } catch (err) {
+                j(err)
+            }
+        })
     }
 
     error(msg) {
