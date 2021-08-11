@@ -113,7 +113,7 @@ export default {
         return this.options.instance.config['close-on-click-overlay']
       }
       if(this.options.instance.config.disableClose !== undefined) {
-        return this.options.instance.config.disableClose
+        return !this.options.instance.config.disableClose
       }
       return true
     }

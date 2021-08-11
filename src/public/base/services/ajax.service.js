@@ -83,7 +83,7 @@ export class AjaxService {
         ), config, data)
     }
 
-    delete(url, params, config) {
+    delete(url, data, config) {
         return this.interceptor(headers => axios.delete(
             this.getUrl(url),
             {
@@ -91,10 +91,10 @@ export class AjaxService {
                     return true
                 },
                 ...config,
-                params,
+                data,
                 headers
             }
-        ), config, params)
+        ), config, data)
     }
 
     // ajax: headers => Promise<{status: number, data: any}>
