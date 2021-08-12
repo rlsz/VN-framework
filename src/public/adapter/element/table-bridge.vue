@@ -6,7 +6,7 @@
     </div>
     <div class="table-wrapper bg-white">
       <el-table ref="table"
-                border
+                :border="borderAttr"
                 fit
                 highlight-current-row
                 :header-cell-style="headerCellStyle"
@@ -23,6 +23,7 @@
       </el-table>
     </div>
     <el-pagination v-if="showPagination"
+                   class="right"
                    :current-page="page + 1"
                    @current-change="skip"
                    @size-change="handleSizeChange"
@@ -50,7 +51,7 @@ import {ConfigService} from "../../config.service";
 
 export default {
   name: "table-bridge",
-  props: ['query', 'size', 'layout', 'tree-props'],
+  props: ['query', 'size', 'layout', 'tree-props', 'border'],
   di: {
     inject: {
       defaultConfig: ConfigService
@@ -99,6 +100,15 @@ export default {
         return false
       }
       return true
+    },
+    borderAttr() {
+      if(this.border === undefined) {
+        return this.defaultConfig.tableBorder
+      }
+      if(this.border === '') {
+        return true
+      }
+      return this.border
     }
   },
   watch: {
