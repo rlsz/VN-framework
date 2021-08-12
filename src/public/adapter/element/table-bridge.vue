@@ -26,7 +26,7 @@
                    :current-page="page + 1"
                    @current-change="skip"
                    @size-change="handleSizeChange"
-                   :layout="layout || 'total, prev, pager, next, sizes, jumper, slot'"
+                   :layout="layout || defaultConfig.tableDefaultLayout"
                    :page-size="pageSize"
                    :page-sizes="pageSizeList"
                    :total="total"
@@ -77,7 +77,7 @@ export default {
     },
     pageSizeList() {
       const size = this.pageSize
-      const arr = Distinct([10, 20, 30, 40, 50, 100, size])
+      const arr = Distinct([...this.defaultConfig.tablePageSizeList, size])
       arr.sort((a, b) => {
         if (a < b) return -1;
         if (a > b) return 1;

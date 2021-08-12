@@ -56,18 +56,32 @@ export function FindVueRoot() {
     // Array.from(document.body.children).find(c => c.__vue__)
 }
 
-let instanceList = []
 let dialogRoot
+export let dialogParent = {
+    stack: [],
+    push(vm) {
+        this.stack.push(vm)
+    },
+    pop() {
+        return this.stack.pop()
+    },
+    get current() {
+        return this.stack[this.stack.length - 1]
+    }
+}
 function AppendComponentToRoot(Vue, comp) {
     Vue.nextTick(() => {
+        if(!dialogParent.current) {
+            const $root = FindVueRoot()
+            dialogParent.push($root)
+        }
         const Component = Vue.extend({
             render: h => h(comp)
         });
         const instance = new Component();
-        const $root = FindVueRoot()
         Object.defineProperty(instance, '$parent', {
             get() {
-                return $root;
+                return dialogParent.current;
             },
             enumerable: true,
             configurable: true
@@ -75,19 +89,7 @@ function AppendComponentToRoot(Vue, comp) {
         instance._routerRoot = (instance.$parent && instance.$parent._routerRoot) || instance;
         instance.$mount()
         document.body.appendChild(instance.$el)
-        instanceList.push(instance)
         dialogRoot = instance
-    })
-}
-export function ChangeRoot(vm) {
-    instanceList.forEach(instance => {
-        Object.defineProperty(instance, '$parent', {
-            get() {
-                return vm;
-            },
-            enumerable: true,
-            configurable: true
-        });
     })
 }
 export function ClearAllDialogs() {
