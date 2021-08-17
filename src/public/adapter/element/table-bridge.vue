@@ -1,7 +1,7 @@
 <template>
   <!-- add class fill-available to fill container -->
   <div class="table-bridge flex vertical">
-    <div class="operate-wrapper">
+    <div class="operate-wrapper flex">
       <slot name="operate"></slot>
     </div>
     <div class="table-wrapper bg-white">
@@ -16,7 +16,7 @@
                 :default-expand-all='false'
                 row-key="id"
                 v-loading="loading"
-                v-bind="{...$props, ...$attrs}"
+                v-bind="{...$props, ...$attrs, query: undefined}"
                 v-on="{...$listeners, 'selection-change': onSelectionChange}"
       >
         <slot></slot>
@@ -226,6 +226,9 @@ export default {
 
 .operate-wrapper {
   padding: 5px 0;
+  &:empty {
+    padding: 0;
+  }
 }
 
 .el-pagination {

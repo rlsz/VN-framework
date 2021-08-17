@@ -2,7 +2,7 @@ import {Distinct} from "../base/utils";
 
 export function CombineValidators(...args) {
     return args.reduce((res, item) => {
-        let {validator, trigger} = item
+        let {required, validator, trigger} = item
         if (!validator) {
             console.error('invalid validator')
             throw new Error(item)
@@ -11,6 +11,7 @@ export function CombineValidators(...args) {
             trigger = [trigger]
         }
         return {
+            required: required === undefined ? res.required : required,
             validator: (rule, value, callback) => {
                 return res.validator(rule, value, err => {
                     if (err) {
@@ -77,6 +78,7 @@ export function TriggerValidator(formRef, props) {
 export class ElFormValidators {
     static required(label) {
         return {
+            required: true,
             validator: (rule, value, callback) => {
                 if (!value && value !== 0) {
                     return callback(new Error(label + '不能为空'))
@@ -154,6 +156,7 @@ export class ElFormValidators {
     static regexp_not(msg, reg) {
         return {
             validator: (rule, value, callback) => {
+                console.log(value, !reg.test(value))
                 if (!reg.test(value)) {
                     return callback(new Error(msg))
                 }
@@ -211,3 +214,11 @@ export class ElFormValidators {
         )
     }
 }
+
+/**
+ * W3C 标准中有如下规定：
+
+ When there is only one single-line text input field in a form, the user agent should accept Enter in that field as a request to submit the form.
+
+ 即：当一个 form 元素中只有一个输入框时，在该输入框中按下回车应提交该表单。如果希望阻止这一默认行为，可以在 <el-form> 标签上添加 @submit.native.prevent。
+ */
