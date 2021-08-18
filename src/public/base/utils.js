@@ -32,8 +32,8 @@ export function GetRandomString(len = 32, exists = []) {
     for (let i = 0; i < len; i++) {
         pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
     }
-    if(exists && exists.length) {
-        if(exists.indexOf(pwd) >= 0) {
+    if (exists && exists.length) {
+        if (exists.indexOf(pwd) >= 0) {
             return GetRandomString(len, exists)
         }
     }
@@ -194,7 +194,7 @@ export function IsImageOk(img) {
 // img: HTMLImageElement、Image
 export function ConvertImageToCanvas(imgTag, outputSize) {
     return new Promise(r => {
-        if(IsImageOk(imgTag)) {
+        if (IsImageOk(imgTag)) {
             r(imgTag)
         } else {
             imgTag.onload = () => {
@@ -382,9 +382,9 @@ export function throttle(executor, bufferLength, compareKey) {
 
     return function (...args) {
         const item = [this, ...args]
-        if(compareKey) {
+        if (compareKey) {
             const key = compareKey.call(...item)
-            if([...queue, ...buffer.filter(c => c !== undefined)].some(c => key === compareKey.call(...c))) {
+            if ([...queue, ...buffer.filter(c => c !== undefined)].some(c => key === compareKey.call(...c))) {
                 return
             }
         }
@@ -554,16 +554,16 @@ export function Tick(time, onTick) {
  * 因此需要为noCacheRouters的同步/异步路由创建随机name，需要注意的是路由组件可能存在异步场景，所以exclude并不是在路由返回时初始化完成的，但可以保证在组件创建时初始化完成
  */
 export function CreateKeepAliveRouter(cacheRouters, noCacheRouters = []) {
-    if(GetJsType(cacheRouters) !== 'Array') {
+    if (GetJsType(cacheRouters) !== 'Array') {
         cacheRouters = [cacheRouters]
     }
-    if(GetJsType(noCacheRouters) !== 'Array') {
+    if (GetJsType(noCacheRouters) !== 'Array') {
         noCacheRouters = [noCacheRouters]
     }
     let exclude = []
-    if(noCacheRouters.length) {
+    if (noCacheRouters.length) {
         const temp = noCacheRouters.map(r => {
-            if(typeof r.component === 'function') {
+            if (typeof r.component === 'function') {
                 return r.component().then(res => {
                     return {
                         ...r,
@@ -576,7 +576,7 @@ export function CreateKeepAliveRouter(cacheRouters, noCacheRouters = []) {
         })
         Promise.all(temp).then(routers => {
             routers.forEach(r => {
-                if(!r.name) {
+                if (!r.name) {
                     r.name = GetRandomString(16, exclude)
                 }
                 r.component.name = r.name
@@ -649,6 +649,7 @@ export function GeneratorFactory(prefix) {
 }
 
 var root = window;
+
 /**
  * Returns the scrolling parent of the given element
  * @function
@@ -712,7 +713,7 @@ export function truncateText(str, len = 100) {
 
 // https://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
 export function ConvertBase64ImageToBlob(imgStr, fileName, sliceSize = 512) {
-    if(/^data:(image\/.+);base64,([^,]+)$/g.test(imgStr)) {
+    if (/^data:(image\/.+);base64,([^,]+)$/g.test(imgStr)) {
         const type = RegExp.$1
         const data = RegExp.$2
         const byteCharacters = atob(data);
@@ -738,4 +739,8 @@ export function ConvertBase64ImageToBlob(imgStr, fileName, sliceSize = 512) {
     } else {
         throw new Error('invalid image string')
     }
+}
+
+export function getMiddleColor(c1, c2) {
+    return ((parseInt(c1, 16) - parseInt(c2, 16)) / 2 + parseInt(c2, 16)).toString(16)
 }
