@@ -177,7 +177,12 @@ export default {
     // 手动选中某一行，自动选择所有子元素, 由于该事件会在selection-change之前触发，所以修改内容会被覆盖，需要添加setTimeout矫正时序
     handleSelect(rows, currentRow) {
       setTimeout(() => {
-        const arr = flattenTreeToArray(currentRow, c => c[this.treeProps.children]).distinct()
+        let arr = []
+        if(this.treeProps) {
+          arr = flattenTreeToArray(currentRow, c => c[this.treeProps.children]).distinct()
+        } else {
+          arr = [currentRow]
+        }
         if (arr.length > 1) {
           const isChecked = rows.indexOf(currentRow) >= 0
           const table = this.table
@@ -191,7 +196,12 @@ export default {
     handleSelectAll(rows) {
       const data = this.list
       if (data && data.length) {
-        const arr = flattenTreeToArray(data, c => c[this.treeProps.children]).distinct()
+        let arr = []
+        if(this.treeProps) {
+          arr = flattenTreeToArray(data, c => c[this.treeProps.children]).distinct()
+        } else {
+          arr = data
+        }
         if (arr.length > data.length) {
           const isChecked = rows.indexOf(data[0]) >= 0
           const table = this.table
