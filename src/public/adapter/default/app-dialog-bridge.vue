@@ -20,7 +20,7 @@
 import {Dialog, Model} from "../../dialogs/dialog";
 import {PlatformService} from '../../platform/platform.service'
 import {Platform} from '../../platform/platform'
-import {IsInFullScreen, ToggleFullScreen} from "@/public/base";
+import {IsInFullScreen, ToggleFullScreen} from "../../../public/base/utils";
 
 export default {
   name: "app-dialog-bridge",

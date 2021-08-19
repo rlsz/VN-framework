@@ -1,5 +1,9 @@
 import {MIME_TYPE} from "./mime/mime-type";
 
+let path = require('path')
+export function resolvePath(...paths) {
+    return path.resolve(...paths)
+}
 export function GetQuery(str) {
     const query = {};
     const search = str || location.search;
