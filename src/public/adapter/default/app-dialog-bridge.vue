@@ -6,7 +6,10 @@
         <span class="default-title">{{title}}</span>
       </slot>
       <span v-if="config && config.tip" class="tip">{{config.tip}}</span>
-      <span v-if="model===Model.float" class="close" @click="close"></span>
+      <template v-if="model===Model.float">
+        <span class="full-screen" :class="{active: this.isInFullScreen}" @click="toggleFullScreen"></span>
+        <span class="close" @click="close"></span>
+      </template>
     </div>
     <div class="body"><slot></slot></div>
     <div class="footer" v-if="!noFooter"><slot name="footer"></slot></div>
@@ -17,6 +20,7 @@
 import {Dialog, Model} from "../../dialogs/dialog";
 import {PlatformService} from '../../platform/platform.service'
 import {Platform} from '../../platform/platform'
+import {IsInFullScreen, ToggleFullScreen} from "@/public/base";
 
 export default {
   name: "app-dialog-bridge",
@@ -27,7 +31,8 @@ export default {
   },
   data() {
     return {
-      Model
+      Model,
+      isInFullScreen: IsInFullScreen()
     }
   },
   computed: {
@@ -58,6 +63,11 @@ export default {
   methods: {
     close(){
       this.dialog.close()
+    },
+    toggleFullScreen() {
+      Promise.resolve(ToggleFullScreen(this.$el)).then(() => {
+        this.isInFullScreen = IsInFullScreen()
+      })
     }
   }
 }
@@ -91,7 +101,7 @@ export default {
     span.close {
       //font-size: 16px;
       //color: #909399;
-      margin-left: auto;
+      //margin-left: auto;
       cursor: pointer;
 
       padding-left: 8px;
@@ -122,6 +132,17 @@ export default {
 
       &:after {
         transform: rotate(-45deg);
+      }
+    }
+    span.full-screen {
+      margin-left: auto;
+      content: '';
+      width: 12px;
+      height: 12px;
+      background: url("../../../assets/public/全屏@2x.png") center/cover no-repeat;
+      cursor: pointer;
+      &.active {
+        background-image: url("../../../assets/public/退出全屏2x.png");
       }
     }
   }

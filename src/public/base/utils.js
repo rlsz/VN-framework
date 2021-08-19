@@ -744,3 +744,36 @@ export function ConvertBase64ImageToBlob(imgStr, fileName, sliceSize = 512) {
 export function getMiddleColor(c1, c2) {
     return ((parseInt(c1, 16) - parseInt(c2, 16)) / 2 + parseInt(c2, 16)).toString(16)
 }
+
+/**
+ * https://stackoverflow.com/questions/1125084/how-to-make-the-window-full-screen-with-javascript-stretching-all-over-the-scre
+ * https://stackoverflow.com/questions/36672561/how-to-exit-fullscreen-onclick-using-javascript
+ */
+export function ToggleFullScreen(target = document.documentElement) {
+    const isInFullScreen = IsInFullScreen();
+    if (!isInFullScreen) {
+        const enter = target.requestFullscreen || target.mozRequestFullScreen || target.webkitRequestFullScreen || target.msRequestFullscreen
+        if(enter) {
+            return enter.call(target)
+        }
+    } else {
+        const exit = document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen || document.msExitFullscreen
+        if(exit) {
+            return exit.call(document)
+        }
+    }
+    if (typeof window.ActiveXObject !== "undefined") { // Older IE.
+        const wscript = new ActiveXObject("WScript.Shell");
+        if (wscript !== null) {
+            return wscript.SendKeys("{F11}");
+        }
+    }
+    throw new Error("This browser doesn't support full screen script.")
+}
+
+export function IsInFullScreen() {
+    return (document.fullscreenElement && document.fullscreenElement !== null) ||
+        (document.webkitFullscreenElement && document.webkitFullscreenElement !== null) ||
+        (document.mozFullScreenElement && document.mozFullScreenElement !== null) ||
+        (document.msFullscreenElement && document.msFullscreenElement !== null)
+}
