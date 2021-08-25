@@ -10,7 +10,7 @@ export class AjaxService {
     host
     loading
 
-    constructor(injector, host = process.env.VUE_APP_SERVE) {
+    constructor(injector, host) {
         this.ls = injector.get(LoggerService)
         this.host = (host + '/').replace(/\/{2,}$/, '/')
         this.loading = injector.get(LoadingService)
