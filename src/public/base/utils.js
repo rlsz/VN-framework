@@ -591,6 +591,7 @@ export function CreateKeepAliveRouter(cacheRouters, noCacheRouters = []) {
     return {
         path: '',
         component: {
+            // 寻找替代render语法：试下render里面的children再return render，看第二个render里面有没有scopedSlot，vue2和vue3都试下
             render(h) {
                 return h('keep-alive', {
                     props: {exclude}

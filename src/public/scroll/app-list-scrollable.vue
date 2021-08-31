@@ -31,7 +31,7 @@ export default {
    * page number start from 0
    * size: number
    */
-  props: ['query', 'size', 'column'],
+  props: ['query', 'size'],
   di: {
     inject: {
       ss: ScrollService,
