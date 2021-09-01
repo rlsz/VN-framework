@@ -19,6 +19,15 @@ export class PersistenceBase {
 
     constructor(injector) { // called in beforeCreated lifecycle
         this.injector = injector
+        this.toJSON = () => {
+            return Object.keys(this)
+                .filter(key => this.persistenceEscape.indexOf(key) < 0 && typeof key === 'string')
+                .reduce((value, key) => {
+                    // @ts-ignore
+                    value[key] = this[key]
+                    return value
+                }, {})
+        }
         return new Proxy(this, {
             set: function (target, property, value, receiver) {
                 const temp = Reflect.set(...arguments);
@@ -53,14 +62,7 @@ export class PersistenceBase {
         if (!this._init) {
             return
         }
-        const value = Object.keys(this)
-            .filter(key => this.persistenceEscape.indexOf(key) < 0)
-            .reduce((value, key) => {
-                value[key] = this[key]
-                return value
-            }, {})
-        const session = this.injector.get(SessionStorageService)
-        session.set(this.persistenceKey, value)
+        this.session.set(this.persistenceKey, this)
     }
 
     restore() {
