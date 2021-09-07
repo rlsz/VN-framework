@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import {AjaxService} from "@/public/base";
+import {AjaxService, ConvertImageToCanvas, ReadImage} from "@/public/base";
 
 export default {
   name: "richText",
@@ -29,11 +29,12 @@ export default {
     },
     upload(image) {
       console.log('on upload', image)
-      let form = new FormData()
-      form.append("file", image);
-      return this.ajax.post('file/justUpload', form).then(res => {
-        console.log('upload result:', res)
-      })
+      return ReadImage(image).then(res => res.src)
+      // let form = new FormData()
+      // form.append("file", image);
+      // return this.ajax.post('file/justUpload', form).then(res => {
+      //   console.log('upload result:', res)
+      // })
     }
   }
 }
