@@ -1,5 +1,7 @@
 import {Directive, DirectiveContext} from "./directive-base";
 
+const activeClass = 'v-link-active'
+
 class VLinkDirective extends DirectiveContext {
     vnode
     isBlank = false
@@ -19,9 +21,9 @@ class VLinkDirective extends DirectiveContext {
             })
             this.active = val.fullPath === route.fullPath
             if (this.active) {
-                el.classList.add('active')
+                el.classList.add(activeClass)
             } else {
-                el.classList.remove('active')
+                el.classList.remove(activeClass)
             }
         }, {
             immediate: true

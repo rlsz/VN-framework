@@ -156,7 +156,6 @@ export class ElFormValidators {
     static regexp_not(msg, reg) {
         return {
             validator: (rule, value, callback) => {
-                console.log(value, !reg.test(value))
                 if (!reg.test(value)) {
                     return callback(new Error(msg))
                 }

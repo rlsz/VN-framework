@@ -15,7 +15,7 @@
           <span v-else>选择图片</span>
         </div>
       </app-file-selector>
-      <app-scale-bar v-model="imgScale"></app-scale-bar>
+      <app-scale-bar v-model="imgScale" v-if="fileUrl"></app-scale-bar>
     </div>
     <div v-if="status === CropStatus.cropping" class="flex vertical cross-center container-box">
       <vue-cropper
