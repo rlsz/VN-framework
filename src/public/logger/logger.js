@@ -45,6 +45,7 @@ export class Log {
     this.time = new Date();
   }
 
+  // todo: add custom error escape function
   escape(str) {
     if (!str || typeof str !== 'string') {
       return str;

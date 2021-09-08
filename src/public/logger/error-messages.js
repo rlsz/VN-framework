@@ -1,3 +1,4 @@
+// todo: add custom error escape function
 export const ERROR_MAP = {
   'ajax error': '请求失败',
   'ajax timeout': '请求超时',

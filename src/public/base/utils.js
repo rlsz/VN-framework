@@ -638,7 +638,7 @@ export function CreateKeepAliveRouter(cacheRouters, noCacheRouters = []) {
     }
 }
 
-export function GeneratorFactory(prefix) {
+export function GeneratorFactory(prefix = 0) {
     function* newID() {
         let i = 1;
         while (true) {
