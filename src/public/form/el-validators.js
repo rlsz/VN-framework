@@ -80,7 +80,7 @@ export class ElFormValidators {
         return {
             required: true,
             validator: (rule, value, callback) => {
-                if (!value && value !== 0) {
+                if (!value && value !== 0 && value !== false) {
                     return callback(new Error(label + '不能为空'))
                 }
                 if(typeof value === 'string' && /^\s*$/gi.test(value)) {
