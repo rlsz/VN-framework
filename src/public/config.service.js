@@ -4,4 +4,5 @@ export class ConfigService {
     tableBorder = true
     tableAlwaysShowPagination = false
     tableDefaultLayout = 'total, prev, pager, next, sizes, jumper, slot'
+    dialogDisableClose = false
 }

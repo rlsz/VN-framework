@@ -3,6 +3,7 @@ import {Dialog, Model, Position} from "../../dialogs/dialog";
 import {PlatformService} from '../../platform/platform.service'
 import {Platform} from '../../platform/platform'
 import {getScrollParent} from '../../base/utils'
+import {ConfigService} from "../../config.service";
 
 function round(num) {
   if(num >= 0) {
@@ -75,7 +76,8 @@ export default {
       }
     }],
     inject: {
-      dialog: Dialog
+      dialog: Dialog,
+      configService: ConfigService
     }
   },
   data() {
@@ -106,16 +108,18 @@ export default {
       return Position.bottom
     },
     enableOverlayClose() {
-      if(!this.options.instance.config) {
-        return true
+      if (!this.options.instance.config) {
+        return !this.configService?.dialogDisableClose;
       }
-      if(this.options.instance.config['close-on-click-overlay'] !== undefined) {
-        return this.options.instance.config['close-on-click-overlay']
+      if (
+          this.options.instance.config["close-on-click-overlay"] !== undefined
+      ) {
+        return this.options.instance.config["close-on-click-overlay"];
       }
-      if(this.options.instance.config.disableClose !== undefined) {
-        return !this.options.instance.config.disableClose
+      if (this.options.instance.config.disableClose !== undefined) {
+        return !this.options.instance.config.disableClose;
       }
-      return true
+      return !this.configService?.dialogDisableClose;
     }
   },
   // https://vuejs.org/v2/guide/render-function.html#createElement-Arguments
