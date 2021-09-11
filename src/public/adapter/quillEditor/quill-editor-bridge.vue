@@ -110,7 +110,7 @@ export default {
       let ops = []
       Delta.ops.forEach(op => {
         const imgBase64 = op.insert?.image
-        if (imgBase64) {
+        if (imgBase64 && /^data:(image\/.+);base64,([^,]+)$/g.test(imgBase64)) {
           this.$nextTick(() => {
             this.uploadImage(ConvertBase64ImageToBlob(imgBase64))
           })
