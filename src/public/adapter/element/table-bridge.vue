@@ -164,10 +164,6 @@ export default {
         if (currentSeq !== this.sequence) {
           return
         }
-        this.$message.error({
-          message: err.message || err,
-          type: 'error'
-        });
       })
     },
     onSelectionChange(selection) {
