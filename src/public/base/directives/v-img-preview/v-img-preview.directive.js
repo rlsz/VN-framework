@@ -32,7 +32,8 @@ class VImgPreviewDirective extends DirectiveContext {
     onClick() {
         this.ds.open(ImgPreview, {
             src: this.src || '',
-            model: Model.float
+            model: Model.float,
+            disableClose: false
         });
     }
 }
