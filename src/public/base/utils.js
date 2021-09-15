@@ -782,3 +782,25 @@ export function IsInFullScreen() {
         (document.mozFullScreenElement && document.mozFullScreenElement !== null) ||
         (document.msFullscreenElement && document.msFullscreenElement !== null)
 }
+
+export function DownloadByUrl(url, fileName) {
+    const link = document.createElement('a');
+    link.href = url;
+    if(fileName) {
+        link.download = fileName
+    }
+    link.click();
+}
+export function DownloadByBlob(blob, fileName) {
+    if (window.navigator.msSaveOrOpenBlob) {
+        navigator.msSaveBlob(blob, fileName);
+    } else {
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        if(fileName) {
+            link.download = fileName
+        }
+        link.click();
+        window.URL.revokeObjectURL(link.href);
+    }
+}
