@@ -7,6 +7,7 @@ export * from './services/ajax.service'
 export * from './services/loading.service'
 export * from './services/cookie-storage.service'
 export {default as ImgPreview} from './directives/v-img-preview/img-preview.vue'
+export {default as VideoPreview} from './directives/v-video-preview/video-preview.vue'
 export {default as ImgUploader} from './components/img-uploader.vue'
 export {default as ActionsDialog} from './components/actions-dialog.vue'
 export {default as ProgressBarDialog} from './components/progress-bar-dialog.vue'
@@ -27,6 +28,7 @@ import fillNumber from './filters/fillNumber'
 import highlight from './filters/highlight'
 import vHtmlNew from './directives/v-html-new.directive'
 import vImgPreview from './directives/v-img-preview/v-img-preview.directive'
+import vVideoPreview from './directives/v-video-preview/v-video-preview.directive'
 import vLoadingTarget from './directives/v-loading-target.directive'
 
 export default function (Vue) {
@@ -46,5 +48,6 @@ export default function (Vue) {
     Vue.use(vHtmlNew)
     Vue.use(fillNumber)
     Vue.use(vImgPreview)
+    Vue.use(vVideoPreview)
     Vue.use(vLoadingTarget)
 }

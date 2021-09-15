@@ -812,7 +812,7 @@ export function DownloadByBlob(blob, fileName) {
         const link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob);
         if(fileName) {
-            link.download = fileName // doesn't work for cross-origin requests
+            link.download = fileName // doesn't work for cross-origin requests, works for blob download
         }
         link.click();
         window.URL.revokeObjectURL(link.href);
