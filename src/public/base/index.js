@@ -9,6 +9,7 @@ export * from './services/cookie-storage.service'
 export {default as ImgPreview} from './directives/v-img-preview/img-preview.vue'
 export {default as ImgUploader} from './components/img-uploader.vue'
 export {default as ActionsDialog} from './components/actions-dialog.vue'
+export {default as ProgressBarDialog} from './components/progress-bar-dialog.vue'
 
 import fileSelector from './components/app-file-selector.vue'
 import emotion from './components/app-emotion.vue'

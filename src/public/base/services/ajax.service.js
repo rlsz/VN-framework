@@ -1,17 +1,41 @@
 import axios from 'axios'
 import {LoggerService} from "../../logger/logger.service";
 import {LoadingService} from "../../base/services/loading.service";
+import {SimpleSubject} from "../../base/utils";
+import ProgressBarDialog from "../../base/components/progress-bar-dialog.vue"
+import {DialogService} from "../../dialogs/dialog.service";
+import {Position} from "@/public/dialogs";
 
 const virtual_a = document.createElement('a')
 
 export class AjaxService {
 
-    ls
+    injector
+    get ls() {
+        return this.injector.get(LoggerService)
+    }
+    get ds() {
+        return this.injector.get(DialogService)
+    }
+    get progressAnchor() {
+        const id = 'progress-bar-anchor'
+        let temp = document.getElementById(id)
+        if(!temp) {
+            temp = document.createElement('span')
+            temp.id = id
+            temp.style.position = 'fixed'
+            temp.style.right = '20px'
+            temp.style.top = '40px'
+            temp.style.pointerEvents = 'none'
+            document.body.appendChild(temp)
+        }
+        return temp
+    }
     host
     loading
 
-    constructor(injector, host) {
-        this.ls = injector.get(LoggerService)
+    constructor(injector, host = process.env.VUE_APP_SERVE) {
+        this.injector = injector
         this.host = (host + '/').replace(/\/{2,}$/, '/')
         this.loading = injector.get(LoadingService)
     }
@@ -56,6 +80,17 @@ export class AjaxService {
     }
 
     post(url, data, config) {
+        let progress, progressBar
+        if(config && config.progress) {
+            progress = new SimpleSubject(0)
+            progressBar = this.ds.open(ProgressBarDialog, {
+                data: progress,
+                desc: config.progress,
+                anchor: this.progressAnchor,
+                position: Position.left,
+                disableClose: true
+            })
+        }
         return this.interceptor(headers => axios.post(
             this.getUrl(url),
             data,
@@ -63,10 +98,18 @@ export class AjaxService {
                 validateStatus: function () {
                     return true
                 },
+                onUploadProgress(progressEvent) {
+                    if(progress) {
+                        const { loaded, total } = progressEvent
+                        progress.next(loaded / total)
+                    }
+                },
                 ...config,
                 headers
             }
-        ), config, data)
+        ), config, data).finally(() => {
+            progressBar.close()
+        })
     }
 
     put(url, data, config) {
