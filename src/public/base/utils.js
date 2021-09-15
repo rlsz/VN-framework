@@ -375,9 +375,19 @@ export function throttle(executor, bufferLength, compareKey) {
         }
         if (queue.length) {
             buffer[i] = queue.shift()
-            Promise.resolve(
-                executor.call(...buffer[i])
-            ).finally(() => {
+            let res
+            try {
+                res = Promise.resolve(
+                    executor.apply(buffer[i].ref, buffer[i].args)
+                )
+            } catch (err) {
+                res = Promise.reject(err)
+            }
+            res.then(res => {
+                buffer[i].r(res)
+            }).catch(err => {
+                buffer[i].j(err)
+            }).finally(() => {
                 buffer[i] = undefined
                 flush(i)
             })
@@ -385,15 +395,17 @@ export function throttle(executor, bufferLength, compareKey) {
     }
 
     return function (...args) {
-        const item = [this, ...args]
-        if (compareKey) {
-            const key = compareKey.call(...item)
-            if ([...queue, ...buffer.filter(c => c !== undefined)].some(c => key === compareKey.call(...c))) {
-                return
+        return new Promise((r, j) => {
+            const item = { r, j, ref: this, args }
+            if (compareKey) {
+                const key = compareKey.apply(item.ref, item.args)
+                if ([...queue, ...buffer.filter(c => c !== undefined)].some(c => key === compareKey.apply(c.ref, c.args))) {
+                    return
+                }
             }
-        }
-        queue.push(item)
-        refresh()
+            queue.push(item)
+            refresh()
+        })
     }
 }
 
@@ -806,3 +818,4 @@ export function DownloadByBlob(blob, fileName) {
         window.URL.revokeObjectURL(link.href);
     }
 }
+
