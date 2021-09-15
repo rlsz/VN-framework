@@ -783,14 +783,16 @@ export function IsInFullScreen() {
         (document.msFullscreenElement && document.msFullscreenElement !== null)
 }
 
-export function DownloadByUrl(url, fileName) {
+export const DownloadByUrl = throttle(function (url, fileName) {
     const link = document.createElement('a');
     link.href = url;
     if(fileName) {
-        link.download = fileName
+        link.download = fileName // doesn't work for cross-origin requests
     }
     link.click();
-}
+    return timer(300)
+}, 1)
+
 export function DownloadByBlob(blob, fileName) {
     if (window.navigator.msSaveOrOpenBlob) {
         navigator.msSaveBlob(blob, fileName);
@@ -798,7 +800,7 @@ export function DownloadByBlob(blob, fileName) {
         const link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob);
         if(fileName) {
-            link.download = fileName
+            link.download = fileName // doesn't work for cross-origin requests
         }
         link.click();
         window.URL.revokeObjectURL(link.href);
