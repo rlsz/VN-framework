@@ -108,7 +108,9 @@ export class AjaxService {
                 headers
             }
         ), config, data).finally(() => {
-            progressBar.close()
+            if(progressBar) {
+                progressBar.close()
+            }
         })
     }
 
