@@ -88,7 +88,7 @@ export class ElFormValidators {
                 }
                 return callback()
             },
-            trigger: 'blur'
+            trigger: ['blur', 'change']
         }
     }
 
