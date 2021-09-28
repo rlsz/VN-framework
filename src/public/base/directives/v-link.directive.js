@@ -16,9 +16,7 @@ class VLinkDirective extends DirectiveContext {
         this.isBlank = !!binding.modifiers.blank
         this.componentInstance = vnode.componentInstance || vnode.context
         this.unwatch = this.componentInstance.$watch('$route', val => {
-            const {route} = this.componentInstance.$router.resolve({
-                path: this.value,
-            })
+            const {route} = this.componentInstance.$router.resolve(this.value)
             this.active = val.fullPath === route.fullPath
             if (this.active) {
                 el.classList.add(activeClass)
@@ -49,7 +47,7 @@ class VLinkDirective extends DirectiveContext {
             })
             window.open(href, '_blank')
         } else {
-            router.push(this.value)
+            router.push(this.value).catch(e => {})
         }
     }
 }
