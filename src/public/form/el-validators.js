@@ -76,7 +76,7 @@ export function TriggerValidator(formRef, props) {
  * trigger： blur - 输入框，change - 选择框
  */
 export class ElFormValidators {
-    static required(label) {
+    static required(label, trigger) {
         return {
             required: true,
             validator: (rule, value, callback) => {
@@ -86,9 +86,12 @@ export class ElFormValidators {
                 if(typeof value === 'string' && /^\s*$/gi.test(value)) {
                     return callback(new Error(label + '不能为空'))
                 }
+                if(value instanceof Array && value.length === 0) {
+                    return callback(new Error(label + '不能为空'))
+                }
                 return callback()
             },
-            trigger: ['blur', 'change']
+            trigger: trigger || ['blur', 'change']
         }
     }
 
