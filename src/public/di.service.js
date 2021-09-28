@@ -104,7 +104,7 @@ class DependencyInjection {
             if (!this.vm.$parent) {
                 throw new Error(`token instance can't be found: ${token}`)
             }
-            return this.vm.$parent.$injector.get(token)
+            return this.vm.$parent.$injector.get(token, mute)
         } catch (e) {
             if(!mute) {
                 console.error(e)
