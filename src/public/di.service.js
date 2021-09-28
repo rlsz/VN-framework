@@ -92,7 +92,7 @@ class DependencyInjection {
         this.instanceMap[token.InjectionSymbol] = value
     }
 
-    get(token) {
+    get(token, mute = false) {
         try {
             if (!token.InjectionSymbol || (token.name && token.InjectionSymbol.description !== token.name)) {
                 throw new Error(`target token is not generated for now: ${token}`)
@@ -106,7 +106,9 @@ class DependencyInjection {
             }
             return this.vm.$parent.$injector.get(token)
         } catch (e) {
-            console.error(e)
+            if(!mute) {
+                console.error(e)
+            }
             return undefined
         }
     }

@@ -31,6 +31,8 @@
  *
  * @type {{pop(*=): *, stack: *[], readonly current: *, push(*=): void}}
  */
+import {Dialog} from "./dialog";
+
 export let dialogParent = {
     stack: [],
     push(vm) {
@@ -46,6 +48,11 @@ export let dialogParent = {
 }
 
 export class DialogRoot {
+    constructor(injector) {
+        if(injector.get(Dialog, true)) {
+            throw new Error("can not set DialogRoot in dialogs")
+        }
+    }
     diCreated(vm) {
         dialogParent.push(vm)
     }
