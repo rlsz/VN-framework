@@ -192,5 +192,12 @@ export default {
                 title: 'mixin测试'
             }
         },
+        {
+            path: 'movie',
+            component: () => import(/* webpackChunkName: "test" */ './movie.vue'),
+            meta: {
+                title: 'movie测试'
+            }
+        },
     ]
 }
