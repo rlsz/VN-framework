@@ -13,8 +13,9 @@
         </template>
       </div>
     </app-file-selector>
+    <video controls autoplay :src="ms.src" ref="video" @ended="ms.end()"></video>
     <div>
-      <span>解析文件列表:</span>
+      <span>解析文件列表:<span class="link" @click="playSelected">自动播放选中视频</span></span>
       <folderNode :value="folderTree"></folderNode>
     </div>
   </div>
@@ -22,9 +23,18 @@
 
 <script>
 import folderNode from "./components/folderNode.vue";
+import hbSwitch from './components/hb-switch.vue'
+import {GetFileExtension, throttle, ToggleFullScreen} from "@/public/base";
+import {MovieService} from "./components/MovieService";
 export default {
   name: "movie",
-  components: {folderNode},
+  components: {folderNode, hbSwitch},
+  di: {
+    providers: [MovieService],
+    inject: {
+      ms: MovieService
+    }
+  },
   data(){
     return {
       files: []
@@ -32,7 +42,6 @@ export default {
   },
   computed: {
     folderName() {
-      console.log(this.files)
       if (this.files?.length) {
         const temp = this.files[0].webkitRelativePath.match(/[\/\\]/)?.index
         if (temp > 0) {
@@ -46,11 +55,34 @@ export default {
       if(!this.files?.length) {
         return root
       }
-      this.files.forEach(file => {
+      const temp = this.files.filter(c => ['.DS_Store'].indexOf(c.name) < 0).map( c => {
+        if(/^([^第]+)第(\d+)[^\d]+/.test(c.webkitRelativePath)) {
+          c.season = RegExp.$1
+          c.episode = Number(RegExp.$2)
+        }
+        return c
+      })
+      console.log(temp)
+      temp.sort((a, b) => {
+        if(a.season && b.season) {
+          if (a.season < b.season) return -1;
+          if (a.season > b.season) return 1;
+
+          if (a.episode < b.episode) return -1;
+          if (a.episode > b.episode) return 1;
+          return 0
+        }
+        if(a.season && !b.season) return -1;
+        if(!a.season && b.season) return 1;
+        if (a.webkitRelativePath < b.webkitRelativePath) return -1;
+        if (a.webkitRelativePath > b.webkitRelativePath) return 1;
+        return 0
+      })
+      temp.forEach(file => {
         let node = root
         const paths = file.webkitRelativePath.split('/')
         paths.forEach(path => {
-          if(/\.[a-zA-Z0-9]+$/.test(path)) {
+          if(GetFileExtension(path)) {
             node[path] = file
           } else {
             if(!node[path]) {
@@ -61,6 +93,11 @@ export default {
         })
       })
       return root
+    }
+  },
+  methods: {
+    playSelected() {
+      this.ms.multiPlay(this.$el.querySelectorAll('.file-node.selected'))
     }
   }
 }

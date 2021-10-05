@@ -1,6 +1,6 @@
 <template>
-  <div class="video-preview-container" @click="dialog.close()">
-    <video controls :src="dialog.config.src">
+  <div class="video-preview-container flex center" @click="dialog.close()">
+    <video controls :autoplay="!!dialog.config.autoplay" :src="dialog.config.src" ref="video" @ended="ended">
       <p>Your browser doesn't support HTML5 video. Here is a <a :href="dialog.config.src" target="_blank">link to the video</a> instead.</p>
     </video>
   </div>
@@ -8,11 +8,22 @@
 
 <script>
 import {Dialog} from "../../../dialogs/dialog";
+import {ToggleFullScreen} from "../../utils";
 
 export default {
   di: {
     inject: {
       dialog: Dialog
+    }
+  },
+  mounted() {
+    if(this.dialog.config?.fullscreen) {
+      ToggleFullScreen(this.$refs.video)
+    }
+  },
+  methods: {
+    ended() {
+      this.dialog.close('ended')
     }
   }
 }
@@ -20,7 +31,7 @@ export default {
 
 <style lang="less" scoped>
 .video-preview-container {
-  display: block;
+  //display: block;
   overflow: auto;
   padding: 20px;
   cursor: zoom-out;
@@ -28,6 +39,7 @@ export default {
 
 video {
   max-width: 100%;
+  max-height: 100%;
 }
 
 </style>

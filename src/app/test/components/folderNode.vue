@@ -1,15 +1,25 @@
 <template>
   <div class="folder-node">
     <div v-for="(item, key) in value">
-      <span>{{key}}:</span>
       <fileNode v-if="isFile(item)" :value="item" :level="level+1"></fileNode>
-      <folderNode v-else :value="item" :level="level+1"></folderNode>
+      <div v-else>
+        <span class="shrink">
+          <span>{{ key }}:</span>
+          <span class="link" @click="playChildren">自动播放所有</span>
+        </span>
+        <folderNode :value="item" :level="level+1"></folderNode>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import fileNode from './fileNode.vue'
+import {throttle} from "@/public/base";
+import {DialogService} from "@/public/dialogs";
+import {LoggerService} from "@/public/logger";
+import {MovieService} from "./MovieService";
+
 export default {
   name: "folderNode",
   components: {
@@ -26,9 +36,19 @@ export default {
       default: {}
     }
   },
+  di: {
+    inject: {
+      ds: DialogService,
+      ls: LoggerService,
+      ms: MovieService
+    }
+  },
   methods: {
     isFile(target) {
       return target instanceof Blob
+    },
+    playChildren() {
+      this.ms.multiPlay(this.$el.querySelectorAll('.file-node'))
     }
   }
 }
@@ -36,6 +56,9 @@ export default {
 
 <style lang="less" scoped>
 .folder-node {
-
+  padding-left: 20px;
+}
+.link {
+  margin-left: 8px;
 }
 </style>

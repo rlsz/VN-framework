@@ -766,14 +766,20 @@ export function getMiddleColor(c1, c2) {
  * https://stackoverflow.com/questions/1125084/how-to-make-the-window-full-screen-with-javascript-stretching-all-over-the-scre
  * https://stackoverflow.com/questions/36672561/how-to-exit-fullscreen-onclick-using-javascript
  */
-export function ToggleFullScreen(target = document.documentElement) {
+export function ToggleFullScreen(target = document.documentElement, status) {
     const isInFullScreen = IsInFullScreen();
     if (!isInFullScreen) {
+        if(status === false) {
+            return Promise.resolve(true)
+        }
         const enter = target.requestFullscreen || target.mozRequestFullScreen || target.webkitRequestFullScreen || target.msRequestFullscreen
         if(enter) {
             return enter.call(target)
         }
     } else {
+        if(status === true) {
+            return Promise.resolve(true)
+        }
         const exit = document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen || document.msExitFullscreen
         if(exit) {
             return exit.call(document)
@@ -819,3 +825,7 @@ export function DownloadByBlob(blob, fileName) {
     }
 }
 
+export function GetFileExtension(fileName, lower = true) {
+    const extension = /\.([a-zA-Z0-9]+)$/.test(fileName) ? RegExp.$1 : ''
+    return extension.toLowerCase()
+}
