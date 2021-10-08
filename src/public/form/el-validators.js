@@ -72,6 +72,8 @@ export function TriggerValidator(formRef, props) {
     return Promise.all(pArr)
 }
 
+export const NumberSymbol = Symbol('validator-number')
+
 /** 通用校验规则
  * trigger： blur - 输入框，change - 选择框
  */
@@ -98,7 +100,8 @@ export class ElFormValidators {
     static number(label) {
         return {
             validator: (rule, value, callback) => {
-                if (/[^0-9]/g.test(value)) {
+                rule[NumberSymbol] = true
+                if (!/^\s*-?\d*\.?\d*\s*$/.test(value)) {
                     return callback(new Error(label + '必须为数字'))
                 }
                 return callback()
@@ -107,17 +110,29 @@ export class ElFormValidators {
         }
     }
 
-    static max(label, max) {
+    static max(label, max, includeEdge = true) {
         return {
             validator: (rule, value, callback) => {
-                if (typeof value === 'number') {
-                    if (value > max) {
-                        return callback(new Error(label + '不能超过' + max))
+                if (typeof value === 'number' || rule[NumberSymbol]) {
+                    if(includeEdge) {
+                        if (value > max) {
+                            return callback(new Error(label + '不能超过' + max))
+                        }
+                    } else {
+                        if (value >= max) {
+                            return callback(new Error(label + '必须小于' + max))
+                        }
                     }
                 }
                 if (typeof value === 'string') {
-                    if (value.length > max) {
-                        return callback(new Error(label + '长度不能超过' + max + '位'))
+                    if(includeEdge) {
+                        if (value.length > max) {
+                            return callback(new Error(label + '长度不能超过' + max + '位'))
+                        }
+                    } else {
+                        if (value.length > max) {
+                            return callback(new Error(label + '长度必须小于' + max + '位'))
+                        }
                     }
                 }
                 return callback()
@@ -126,17 +141,29 @@ export class ElFormValidators {
         }
     }
 
-    static min(label, min) {
+    static min(label, min, includeEdge = true) {
         return {
             validator: (rule, value, callback) => {
-                if (typeof value === 'number') {
-                    if (value < min) {
-                        return callback(new Error(label + '不能小于' + min))
+                if (typeof value === 'number' || rule[NumberSymbol]) {
+                    if(includeEdge) {
+                        if (value < min) {
+                            return callback(new Error(label + '不能小于' + min))
+                        }
+                    } else {
+                        if (value <= min) {
+                            return callback(new Error(label + '必须大于' + min))
+                        }
                     }
                 }
                 if (typeof value === 'string') {
-                    if (value.length < min) {
-                        return callback(new Error(label + '长度不能少于' + min + '位'))
+                    if(includeEdge) {
+                        if (value.length < min) {
+                            return callback(new Error(label + '长度不能少于' + min + '位'))
+                        }
+                    } else {
+                        if (value.length < min) {
+                            return callback(new Error(label + '长度必须大于' + min + '位'))
+                        }
                     }
                 }
                 return callback()
