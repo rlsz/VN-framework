@@ -83,27 +83,16 @@ export default {
       this.$emit('input', e.target.value)
     },
     refresh() {
-      this.textarea.style.height = 'auto';
-      const style = calcBoxStyle(this.textarea)
-      // let oldHeight
-      // if(style['box-sizing'] === 'border-box') {
-      //   oldHeight = style.positionInfo.height
-      // } else if(style['box-sizing'] === 'content-box') {
-      //   oldHeight = parseFloat(style.height)
-      // } else {
-      //   throw new Error('unexpected box-sizing:' + style['box-sizing'])
-      // }
-      // const oldHeight = style.positionInfo.height
-      const oldHeight = parseFloat(style.height)
-      const offset = style.scrollHeight - style.clientHeight
-      const newHeight = offset + oldHeight;
-      // console.log('refresh', JSON.stringify({
-      //   oldHeight,
-      //   newHeight,
-      //   style
-      // }, null, '  '))
-      if(offset > 0) {
-        this.textarea.style.height = newHeight + 'px'
+      const {scrollHeight, clientHeight} = calcBoxStyle(this.textarea)
+      if(scrollHeight !== clientHeight) {
+        this.textarea.style.height = 'auto';
+        const style = calcBoxStyle(this.textarea)
+        const initialHeight = parseFloat(style.height)
+        const offset = style.scrollHeight - style.clientHeight
+        const newHeight = offset + initialHeight;
+        if(offset > 0) {
+          this.textarea.style.height = newHeight + 'px'
+        }
       }
     }
   }
