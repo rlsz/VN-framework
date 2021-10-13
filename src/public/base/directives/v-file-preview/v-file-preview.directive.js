@@ -9,6 +9,7 @@ class VFilePreviewDirective extends DirectiveContext {
     src
     ds
     type
+    title
 
     bind(el, binding, vNode) {
         super.bind(...arguments);
@@ -25,9 +26,10 @@ class VFilePreviewDirective extends DirectiveContext {
         } else if (binding.modifiers.video) {
             this.type = FileType.video
         }
+        this.title = vNode?.data?.attrs['preview-title']
     }
 
-    update(el, binding) {
+    update(el, binding, vNode) {
         super.update(...arguments)
         this.src = el.src || this.value
         if (!this.src) {
@@ -35,6 +37,7 @@ class VFilePreviewDirective extends DirectiveContext {
         } else {
             el.classList.remove('disabled')
         }
+        this.title = vNode?.data?.attrs['preview-title']
     }
 
     onClick() {
@@ -42,7 +45,8 @@ class VFilePreviewDirective extends DirectiveContext {
             src: this.src || '',
             model: Model.float,
             disableClose: false,
-            type: this.type
+            type: this.type,
+            title: this.title
         });
     }
 }
