@@ -242,6 +242,18 @@ export class ElFormValidators {
             ElFormValidators.max(label, 6)
         )
     }
+    // isDuplicate: any => boolean
+    static duplicate(label, isDuplicate) {
+        return {
+            validator: (rule, value, callback) => {
+                if (isDuplicate(value)) {
+                    return callback(new Error(label + '不能重复'))
+                }
+                return callback()
+            },
+            trigger: 'change'
+        }
+    }
 }
 
 /**
