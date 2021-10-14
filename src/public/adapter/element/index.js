@@ -104,9 +104,11 @@ export function confirm(opts) {
 import VElSelectModifyDirective from './v-el-select-modify.directive'
 import MultiSelectBridge from './multi-select-bridge'
 import TableBridge from './table-bridge'
+import AsyncSelect from './async-select'
 
 export default function (Vue) {
     Vue.use(VElSelectModifyDirective)
     Vue.component(MultiSelectBridge.name, MultiSelectBridge)
     Vue.component(TableBridge.name, TableBridge)
+    Vue.component(AsyncSelect.name,AsyncSelect)
 }
