@@ -118,7 +118,7 @@ export default {
     query(val, oldVal) {
       this.sequence++
       this.page = 0
-      this.data = []
+      this.list = []
       this.getData()
     },
     size() {
