@@ -1,4 +1,6 @@
 import {Directive, DirectiveContext} from "./directive-base";
+// https://www.npmjs.com/package/sanitize-html
+import sanitizeHTML from 'sanitize-html';
 
 /**
  * 微信浏览器、ios系统中，通过v-html绑定的内容可能会出现滚动区域无滚动条的问题
@@ -25,6 +27,12 @@ class VHtmlNewDirective extends DirectiveContext {
         if(/<body>([^]*)<\/body>/.test(value)) {
             value = RegExp.$1
         }
+        value = sanitizeHTML(value, {
+            allowedAttributes: {
+                ...sanitizeHTML.defaults.allowedAttributes,
+                '*': [ 'style', 'class' ]
+            }
+        })
         el.innerHTML = value
     }
 }

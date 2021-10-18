@@ -1,5 +1,3 @@
-import {SimpleClone} from "../utils";
-
 const escapeRe = /[-/\\^$*+?.()|[\]{}]/g;
 
 function EscapeRegexCharacter(s) {
@@ -34,7 +32,7 @@ export default function (Vue) {
         })
         const matchStr = words.map(c => {
             const temp = EscapeRegexCharacter(c);
-            if (/^&?#?\d*;?$/g.test(c)) {
+            if (/^&?#?\d*;?$/.test(c)) {
                 return '(?<!&#?\\d*)' + temp + '(?!#?\\d*;)';
             }
             return temp;
@@ -45,7 +43,7 @@ export default function (Vue) {
         const template = IsValidColor(colorOrTemplate) ?
             `<em style="color:${colorOrTemplate};font-style: inherit;">$&</em>` :
             colorOrTemplate
-        const re = new RegExp(matchStr, 'gi');
+        const re = new RegExp('(?<!<[^<>]*)' + matchStr + '(?![^<>]*>)', 'gi');
         return value.replace(re, template);
     })
 }
