@@ -1,7 +1,7 @@
 <template>
   <div class="file-node flex cross-center" :class="{selected: checked}">
     <hbSwitch v-if="isVideo" v-model="checked"></hbSwitch>
-    <span>{{value.name}}</span>
+    <span :style="{marginLeft: !isVideo && '58px'}">{{value.name}}</span>
     <span v-if="isVideo" class="link" @click="play">play</span>
   </div>
 </template>

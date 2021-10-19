@@ -55,25 +55,43 @@ export default {
       if(!this.files?.length) {
         return root
       }
+      const re = /\d+/g
       const temp = this.files.filter(c => ['.DS_Store'].indexOf(c.name) < 0).map( c => {
-        if(/^([^第]+)第(\d+)[^\d]+/.test(c.webkitRelativePath)) {
-          c.season = RegExp.$1
-          c.episode = Number(RegExp.$2)
+        if(/^([^第]+)第(\d+)[^\d]+(.+)$/i.test(c.webkitRelativePath)) {
+          c.skeleton = RegExp.$1
+          c.sequence = [Number(RegExp.$2), RegExp.$3]
+        } else if(/^(.+)s(\d+)e(\d+)(.+)$/i.test(c.webkitRelativePath)) {
+          c.skeleton = RegExp.$1
+          c.sequence = [Number(RegExp.$2), Number(RegExp.$3), RegExp.$4]
+        } else {
+          const sequence = []
+          const skeleton = c.webkitRelativePath.replace(re, (matched) => {
+            sequence.push(Number(matched))
+            return '-'
+          })
+          if(sequence.length) {
+            c.skeleton = skeleton
+            c.sequence = sequence
+          }
         }
         return c
       })
       console.log(temp)
       temp.sort((a, b) => {
-        if(a.season && b.season) {
-          if (a.season < b.season) return -1;
-          if (a.season > b.season) return 1;
+        if(a.skeleton && b.skeleton) {
+          if (a.skeleton < b.skeleton) return -1;
+          if (a.skeleton > b.skeleton) return 1;
 
-          if (a.episode < b.episode) return -1;
-          if (a.episode > b.episode) return 1;
+          if(a.sequence.length < b.sequence.length) return -1;
+          if(a.sequence.length > b.sequence.length) return 1;
+          for(let i = 0; i < a.sequence.length; i ++) {
+            if(a.sequence[i] < b.sequence[i]) return -1;
+            if(a.sequence[i] > b.sequence[i]) return 1;
+          }
           return 0
         }
-        if(a.season && !b.season) return -1;
-        if(!a.season && b.season) return 1;
+        if(a.skeleton && !b.skeleton) return -1;
+        if(!a.skeleton && b.skeleton) return 1;
         if (a.webkitRelativePath < b.webkitRelativePath) return -1;
         if (a.webkitRelativePath > b.webkitRelativePath) return 1;
         return 0
@@ -81,8 +99,8 @@ export default {
       temp.forEach(file => {
         let node = root
         const paths = file.webkitRelativePath.split('/')
-        paths.forEach(path => {
-          if(GetFileExtension(path)) {
+        paths.forEach((path, index) => {
+          if(index === paths.length - 1) {
             node[path] = file
           } else {
             if(!node[path]) {

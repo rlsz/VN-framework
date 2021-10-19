@@ -1,13 +1,13 @@
 <template>
   <div class="folder-node">
-    <div v-for="(item, key) in value">
+    <div v-for="(item, key, index) in value">
       <fileNode v-if="isFile(item)" :value="item" :level="level+1"></fileNode>
       <div v-else>
         <span class="shrink">
           <span>{{ key }}:</span>
-          <span class="link" @click="playChildren">自动播放所有</span>
+          <span class="link" @click="playChildren(index)">自动播放所有</span>
         </span>
-        <folderNode :value="item" :level="level+1"></folderNode>
+        <folderNode :value="item" :level="level+1" ref="ref-item"></folderNode>
       </div>
     </div>
   </div>
@@ -47,8 +47,8 @@ export default {
     isFile(target) {
       return target instanceof Blob
     },
-    playChildren() {
-      this.ms.multiPlay(this.$el.querySelectorAll('.file-node'))
+    playChildren(i) {
+      this.ms.multiPlay(this.$refs['ref-item'][i].$el.querySelectorAll('.file-node'))
     }
   }
 }
