@@ -16,14 +16,18 @@ export default function(Vue, opts = {}) {
 
 // https://github.com/vuejs/vue-router/issues/1187
 export function initHoldPosition(router) {
-    const scrollableElementId = 'position-holder' // You should change this
+    const scrollableElementClass = 'app-scroll-holder' // You should change this
     const scrollPositions = Object.create(null)
 
     router.beforeEach((to, from, next) => {
-        let element = document.getElementById(scrollableElementId)
-        if (element !== null) {
-            const top = element.scrollTop
-            scrollPositions[from.path] = top
+        let elements = Array.from(document.querySelectorAll('.' + scrollableElementClass))
+        if (elements.length) {
+            scrollPositions[from.path] = elements.reduce((map, element) => {
+                if(element.id) {
+                    map[element.id] = element.scrollTop
+                }
+                return map
+            }, {})
         }
         next()
     })
@@ -31,9 +35,11 @@ export function initHoldPosition(router) {
     window.addEventListener('popstate', () => {
         setTimeout(()=>{
             let currentRouteName = router.history.current.path
-            let element = document.getElementById(scrollableElementId)
-            if (element !== null && currentRouteName in scrollPositions) {
-                element.scrollTop = scrollPositions[currentRouteName]
+            let elements = Array.from(document.querySelectorAll('.' + scrollableElementClass))
+            if (elements.length && currentRouteName in scrollPositions) {
+                elements.forEach(element => {
+                    element.scrollTop = scrollPositions[currentRouteName][element.id]
+                })
             }
         }, 0)
     })

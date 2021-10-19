@@ -6,10 +6,10 @@
          :style="{transform: sentinelTransform}"
     >下拉刷新</div>
     <div class="scroll"
-         :class="innerClass"
+         :class="innerClassCalc"
          :style="{transform: scrollTransform}"
          ref="scroll"
-         :id="hold!==undefined && 'position-holder'"
+         :id="holdId"
          @scroll="handleScroll"
          @touchstart="handleTouch"
          @touchend="handleTouch"
@@ -23,7 +23,7 @@
 
 <script>
 import {ScrollService, ScrollType} from './scroll.service'
-import {SimpleSubject} from "../base";
+import {GetJsType, SimpleClone, SimpleSubject} from "../base";
 
 const TouchType = {
   touchstart: 'touchstart',
@@ -76,6 +76,24 @@ export default {
     },
     scrollDom() {
       return this.$refs.scroll
+    },
+    holdId() {
+      return this.hold === undefined? undefined : this.hold||'position-holder'
+    },
+    innerClassCalc() {
+      let innerClass
+      if(typeof this.innerClass === 'string') {
+        innerClass = this.innerClass.split(/\s+/).reduce((obj, item) => {
+          if(item) {
+            obj[item]=true
+          }
+          return obj
+        }, {})
+      } else if(GetJsType(this.innerClass) === 'Object') {
+        innerClass = SimpleClone(this.innerClass)
+      }
+      innerClass['app-scroll-holder'] = !!this.holdId
+      return innerClass
     }
     // getLogger(){
     //     return this.log.filter((c,i)=>i>this.log.length - 10).join(', ')
