@@ -1,5 +1,5 @@
 <template>
-  <span className="app-tabs">
+  <span class="app-tabs">
     <slot name="prefix"></slot>
     <slot v-bind:value="item" v-bind:active="tabs.isActive(item)" v-for="(item,index) in options">
       use slotProps.value to access row data in slot template,
