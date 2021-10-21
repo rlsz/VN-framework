@@ -1,8 +1,8 @@
 <template>
   <app-dialog-bridge :class="{'no-header': !config.title}">
     <span slot="title">{{config.title}}</span>
-    <div class="flex center file-preview-container" @click="dialog.close()">
-      <img v-if="dialog.config.type === FileType.image" :src="dialog.config.src"/>
+    <div class="flex center file-preview-container">
+      <img @click="dialog.close()" v-if="dialog.config.type === FileType.image" :src="dialog.config.src"/>
       <video v-else-if="dialog.config.type === FileType.video" controls :src="dialog.config.src">
         <p>Your browser doesn't support HTML5 video. Here is a <a :href="dialog.config.src" target="_blank">link to the video</a> instead.</p>
       </video>
@@ -44,18 +44,27 @@ export default {
     iframe {
       min-height: calc(100vh - 100px);
     }
+    video {
+      max-height: calc(100vh - 100px);
+    }
   }
 }
 .file-preview-container {
   //display: block;
   //overflow: auto;
   //padding: 20px;
+}
+
+img {
+  max-width: 100%;
   cursor: zoom-out;
 }
 
-video, img {
+video {
   max-width: 100%;
+  max-height: calc(100vh - 138px);
 }
+
 iframe {
   min-width: calc(100vw - 100px);
   min-height: calc(100vh - 138px);
