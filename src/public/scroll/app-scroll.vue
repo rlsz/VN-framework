@@ -91,6 +91,8 @@ export default {
         }, {})
       } else if(GetJsType(this.innerClass) === 'Object') {
         innerClass = SimpleClone(this.innerClass)
+      } else {
+        innerClass = {}
       }
       innerClass['app-scroll-holder'] = !!this.holdId
       return innerClass
