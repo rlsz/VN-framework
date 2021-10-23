@@ -174,7 +174,7 @@ export class ElFormValidators {
     static regexp(msg, reg) {
         return {
             validator: (rule, value, callback) => {
-                if (reg.test(value)) {
+                if (value && reg.test(value)) {
                     return callback(new Error(msg))
                 }
                 return callback()
@@ -186,7 +186,7 @@ export class ElFormValidators {
     static regexp_not(msg, reg) {
         return {
             validator: (rule, value, callback) => {
-                if (!reg.test(value)) {
+                if (value && !reg.test(value)) {
                     return callback(new Error(msg))
                 }
                 return callback()
