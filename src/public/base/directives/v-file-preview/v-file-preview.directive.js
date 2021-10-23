@@ -26,7 +26,8 @@ class VFilePreviewDirective extends DirectiveContext {
         } else if (binding.modifiers.video) {
             this.type = FileType.video
         }
-        this.title = vNode?.data?.attrs['preview-title']
+        const attrs = vNode?.data?.attrs
+        this.title = attrs && attrs['preview-title']
     }
 
     update(el, binding, vNode) {
@@ -37,7 +38,8 @@ class VFilePreviewDirective extends DirectiveContext {
         } else {
             el.classList.remove('disabled')
         }
-        this.title = vNode?.data?.attrs['preview-title']
+        const attrs = vNode?.data?.attrs
+        this.title = attrs && attrs['preview-title']
     }
 
     onClick() {
