@@ -61,26 +61,28 @@ export * from './dialogs/dialog-root'
 
 let dialogRoot
 function AppendComponentToRoot(Vue, comp) {
-    Vue.nextTick(() => {
-        if(!dialogParent.current) {
-            const $root = FindVueRoot()
-            dialogParent.push($root)
-        }
-        const Component = Vue.extend({
-            render: h => h(comp)
-        });
-        const instance = new Component();
-        Object.defineProperty(instance, '$parent', {
-            get() {
-                return dialogParent.current;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        instance._routerRoot = (instance.$parent && instance.$parent._routerRoot) || instance;
-        instance.$mount()
-        document.body.appendChild(instance.$el)
-        dialogRoot = instance
+    return new Promise(r => {
+        Vue.nextTick(() => {
+            if(!dialogParent.current) {
+                const $root = FindVueRoot()
+                dialogParent.push($root)
+            }
+            const Component = Vue.extend({
+                render: h => h(comp)
+            });
+            const instance = new Component();
+            Object.defineProperty(instance, '$parent', {
+                get() {
+                    return dialogParent.current;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            instance._routerRoot = (instance.$parent && instance.$parent._routerRoot) || instance;
+            instance.$mount()
+            document.body.appendChild(instance.$el)
+            r(instance)
+        })
     })
 }
 export function ClearAllDialogs() {
@@ -100,6 +102,8 @@ export default function (Vue, router) {
     Vue.use(dialogs)
     Vue.use(scroll, {hold: router})
     Vue.use(form)
-    AppendComponentToRoot(Vue, DialogsContainer)
+    AppendComponentToRoot(Vue, DialogsContainer).then(inc => {
+        dialogRoot = inc
+    })
     Vue.prototype.$ls = LoggerService.instance
 }
