@@ -60,7 +60,3 @@ export class DialogRoot {
         dialogParent.pop(vm)
     }
 }
-
-window.getDialogRoot = () => {
-    return dialogParent
-}

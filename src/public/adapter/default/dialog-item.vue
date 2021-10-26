@@ -1,5 +1,6 @@
 <script>
 import { Dialog, Model, Position } from "../../dialogs/dialog";
+import { DialogParent } from "../../dialogs/dialog-parent";
 import { PlatformService } from "../../platform/platform.service";
 import { Platform } from "../../platform/platform";
 import { getScrollParent } from "../../base/utils";
@@ -74,8 +75,14 @@ export default {
         provide: Dialog,
         useFactory() {
           return this.$options.propsData.options.instance;
-        },
+        }
       },
+      {
+        provide: DialogParent,
+        useFactory() {
+          return this.$options.propsData.options.parent;
+        }
+      }
     ],
     inject: {
       dialog: Dialog,

@@ -1,5 +1,3 @@
-import Vue from "vue";
-
 class DependencyInjection {
     vm
     instanceMap = {}
@@ -15,7 +13,9 @@ class DependencyInjection {
             for (let key in inject) {
                 const token = inject[key]
                 if (token) {
-                    data[key] = this.get(token)
+                    data[key] = this.get(token, {
+                        checkProxy: true
+                    })
                 } else {
                     console.error('token must be given for inject key "' + key + '"')
                     data[key] = undefined
@@ -30,6 +30,8 @@ class DependencyInjection {
     // get ownProviders() {
     //     return Object.getOwnPropertySymbols(this.instanceMap).map(c => this.instanceMap[c])
     // }
+
+    revocableProxy = []
 
     constructor(vm) {
         this.vm = vm
@@ -86,27 +88,67 @@ class DependencyInjection {
                 throw new Error(`provider configuration error: ${provider}`)
             }
         }
-        if (!token.InjectionSymbol || (token.name && token.InjectionSymbol.description !== token.name)) {
-            token.InjectionSymbol = Symbol(token.name)
+
+        let symbol
+        if(typeof token === 'symbol') {
+            symbol = token
+        } else {
+            if (!token.InjectionSymbol || (token.name && token.InjectionSymbol.description !== token.name)) {
+                token.InjectionSymbol = Symbol(token.name)
+            }
+            symbol = token.InjectionSymbol
         }
-        this.instanceMap[token.InjectionSymbol] = value
+        this.instanceMap[symbol] = value
     }
 
-    get(token, mute = false) {
-        try {
-            if (!token.InjectionSymbol || (token.name && token.InjectionSymbol.description !== token.name)) {
-                throw new Error(`target token is not generated for now: ${token}`)
+    /**
+     *
+     * @param token
+     * @param opts { mute?: boolean, checkProxy?: boolean, proxyBridge: DependencyInjection }
+     * @returns {*|undefined}
+     */
+    get(token, opts = {}) {
+        if(typeof opts === 'boolean') {
+            opts = {
+                mute: false
             }
-            const target = this.instanceMap[token.InjectionSymbol]
+        }
+        if(opts.checkProxy && !opts.proxyBridge) {
+            opts.proxyBridge = this
+        }
+        try {
+            if(!token) {
+                throw new Error(`invalid token ${token}`)
+            }
+            let symbol
+            if(typeof token === 'symbol') {
+                symbol = token
+            } else {
+                symbol = token.InjectionSymbol
+                if (!symbol || (token.name && symbol.description !== token.name)) {
+                    throw new Error(`target token is not generated for now: ${token.toString()}`)
+                }
+            }
+            const target = this.instanceMap[symbol]
             if (target !== undefined) {
+                if(opts.checkProxy && target instanceof ServiceProxyTarget) {
+                    if(typeof target[ServiceProxyHandlerProperty] === "function") {
+                        const handler = new target[ServiceProxyHandlerProperty](opts.proxyBridge)
+                        const revocable = Proxy.revocable(target, handler)
+                        this.revocableProxy.push(revocable)
+                        return revocable.proxy
+                    } else {
+                        throw new Error('ServiceProxyHandlerProperty must be set with a class')
+                    }
+                }
                 return target
             }
             if (!this.vm.$parent) {
-                throw new Error(`token instance can't be found: ${token}`)
+                throw new Error(`token instance can't be found: ${token.toString()}`)
             }
-            return this.vm.$parent.$injector.get(token, mute)
+            return this.vm.$parent.$injector.get(token, opts)
         } catch (e) {
-            if(!mute) {
+            if(!opts.mute) {
                 console.error(e)
             }
             return undefined
@@ -184,6 +226,36 @@ export default function (Vue) {
             this.$injector.ownProviders.forEach(providerInstance => {
                 providerInstance?.diDestroyed && providerInstance.diDestroyed(this)
             })
+            this.$injector.revocableProxy.forEach(revocable => {
+                revocable.revoke();
+            })
+        },
+        activated() {
+            this.$injector.ownProviders.forEach(providerInstance => {
+                providerInstance?.diActivated && providerInstance.diActivated(this)
+            })
+        },
+        deactivated() {
+            this.$injector.ownProviders.forEach(providerInstance => {
+                providerInstance?.diDeactivated && providerInstance.diDeactivated(this)
+            })
         }
     })
+}
+
+export class ServiceProxyTarget {
+    [ServiceProxyHandlerProperty] = SimpleServiceProxyHandler
+}
+export const ServiceProxyHandlerProperty = Symbol('ServiceProxyHandlerProperty')
+export class SimpleServiceProxyHandler {
+    injector
+    constructor(injector) {
+        this.injector = injector
+    }
+    get(target, prop, receiver) {
+        return Reflect.get(...arguments);
+    }
+    set(target, property, value, receiver) {
+        return Reflect.set(...arguments);
+    }
 }

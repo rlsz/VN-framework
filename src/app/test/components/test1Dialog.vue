@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import {Dialog} from "@/public/dialogs";
+import {Dialog, DialogParent} from "@/public/dialogs";
 import {LoggerService} from "@/public/logger";
 import {AjaxService} from "@/public/base";
 
@@ -18,6 +18,7 @@ export default {
   di: {
     inject: {
       dialog: Dialog,
+      parent: DialogParent,
       ls: LoggerService,
       ajax: AjaxService
     }
@@ -33,6 +34,7 @@ export default {
     }
   },
   created() {
+    console.log('parent', this.parent)
   },
   methods: {
     submit() {

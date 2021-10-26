@@ -2,6 +2,7 @@ import {SimpleSubject} from "../base/utils";
 import {Dialog} from "./dialog";
 import SuccessComponent from './dialog-success.vue'
 import InfoComponent from './dialog-info.vue'
+import {ServiceProxyTarget, ServiceProxyHandlerProperty, SimpleServiceProxyHandler} from "../di.service";
 
 let singleton = null
 /**
@@ -18,7 +19,7 @@ let singleton = null
     button?: string;
   }
  */
-export class DialogService {
+export class DialogService extends ServiceProxyTarget {
   static get instance() {
     if (!singleton) {
       singleton = new DialogService()
@@ -26,15 +27,19 @@ export class DialogService {
     return singleton
   }
 
+  [ServiceProxyHandlerProperty] = DialogServiceProxyHandler
+
   dialog = new SimpleSubject();
   constructor() {
+    super()
   }
 
-  open(comp, config) {
+  open(comp, config, parent) {
     const instance = new Dialog(config);
     this.dialog.next({
       instance,
-      vueComponent: comp
+      vueComponent: comp,
+      parent
     })
 
     return instance
@@ -65,5 +70,17 @@ export class DialogService {
 
   confirm(option) {
     return require('../adapter').confirm(option)
+  }
+}
+
+class DialogServiceProxyHandler extends SimpleServiceProxyHandler {
+  get(target, prop, receiver) {
+    if(prop === 'open') {
+      let originalOpen = Reflect.get(...arguments);
+      return (comp, config, parent) => {
+        originalOpen.call(target, comp, config, parent || this.injector.vm)
+      }
+    }
+    return Reflect.get(...arguments);
   }
 }
