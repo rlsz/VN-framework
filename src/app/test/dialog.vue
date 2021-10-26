@@ -8,11 +8,13 @@
     <button class="app-form" @click="simpleComp()">简单组件</button>
     <button class="app-form" @click="openLoading()" v-loading-target>打开loading弹窗</button>
     <button class="app-form" @click="ajaxSimulator()" v-loading-target>模拟接口请求</button>
+    <button class="app-form" @click="parentDialogTest()">弹窗父组件测试</button>
   </div>
 </template>
 
 <script>
 import TestDialog from "./components/TestDialog";
+import test1Dialog from "./components/test1Dialog";
 import {LoggerService} from "@/public/logger";
 import {DialogService, Model} from "@/public/dialogs";
 import {LoadingService} from "@/public/base";
@@ -135,6 +137,9 @@ export default {
       }, {
         model: Model.transparent
       })
+    },
+    parentDialogTest() {
+      this.ds.open(test1Dialog)
     }
   }
 }
