@@ -808,7 +808,7 @@ export const DownloadByUrl = throttle(function (url, fileName) {
         link.download = fileName // doesn't work for cross-origin requests
     }
     link.click();
-    return timer(1000) // delay 1s for next download (if not, last download will be canceled in chrome)
+    return timer(1000) // delay 1s for next download (if not, all previous download tasks will be canceled in chrome)
 }, 1)
 
 export function DownloadByBlob(blob, fileName) {
