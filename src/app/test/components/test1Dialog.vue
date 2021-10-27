@@ -40,6 +40,13 @@ export default {
     submit() {
       this.ajax.post('submit', {}).then(res => {
         this.ls.success('success')
+      }).finally(() => {
+        this.$router.push('popupTest')
+        setTimeout(() => {
+          console.log(
+              this.parent.$injector.get(AjaxService)
+          )
+        }, 1000)
       })
     }
   }

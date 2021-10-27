@@ -135,7 +135,7 @@ class DependencyInjection {
                     if(typeof target[ServiceProxyHandlerProperty] === "function") {
                         const handler = new target[ServiceProxyHandlerProperty](opts.proxyBridge)
                         const revocable = Proxy.revocable(target, handler)
-                        this.revocableProxy.push(revocable)
+                        opts.proxyBridge.revocableProxy.push(revocable)
                         return revocable.proxy
                     } else {
                         throw new Error('ServiceProxyHandlerProperty must be set with a class')

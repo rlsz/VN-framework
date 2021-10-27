@@ -31,6 +31,7 @@ export default {
     }
   },
   created() {
+    window.testDialog = this
   },
   methods: {
     basic() {
@@ -139,7 +140,9 @@ export default {
       })
     },
     parentDialogTest() {
-      this.ds.open(test1Dialog)
+      this.ds.open(test1Dialog).afterClosed().then(() => {
+        console.log('closed', this)
+      })
     }
   }
 }
