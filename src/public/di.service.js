@@ -14,7 +14,8 @@ class DependencyInjection {
                 const token = inject[key]
                 if (token) {
                     data[key] = this.get(token, {
-                        checkProxy: true
+                        checkProxy: true,
+                        proxyBridge: this
                     })
                 } else {
                     console.error('token must be given for inject key "' + key + '"')
@@ -112,9 +113,6 @@ class DependencyInjection {
             opts = {
                 mute: false
             }
-        }
-        if(opts.checkProxy && !opts.proxyBridge) {
-            opts.proxyBridge = this
         }
         try {
             if(!token) {
