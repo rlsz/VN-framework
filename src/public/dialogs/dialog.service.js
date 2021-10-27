@@ -2,7 +2,7 @@ import {SimpleSubject} from "../base/utils";
 import {Dialog} from "./dialog";
 import SuccessComponent from './dialog-success.vue'
 import InfoComponent from './dialog-info.vue'
-import {ServiceProxyTarget, ServiceProxyHandlerProperty, SimpleServiceProxyHandler} from "../di.service";
+import {ServiceProxyHandlerProperty, SimpleServiceProxyHandler} from "../di.service";
 
 let singleton = null
 /**
@@ -19,7 +19,7 @@ let singleton = null
     button?: string;
   }
  */
-export class DialogService extends ServiceProxyTarget {
+export class DialogService {
   static get instance() {
     if (!singleton) {
       singleton = new DialogService()
@@ -31,7 +31,6 @@ export class DialogService extends ServiceProxyTarget {
 
   dialog = new SimpleSubject();
   constructor() {
-    super()
   }
 
   open(comp, config, parent) {

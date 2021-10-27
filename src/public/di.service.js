@@ -131,7 +131,7 @@ class DependencyInjection {
             }
             const target = this.instanceMap[symbol]
             if (target !== undefined) {
-                if(opts.checkProxy && target instanceof ServiceProxyTarget) {
+                if(opts.checkProxy && target[ServiceProxyHandlerProperty]) {
                     if(typeof target[ServiceProxyHandlerProperty] === "function") {
                         const handler = new target[ServiceProxyHandlerProperty](opts.proxyBridge)
                         const revocable = Proxy.revocable(target, handler)
@@ -243,9 +243,6 @@ export default function (Vue) {
     })
 }
 
-export class ServiceProxyTarget {
-    [ServiceProxyHandlerProperty] = SimpleServiceProxyHandler
-}
 export const ServiceProxyHandlerProperty = Symbol('ServiceProxyHandlerProperty')
 export class SimpleServiceProxyHandler {
     injector
