@@ -77,9 +77,9 @@ class DialogServiceProxyHandler extends SimpleServiceProxyHandler {
     if(prop === 'open') {
       let originalOpen = Reflect.get(...arguments);
       return (comp, config, parent) => {
-        originalOpen.call(target, comp, config, parent || this.injector.vm)
+        return originalOpen.call(target, comp, config, parent || this.injector.vm)
       }
     }
-    return Reflect.get(...arguments);
+    return super.get(...arguments)
   }
 }
