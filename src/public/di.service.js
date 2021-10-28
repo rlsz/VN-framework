@@ -111,7 +111,7 @@ class DependencyInjection {
     get(token, opts = {}) {
         if(typeof opts === 'boolean') {
             opts = {
-                mute: false
+                mute: opts
             }
         }
         try {
