@@ -9,10 +9,12 @@
         <span>状态</span>
         <span>操作</span>
       </div>
-      <template v-for="(row, index) in testData">
+      <template v-for="(row, index) in testData.data.data">
         <div class="row">
           <span>checkbox</span>
-          <span v-html-new="$options.filters.highlight(row.title, keywords)"></span>
+          <span>
+            <span v-html-new="$options.filters.highlight(row.title, ['资讯'])"></span>
+          </span>
           <div>{{ row.sourceInfo && row.sourceInfo.name || '-' }}</div>
           <div>{{ row.channel || '-' }}</div>
           <span>{{ row.state }}</span>

@@ -1,7 +1,29 @@
 <template>
   <div class="flex vertical fill-content">
-    <app-table :data="testData">
-
+    <app-table :data="testData.data.data">
+      <app-table-column type="selection" width="55" fixed="left" align="center"/>
+      <app-table-column align="left" min-width="250" label="标题">
+        <template slot-scope="{row}">
+          <span v-html="$options.filters.highlight(row.title, ['资讯'])"></span>
+        </template>
+      </app-table-column>
+      <app-table-column align="center" width="100" label="来源">
+        <template slot-scope="{row}">
+          <div>{{ row.sourceInfo && row.sourceInfo.name || '-' }}</div>
+        </template>
+      </app-table-column>
+      <app-table-column align="center" width="100" label="频道">
+        <template slot-scope="{row}">
+          <div>{{ row.channel || '-' }}</div>
+        </template>
+      </app-table-column>
+      <app-table-column property="state" align="center" label="状态" width="80"></app-table-column>
+      <app-table-column label="操作" align="center" width="350">
+        <template slot-scope="{row}">
+          <el-button type="warning" size="mini">测试按钮1</el-button>
+          <el-button type="warning" size="mini">测试按钮2</el-button>
+        </template>
+      </app-table-column>
     </app-table>
   </div>
 </template>
