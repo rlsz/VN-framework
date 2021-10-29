@@ -124,7 +124,7 @@ class DependencyInjection {
             } else {
                 symbol = token.InjectionSymbol
                 if (!symbol || (token.name && symbol.description !== token.name)) {
-                    throw new Error(`target token is not generated for now: ${token.toString()}`)
+                    throw new Error(`target token is not generated for now: ${token && token.toString()}`)
                 }
             }
             const target = this.instanceMap[symbol]
@@ -142,7 +142,7 @@ class DependencyInjection {
                 return target
             }
             if (!this.vm.$parent) {
-                throw new Error(`token instance can't be found: ${token.toString()}`)
+                throw new Error(`token instance can't be found: ${token && token.toString()}`)
             }
             return this.vm.$parent.$injector.get(token, opts)
         } catch (e) {

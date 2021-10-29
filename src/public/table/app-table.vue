@@ -2,7 +2,7 @@
   <div class="table">
     <div class="hidden-columns" ref="hiddenColumns"><slot></slot></div>
     <AppTableRow header></AppTableRow>
-    <template v-for="(row, index) in list">
+    <template v-for="(row, index) in ats.list">
       <AppTableRow :data="row" :index="index" :key="'table-row-'+index"></AppTableRow>
     </template>
   </div>
@@ -15,27 +15,17 @@ import AppTableRow from './app-table-row.vue'
 /**
  * data: any[] | Promise<any[]>
  * query: (page:number,size:number) => Promise<{ data: any[], total: number }>
+ * page start from 0
  */
 export default {
   name: "app-table",
-  props: ['data', 'query'],
+  props: ['data', 'query', 'size'],
   components: { AppTableRow },
   di: {
     providers: [AppTableService],
     inject: {
       ats: AppTableService
     }
-  },
-  data() {
-    return {
-      list: []
-    }
-  },
-  created() {
-    Promise.resolve(this.data).then(d => {
-      this.list = d || []
-    })
-    console.log(this.ats)
   }
 }
 </script>
