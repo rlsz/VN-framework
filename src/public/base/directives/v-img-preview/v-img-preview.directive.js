@@ -1,3 +1,5 @@
+import "./img-preview.less"
+
 import {Directive, DirectiveContext} from "../directive-base";
 import ImgPreview from './img-preview'
 import {DialogService} from "../../../dialogs/dialog.service";

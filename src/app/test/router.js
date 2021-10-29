@@ -78,7 +78,21 @@ export default {
             path: 'table',
             component: () => import(/* webpackChunkName: "test" */ './table.vue'),
             meta: {
-                title: '表格'
+                title: 'table-bridge组件'
+            }
+        },
+        {
+            path: 'table1',
+            component: () => import(/* webpackChunkName: "test" */ './table1.vue'),
+            meta: {
+                title: '自定义table样式'
+            }
+        },
+        {
+            path: 'table2',
+            component: () => import(/* webpackChunkName: "test" */ './table2.vue'),
+            meta: {
+                title: '自定义table组件'
             }
         },
         {

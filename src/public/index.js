@@ -1,13 +1,5 @@
-import "./styles/frame.less"
-import "./styles/icon.less"
-import "./styles/scroll.less"
-import "./styles/loadding.less"
-import "./form/form.less"
-import "./table/table.less"
-import "./base/directives/v-limit-line.less"
-import "./base/directives/v-html-new.less"
-import "./base/directives/v-img-preview/img-preview.less"
-
+import "./styles"
+import "./table"
 import adapter from './adapter'
 
 import {

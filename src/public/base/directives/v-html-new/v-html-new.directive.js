@@ -1,4 +1,6 @@
-import {Directive, DirectiveContext} from "./directive-base";
+import "./v-html-new.less"
+
+import {Directive, DirectiveContext} from "../directive-base";
 // https://www.npmjs.com/package/sanitize-html
 import sanitizeHTML from 'sanitize-html';
 

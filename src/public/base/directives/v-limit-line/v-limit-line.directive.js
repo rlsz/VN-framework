@@ -1,4 +1,6 @@
-import {Directive, DirectiveContext} from "./directive-base";
+import "./v-limit-line.less"
+
+import {Directive, DirectiveContext} from "../directive-base";
 class VLimitLineDirective extends DirectiveContext {
     bind(el, binding) {
         el.classList.add('limit-line-general')
