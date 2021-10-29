@@ -58,6 +58,13 @@ export default {
       //     return h('div', {}, 'test')
       //   }
       // })
+
+      // this.ds.open({
+      //   render(h){
+      //     return (<div>testhahaha</div>)
+      //   }
+      // })
+
       const instance = this.ds.open({
         render(h) {
           return h('app-dialog-bridge', {
