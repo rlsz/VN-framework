@@ -11,11 +11,11 @@
 */
 .limit-line-general {
   //white-space: nowrap; // 能解决一部分问题，但会引起更不可控的问题，不建议使用
-  overflow: hidden;
-  display: -webkit-box;
+  overflow: hidden !important;
+  display: -webkit-box !important;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
-  word-break: break-all;
+  word-break: break-all !important;
 }
 
 /* IE10+ CSS styles go here

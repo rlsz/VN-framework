@@ -37,7 +37,7 @@ function defaultRenderCell(h, { row, column, $index }) {
 let index = 0
 export default {
   name: "app-table-column",
-  props: ['type', 'label', 'align', 'width', 'min-width', 'vertical'],
+  props: ['type', 'property', 'label', 'align', 'width', 'min-width', 'vertical', 'limit-line', 'highlight'],
   di: {
     inject: {
       ats: AppTableService
@@ -50,21 +50,36 @@ export default {
   },
   computed: {
     config() {
-      const {type, label, align, width, minWidth, $scopedSlots, vertical} = this
+      let {
+        type, label, align, width, minWidth, property,
+        $scopedSlots, vertical,
+        limitLine,
+        highlight
+      } = this
+      limitLine = limitLine === '' ? 1 : limitLine
+      highlight = typeof highlight === 'string'? [highlight]: highlight
       const renderHeader = (h, scope) => {
-        return (<div class="cell" style={ this.calcCellStyle(scope.column) }>{
+        return (<div class={ this.calcCellClass(scope.column) } style={ this.calcCellStyle(scope.column) }>{
           $scopedSlots.header ? $scopedSlots.header(scope) : label
         }</div>);
       }
       const renderCell = (h, scope) => {
-        return (<div class="cell" style={ this.calcCellStyle(scope.column) }>{
-          $scopedSlots.default? $scopedSlots.default(scope): defaultRenderCell(h, scope)
+        let children = $scopedSlots.default? $scopedSlots.default(scope): defaultRenderCell(h, scope)
+        if(highlight) {
+          children = ( <span v-html-new={this.$options.filters.highlight(children, highlight)}>{children}</span> )
+        }
+        if(limitLine) {
+          children = ( <span v-limit-line={limitLine}>{children}</span> )
+        }
+        return (<div class={ this.calcCellClass(scope.column) } style={ this.calcCellStyle(scope.column) }>{
+          children
         }</div>);
       };
       return {
-        type, label, align, width, minWidth,
+        type, label, align, width, minWidth, property,
         renderHeader, renderCell,
-        vertical: vertical === '' || !!vertical
+        vertical: vertical === '' || !!vertical,
+        limitLine
       }
     }
   },
@@ -78,6 +93,10 @@ export default {
     return h('div', this.$slots.default);
   },
   methods: {
+    calcCellClass(column) {
+      let temp = ['cell']
+      return temp.join(' ')
+    },
     calcCellStyle(column) {
       let style = {}
       if(column.minWidth) {
@@ -88,6 +107,19 @@ export default {
       }
       if(column.vertical) {
         style['flex-direction'] = 'column'
+        if(column.align === 'left') {
+          style['align-items'] = 'flex-start'
+        }
+        if(column.align === 'right') {
+          style['align-items'] = 'flex-end'
+        }
+      } else {
+        if(column.align === 'left') {
+          style['justify-content'] = 'flex-start'
+        }
+        if(column.align === 'right') {
+          style['justify-content'] = 'flex-end'
+        }
       }
       return Object.keys(style).map(key => key + ':' + style[key]).join(';')
     }
