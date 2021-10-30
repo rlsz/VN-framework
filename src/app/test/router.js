@@ -92,7 +92,14 @@ export default {
             path: 'table2',
             component: () => import(/* webpackChunkName: "test" */ './table2.vue'),
             meta: {
-                title: '自定义table组件'
+                title: '自定义table组件-data'
+            }
+        },
+        {
+            path: 'table3',
+            component: () => import(/* webpackChunkName: "test" */ './table3.vue'),
+            meta: {
+                title: '自定义table组件-query'
             }
         },
         {

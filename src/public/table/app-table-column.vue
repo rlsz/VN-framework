@@ -65,7 +65,12 @@ export default {
         if($scopedSlots.header) {
           children = $scopedSlots.header(scope)
         } else if(type === 'selection') {
-          children = (<app-checkbox value={scope.selected} on-input={$event => this.ats.toggleSelectAll($event)}></app-checkbox>)
+          children = (
+              <app-checkbox value={scope.selected}
+                            on-input={$event => this.ats.toggleSelectAll($event)}
+                            disabled={!this.ats.list || !this.ats.list.length}
+              ></app-checkbox>
+          )
         } else {
           children = label
         }

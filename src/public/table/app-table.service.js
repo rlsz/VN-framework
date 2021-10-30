@@ -95,6 +95,9 @@ export class AppTableService {
                 if (val != this.vm.size) {
                     this.$emit('size', val + '')
                 }
+            }),
+            this.vm.$watch(() => this.checkedList, val => {
+                this.vm.$emit('selection-change', val)
             })
         )
     }

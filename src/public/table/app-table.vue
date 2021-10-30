@@ -5,6 +5,12 @@
     <template v-for="(row, index) in ats.list">
       <AppTableRow :data="row" :index="index" :key="'table-row-'+index"></AppTableRow>
     </template>
+    <span v-if="ats.loading" class="table-loading flex center">
+      <i class="loading-general"></i>
+    </span>
+    <span v-if="!ats.loading && (!ats.list || !ats.list.length)" class="table-empty">
+      <i class="empty"></i>
+    </span>
     <AppPagination v-if="ats.showPagination"></AppPagination>
   </div>
 </template>
@@ -37,5 +43,11 @@ export default {
   visibility: hidden;
   position: absolute;
   z-index: -1;
+}
+.table-empty {
+  padding: 20px;
+}
+.table-loading {
+  padding: 40px 20px;
 }
 </style>
