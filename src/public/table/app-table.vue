@@ -1,16 +1,18 @@
 <template>
-  <div class="table">
+  <div class="table flex vertical">
     <div class="hidden-columns" ref="hiddenColumns"><slot></slot></div>
     <AppTableRow header></AppTableRow>
     <template v-for="(row, index) in ats.list">
       <AppTableRow :data="row" :index="index" :key="'table-row-'+index"></AppTableRow>
     </template>
+    <AppPagination v-if="ats.showPagination"></AppPagination>
   </div>
 </template>
 
 <script>
 import {AppTableService} from "./app-table.service";
 import AppTableRow from './app-table-row.vue'
+import AppPagination from './app-pagination.vue'
 
 /**
  * data: any[] | Promise<any[]>
@@ -20,7 +22,7 @@ import AppTableRow from './app-table-row.vue'
 export default {
   name: "app-table",
   props: ['data', 'query', 'size'],
-  components: { AppTableRow },
+  components: { AppTableRow, AppPagination },
   di: {
     providers: [AppTableService],
     inject: {

@@ -7,6 +7,11 @@
 <!--          <span v-html="$options.filters.highlight(row.title, ['资讯'])"></span>-->
 <!--        </template>-->
 <!--      </app-table-column>-->
+      <app-table-column width="80" label="序号">
+        <template slot-scope="{row, column, $index, context}">
+          <div>{{ context.page * context.pageSize + $index + 1 }}</div>
+        </template>
+      </app-table-column>
       <app-table-column property="title" align="left" label="标题" :highlight="['资讯', '电力']"></app-table-column>
       <app-table-column align="center" width="100" label="来源">
         <template slot-scope="{row}">

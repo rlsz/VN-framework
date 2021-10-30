@@ -25,9 +25,9 @@ export default {
     return (<div class={ this.rowClass }>{
       this.ats.columnsConfig.map(c => {
         if (this.isHeader) {
-          return c.renderHeader(h, {column: c})
+          return c.renderHeader(h, {column: c, context: this.ats})
         } else {
-          return c.renderCell(h, {row: this.data, column: c, $index: this.index})
+          return c.renderCell(h, {row: this.data, column: c, $index: this.index, context: this.ats})
         }
       })
     }</div>)
