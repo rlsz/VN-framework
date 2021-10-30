@@ -140,4 +140,11 @@ export class AppTableService {
             }
         })
     }
+
+    toggleSelectRow({row}, status) {
+
+    }
+    toggleSelectAll(status) {
+
+    }
 }

@@ -19,6 +19,8 @@ import scaleBar from './components/app-scale-bar.vue'
 import stickyContainer from './components/app-sticky-container.vue'
 import sendSmsCode from './components/app-send-sms-code.vue'
 import textarea from './components/app-textarea.vue'
+import checkbox from './components/app-checkbox.vue'
+import appSwitch from './components/app-switch.vue'
 import vCopy from './directives/v-copy.directive'
 import vLimitLine from './directives/v-limit-line/v-limit-line.directive'
 import vLink from './directives/v-link.directive'
@@ -40,6 +42,8 @@ export default function (Vue) {
     Vue.component(stickyContainer.name, stickyContainer)
     Vue.component(sendSmsCode.name, sendSmsCode)
     Vue.component(textarea.name, textarea)
+    Vue.component(checkbox.name, checkbox)
+    Vue.component(appSwitch.name, appSwitch)
     Vue.use(vCopy)
     Vue.use(vLimitLine)
     Vue.use(vLink)

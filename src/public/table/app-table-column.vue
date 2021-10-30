@@ -60,12 +60,25 @@ export default {
       limitLine = limitLine === '' ? 1 : limitLine
       highlight = typeof highlight === 'string'? [highlight]: highlight
       const renderHeader = (h, scope) => {
-        return (<div class={ this.calcCellClass(scope.column) } style={ this.calcCellStyle(scope.column) }>{
-          $scopedSlots.header ? $scopedSlots.header(scope) : label
-        }</div>);
+        let children
+        if($scopedSlots.header) {
+          children = $scopedSlots.header(scope)
+        } else if(type === 'selection') {
+          children = (<app-checkbox value={false}></app-checkbox>)
+        } else {
+          children = label
+        }
+        return (<div class={ this.calcCellClass(scope.column) } style={ this.calcCellStyle(scope.column) }>{children}</div>);
       }
       const renderCell = (h, scope) => {
-        let children = $scopedSlots.default? $scopedSlots.default(scope): defaultRenderCell(h, scope)
+        let children
+        if($scopedSlots.default) {
+          children = $scopedSlots.default(scope)
+        } else if(type === 'selection') {
+          children = (<app-checkbox value={true}></app-checkbox>)
+        } else {
+          children = defaultRenderCell(h, scope)
+        }
         if(highlight) {
           const temp = new (Vue.extend({
             render: () => ( <span>{children}</span> )

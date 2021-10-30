@@ -19,12 +19,37 @@
     <div>
       <button class="app-form" @click="openDialog">弹窗表单测试</button>
     </div>
+    <div class="flex cross-center">
+      <app-checkbox v-model="form.testCheckbox"></app-checkbox>
+      <app-checkbox v-model="form.testCheckbox1"></app-checkbox>
+      <app-checkbox v-model="form.testCheckbox" class="round"></app-checkbox>
+      <app-checkbox v-model="form.testCheckbox1" class="round"></app-checkbox>
+      <app-checkbox v-model="form.testCheckbox" disabled></app-checkbox>
+      <app-checkbox v-model="form.testCheckbox1" disabled></app-checkbox>
+      <app-checkbox v-model="form.testCheckbox" class="round" disabled></app-checkbox>
+      <app-checkbox v-model="form.testCheckbox1" class="round" disabled></app-checkbox>
+      <app-switch v-model="form.testCheckbox"></app-switch>
+      <app-switch v-model="form.testCheckbox1"></app-switch>
+      <app-switch v-model="form.testCheckbox">
+        <template v-slot:active>开</template>
+        <template v-slot:inactive>关</template>
+      </app-switch>
+      <app-switch v-model="form.testCheckbox1">
+        <template v-slot:active>开</template>
+        <template v-slot:inactive>关</template>
+      </app-switch>
+      <app-switch v-model="form.testCheckbox" @click="testSwitch"></app-switch>
+      <app-switch v-model="form.testCheckbox1" @click="testSwitch"></app-switch>
+      <app-switch v-model="form.testCheckbox" disabled></app-switch>
+      <app-switch v-model="form.testCheckbox1" disabled></app-switch>
+    </div>
   </div>
 </template>
 
 <script>
 import formTestDialog from "./components/formTestDialog";
 import {DialogService} from "@/public/dialogs";
+import {timer} from '@/public/base'
 let i = 1
 export default {
   name: "formTest",
@@ -41,7 +66,9 @@ export default {
           {label: 'test' + i, value: i++},
           {label: 'test' + i, value: i++}
         ],
-        text: 'test'
+        text: 'test',
+        testCheckbox: false,
+        testCheckbox1: true
       }
     }
   },
@@ -55,6 +82,9 @@ export default {
     },
     openDialog(e) {
       this.ds.open(formTestDialog)
+    },
+    testSwitch(targetStatus) {
+      return timer(2000)
     }
   }
 }

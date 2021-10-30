@@ -8,6 +8,11 @@ import publicModule, {RootProviders} from '@/public'
 Vue.use(publicModule, router)
 
 Vue.config.productionTip = false
+Vue.config.errorHandler = function (err, vm, info) {
+    if(info !== "v-on handler (Promise/async)") {
+        console.error(err)
+    }
+}
 
 new Vue({
     di: {
