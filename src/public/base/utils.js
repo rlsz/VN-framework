@@ -829,3 +829,5 @@ export function GetFileExtension(fileName, lower = true) {
     const extension = /\.([a-zA-Z0-9]+)$/.test(fileName) ? RegExp.$1 : ''
     return extension.toLowerCase()
 }
+
+export const PART_SELECTION = Symbol('part-selection')

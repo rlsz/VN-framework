@@ -22,6 +22,7 @@
     <div class="flex cross-center">
       <app-checkbox v-model="form.testCheckbox"></app-checkbox>
       <app-checkbox v-model="form.testCheckbox1"></app-checkbox>
+      <app-checkbox :value="PART_SELECTION"></app-checkbox>
       <app-checkbox v-model="form.testCheckbox" class="round"></app-checkbox>
       <app-checkbox v-model="form.testCheckbox1" class="round"></app-checkbox>
       <app-checkbox v-model="form.testCheckbox" disabled></app-checkbox>
@@ -49,7 +50,7 @@
 <script>
 import formTestDialog from "./components/formTestDialog";
 import {DialogService} from "@/public/dialogs";
-import {timer} from '@/public/base'
+import {timer, PART_SELECTION} from '@/public/base'
 let i = 1
 export default {
   name: "formTest",
@@ -69,7 +70,8 @@ export default {
         text: 'test',
         testCheckbox: false,
         testCheckbox1: true
-      }
+      },
+      PART_SELECTION
     }
   },
   methods: {
@@ -94,4 +96,7 @@ export default {
 //.test-2 {
 //  color: red;
 //}
+.app-checkbox {
+  margin: 0 4px;
+}
 </style>

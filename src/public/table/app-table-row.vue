@@ -19,15 +19,29 @@ export default {
         temp.push('header')
       }
       return temp.join(' ')
+    },
+    isSelected() {
+      const index = this.ats.checkedList.indexOf(this.data)
+      return index >= 0
     }
   },
   render(h) {
     return (<div class={ this.rowClass }>{
       this.ats.columnsConfig.map(c => {
         if (this.isHeader) {
-          return c.renderHeader(h, {column: c, context: this.ats})
+          return c.renderHeader(h, {
+            column: c,
+            context: this.ats,
+            selected: this.ats.allSelected
+          })
         } else {
-          return c.renderCell(h, {row: this.data, column: c, $index: this.index, context: this.ats})
+          return c.renderCell(h, {
+            row: this.data,
+            column: c,
+            $index: this.index,
+            context: this.ats,
+            selected: this.isSelected
+          })
         }
       })
     }</div>)

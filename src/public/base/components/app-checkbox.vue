@@ -1,12 +1,14 @@
 <template>
   <span class="app-checkbox"
-        :class="{active: isActive, loading: loading, disabled:isDisabled}"
+        :class="{active: isActive, loading: loading, disabled:isDisabled, 'part-selection': isPartSelection}"
         v-bind="{ ...$attrs }"
         v-on="{ ...$listeners, click: onClick }"
   ></span>
 </template>
 
 <script>
+import {PART_SELECTION} from "../utils";
+
 export default {
   name: "app-checkbox",
   props: ['value', 'disabled'],
@@ -27,6 +29,9 @@ export default {
     },
     isDisabled() {
       return this.disabled === '' || !!this.disabled
+    },
+    isPartSelection() {
+      return this.value === PART_SELECTION
     }
   },
   methods: {
@@ -49,6 +54,9 @@ export default {
       return this.$emit('input', this.getOppositeValue())
     },
     getOppositeValue() {
+      if(this.value === PART_SELECTION) {
+        return true
+      }
       if(typeof this.value === 'boolean') {
         return !this.value
       }
@@ -86,7 +94,17 @@ export default {
     background-color: #409EFF;
     border-color: #409EFF;
   }
-  &:after {
+  &.part-selection {
+    background-color: #409EFF;
+    border-color: #409EFF;
+    &:after {
+      content: "";
+      width: 8px;
+      height: 2px;
+      background-color: white;
+    }
+  }
+  &:not(.part-selection):after {
     content: "";
     width: 3px;
     height: 6px;

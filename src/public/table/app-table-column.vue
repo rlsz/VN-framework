@@ -57,6 +57,7 @@ export default {
         limitLine,
         highlight
       } = this
+      vertical = vertical === '' || !!vertical
       limitLine = limitLine === '' ? 1 : limitLine
       highlight = typeof highlight === 'string'? [highlight]: highlight
       const renderHeader = (h, scope) => {
@@ -64,7 +65,7 @@ export default {
         if($scopedSlots.header) {
           children = $scopedSlots.header(scope)
         } else if(type === 'selection') {
-          children = (<app-checkbox value={false}></app-checkbox>)
+          children = (<app-checkbox value={scope.selected} on-input={$event => this.ats.toggleSelectAll($event)}></app-checkbox>)
         } else {
           children = label
         }
@@ -75,7 +76,7 @@ export default {
         if($scopedSlots.default) {
           children = $scopedSlots.default(scope)
         } else if(type === 'selection') {
-          children = (<app-checkbox value={true}></app-checkbox>)
+          children = (<app-checkbox value={scope.selected} on-input={$event => this.ats.toggleSelectRow(scope, $event)}></app-checkbox>)
         } else {
           children = defaultRenderCell(h, scope)
         }
@@ -96,8 +97,7 @@ export default {
       return {
         type, label, align, width, minWidth, property,
         renderHeader, renderCell,
-        vertical: vertical === '' || !!vertical,
-        limitLine
+        vertical, limitLine
       }
     }
   },

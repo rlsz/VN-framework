@@ -1,4 +1,4 @@
-import {Distinct, SimpleClone} from "../base/utils";
+import {Distinct, PART_SELECTION, SimpleClone} from "../base/utils";
 import {ConfigService} from "../config.service";
 
 export class AppTableService {
@@ -23,6 +23,18 @@ export class AppTableService {
 
     get defaultConfig() {
         return this.injector.get(ConfigService)
+    }
+    get allSelected() {
+        if(!this.checkedList.length) {
+            return false
+        }
+        if(this.checkedList.length === this.list.length) {
+            return true
+        }
+        if(this.checkedList.length < this.list.length) {
+            return PART_SELECTION
+        }
+        return false
     }
 
     constructor(injector) {
@@ -142,9 +154,17 @@ export class AppTableService {
     }
 
     toggleSelectRow({row}, status) {
-
+        if(status) {
+            this.checkedList.push(row)
+        } else {
+            this.checkedList.splice(this.checkedList.indexOf(row), 1)
+        }
     }
     toggleSelectAll(status) {
-
+        if(status) {
+            this.checkedList = this.list.map(c => c)
+        } else {
+            this.checkedList = []
+        }
     }
 }
