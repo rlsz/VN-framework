@@ -1,5 +1,6 @@
 <script>
 import {AppTableService} from "./app-table.service";
+import Vue from 'vue'
 
 function getPropByPath(obj, path, strict) {
   let tempObj = obj;
@@ -66,7 +67,11 @@ export default {
       const renderCell = (h, scope) => {
         let children = $scopedSlots.default? $scopedSlots.default(scope): defaultRenderCell(h, scope)
         if(highlight) {
-          children = ( <span v-html-new={this.$options.filters.highlight(children, highlight)}>{children}</span> )
+          const temp = new (Vue.extend({
+            render: () => ( <span>{children}</span> )
+          }))();
+          temp.$mount()
+          children = ( <span v-html-new={this.$options.filters.highlight(temp.$el.innerHTML, highlight)}></span> )
         }
         if(limitLine) {
           children = ( <span v-limit-line={limitLine}>{children}</span> )
