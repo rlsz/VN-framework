@@ -1,6 +1,7 @@
 <script>
 import {AppTableService} from "./app-table.service";
 import Vue from 'vue'
+import {GeneratorFactory} from "@/public/base";
 
 function getPropByPath(obj, path, strict) {
   let tempObj = obj;
@@ -35,7 +36,7 @@ function defaultRenderCell(h, { row, column, $index }) {
   }
   return value;
 }
-let index = 0
+const NewID = GeneratorFactory('table-column-id_')
 export default {
   name: "app-table-column",
   props: ['type', 'property', 'label', 'align', 'width', 'min-width', 'vertical', 'limit-line', 'highlight'],
@@ -46,20 +47,30 @@ export default {
   },
   data() {
     return {
-
+      // id: Symbol('app-table-column-id')
+      id: NewID()
     }
   },
   computed: {
-    config() {
+    propConfig() {
       let {
+        id,
         type, label, align, width, minWidth, property,
-        $scopedSlots, vertical,
+        vertical,
         limitLine,
         highlight
       } = this
       vertical = vertical === '' || !!vertical
       limitLine = limitLine === '' ? 1 : limitLine
       highlight = typeof highlight === 'string'? [highlight]: highlight
+      return {
+        id,
+        type, label, align, width, minWidth, property,
+        vertical, limitLine, highlight
+      }
+    },
+    config() {
+      const { $scopedSlots, propConfig: {type, label, limitLine, highlight} } = this
       const renderHeader = (h, scope) => {
         let children
         if($scopedSlots.header) {
@@ -85,7 +96,7 @@ export default {
         } else {
           children = defaultRenderCell(h, scope)
         }
-        if(highlight) {
+        if(highlight && highlight.length) {
           const temp = new (Vue.extend({
             render: () => ( <span>{children}</span> )
           }))();
@@ -95,22 +106,25 @@ export default {
         if(limitLine) {
           children = ( <span v-limit-line={limitLine}>{children}</span> )
         }
-        return (<div class={ this.calcCellClass(scope.column) } style={ this.calcCellStyle(scope.column) }>{
-          children
-        }</div>);
+        return (
+            <div class={ this.calcCellClass(scope.column) }
+                 style={ this.calcCellStyle(scope.column) }
+                 // key={ 'cell-row-' + scope.$index + '-column-' + scope.column.id }
+            >{children}</div>
+        );
       };
-      return {
-        type, label, align, width, minWidth, property,
-        renderHeader, renderCell,
-        vertical, limitLine
-      }
+      return {...this.propConfig, renderHeader, renderCell}
+    }
+  },
+  watch: {
+    propConfig() {
+      this.ats.setColumn(this.config)
     }
   },
   created() {
-
   },
   mounted() {
-    this.ats.addColumn(this.config)
+    this.ats.setColumn(this.config)
   },
   render(h) {
     return h('div', this.$slots.default);

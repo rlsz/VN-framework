@@ -12,8 +12,8 @@
           <div>{{ context.page * context.pageSize + $index + 1 }}</div>
         </template>
       </app-table-column>
-      <app-table-column property="title" align="left" label="标题" :highlight="['资讯', '电力']"></app-table-column>
-      <app-table-column align="left" label="标题" :highlight="['资讯', '电力']">
+      <app-table-column property="title" align="left" label="标题1" :highlight="keywords"></app-table-column>
+      <app-table-column align="left" label="标题2" :highlight="['资讯', '电力']">
         <template slot-scope="{row}">
           <span>{{row.title}}</span>
         </template>

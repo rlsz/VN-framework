@@ -3,8 +3,13 @@ import {ConfigService} from "../config.service";
 
 export class AppTableService {
     columnsConfig = [] // { renderHeader: (h, data) => html, renderCell: (h, data) => html }; data: { ...app-table-column-props }
-    addColumn(opts) {
-        this.columnsConfig.push(opts)
+    setColumn(opts) {
+        const index = this.columnsConfig.findIndex(c => c.id === opts.id)
+        if(index >= 0) {
+            this.columnsConfig.splice(index, 1, opts)
+        } else {
+            this.columnsConfig.push(opts)
+        }
     }
 
     list = []
