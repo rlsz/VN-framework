@@ -227,5 +227,12 @@ export default {
                 title: 'movie测试'
             }
         },
+        {
+            path: 'guide',
+            component: () => import(/* webpackChunkName: "test" */ './guide.vue'),
+            meta: {
+                title: '引导测试'
+            }
+        },
     ]
 }

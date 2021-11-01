@@ -7,6 +7,10 @@ import "@/public/styles/global.less"
 import publicModule, {RootProviders} from '@/public'
 Vue.use(publicModule, router)
 
+import comps from './components'
+import {GuideService} from "@/components/guide";
+Vue.use(comps)
+
 Vue.config.productionTip = false
 Vue.config.errorHandler = function (err, vm, info) {
     if(info !== "v-on handler (Promise/async)") {
@@ -17,7 +21,8 @@ Vue.config.errorHandler = function (err, vm, info) {
 new Vue({
     di: {
         providers: [
-            ...RootProviders
+            ...RootProviders,
+            GuideService
         ]
     },
     router,

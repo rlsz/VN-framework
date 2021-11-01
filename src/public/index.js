@@ -52,7 +52,7 @@ import {dialogParent} from './dialogs/dialog-root'
 export * from './dialogs/dialog-root'
 
 let dialogRoot
-function AppendComponentToRoot(Vue, comp) {
+export function AppendComponentToRoot(Vue, comp) {
     return new Promise(r => {
         Vue.nextTick(() => {
             if(!dialogParent.current) {
