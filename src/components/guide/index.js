@@ -5,7 +5,5 @@ export * from './guide.service'
 
 export default function (Vue) {
     Vue.use(guideDirective)
-    AppendComponentToRoot(Vue, AppGuideMask).then(inc => {
-        console.log('guide mask inserted', inc)
-    })
+    AppendComponentToRoot(Vue, AppGuideMask)
 }

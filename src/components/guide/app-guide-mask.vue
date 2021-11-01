@@ -24,26 +24,25 @@ export default {
     return {
       layoutParams: null,
       viewportWidth: 0,
-      viewportHeight: 0,
-      listener: this.refresh.bind(this)
+      viewportHeight: 0
     }
   },
   computed: {
     topHeight() {
-      return this.layoutParams.top + 'px'
+      return (this.layoutParams.top - 1) + 'px'
     },
     bottomHeight() {
-      return (this.viewportHeight - this.layoutParams.bottom) + 'px'
+      return (this.viewportHeight - this.layoutParams.bottom - 1) + 'px'
     },
     leftWidth() {
-      return this.layoutParams.left + 'px'
+      return (this.layoutParams.left - 1) + 'px'
     },
     rightWidth() {
-      return (this.viewportWidth - this.layoutParams.right) + 'px'
+      return (this.viewportWidth - this.layoutParams.right - 1) + 'px'
     }
   },
   watch: {
-    'guide.current.target': {
+    'guide.target': {
       handler(el) {
         this.refresh()
       },
@@ -51,18 +50,17 @@ export default {
     }
   },
   mounted() {
-    window.addEventListener('resize', this.listener);
+    window.addEventListener('resize', this.refresh);
   },
   destroyed() {
-    window.removeEventListener('resize', this.listener);
+    window.removeEventListener('resize', this.refresh);
   },
   methods: {
     refresh() {
-      console.log('refresh viewport')
       const body = document.body.getBoundingClientRect();
       this.viewportWidth = body.width
       this.viewportHeight = body.height
-      const el = this.guide.current?.target
+      const el = this.guide.target
       if(el) {
         this.layoutParams = el.getBoundingClientRect()
       } else {
@@ -81,6 +79,7 @@ export default {
   top: 0;
   bottom: 0;
   overflow: hidden;
+  z-index: 10;
 }
 .mask-top, .mask-left, .mask-right, .mask-bottom {
   background-color: rgba(0, 0, 0, 0.2);

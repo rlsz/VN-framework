@@ -234,5 +234,12 @@ export default {
                 title: '引导测试'
             }
         },
+        {
+            path: 'guide1',
+            component: () => import(/* webpackChunkName: "test" */ './guide1.vue'),
+            meta: {
+                title: '引导测试1'
+            }
+        },
     ]
 }

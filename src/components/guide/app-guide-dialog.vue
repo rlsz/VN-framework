@@ -1,5 +1,9 @@
 <template>
-  <div class="app-guide-dialog">{{config.description || '-'}}</div>
+  <div class="app-guide-dialog flex cross-center">
+    <span>{{options.description || '-'}}</span>
+    <span class="next link" @click="dialog.close(true)" v-if="options.next">下一步</span>
+    <span class="next link" @click="dialog.close()" v-else>关闭</span>
+  </div>
 </template>
 
 <script>
@@ -19,15 +23,18 @@ export default {
     }
   },
   computed: {
-    config() {
-      return this.dialog.config
+    options() {
+      return this.dialog.config?.options || {}
     }
-  },
+  }
 }
 </script>
 
 <style lang="less" scoped>
 .app-guide-dialog {
   padding: 10px 20px;
+}
+.next {
+  margin-left: 20px;
 }
 </style>
