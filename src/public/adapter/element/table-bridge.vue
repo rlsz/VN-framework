@@ -51,7 +51,7 @@ import {ConfigService} from "../../config.service";
 
 export default {
   name: "table-bridge",
-  props: ['query', 'size', 'layout', 'tree-props', 'border'],
+  props: ['data', 'query', 'size', 'layout', 'tree-props', 'border'],
   di: {
     inject: {
       defaultConfig: ConfigService
@@ -147,12 +147,30 @@ export default {
       this.getData();
     },
     getData() {
-      if (!this.query) {
+      if (!this.query && !this.data) {
         return
       }
       const currentSeq = this.sequence
       this.loading = true
-      this.query(this.page, this.pageSize).finally(() => {
+      let p
+      if(this.query) {
+        p = this.query(this.page, this.pageSize)
+      } else if (this.data) {
+        p = Promise.resolve(this.data).then(data => {
+          if (this.size === 0 || this.size === '0') {
+            return {
+              data: data,
+              total: data.length
+            }
+          } else {
+            return {
+              data: data.slice(this.page * this.pageSize, (this.page + 1) * this.pageSize),
+              total: data.length
+            }
+          }
+        })
+      }
+      p.finally(() => {
         if (currentSeq !== this.sequence) {
           return
         }
