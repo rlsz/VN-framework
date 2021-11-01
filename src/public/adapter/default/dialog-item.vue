@@ -193,6 +193,7 @@ export default {
           "scroll",
           this.listener.onScroll
       );
+      window.removeEventListener('resize', this.listener.onScroll);
       setTimeout(() => {
         document.body.removeEventListener("click", this.onBodyClick);
       }, 0);
@@ -231,6 +232,7 @@ export default {
           onScroll: this.onAnchorMove.bind(this),
         };
         target.addEventListener("scroll", this.listener.onScroll);
+        window.addEventListener('resize', this.listener.onScroll);
         setTimeout(() => {
           document.body.addEventListener("click", this.onBodyClick, false);
         }, 0);
