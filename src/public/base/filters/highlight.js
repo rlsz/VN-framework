@@ -1,3 +1,5 @@
+import {PlatformService} from "../../platform/platform.service";
+
 const escapeRe = /[-/\\^$*+?.()|[\]{}]/g;
 
 function EscapeRegexCharacter(s) {
@@ -33,7 +35,11 @@ export default function (Vue) {
         const matchStr = words.map(c => {
             const temp = EscapeRegexCharacter(c);
             if (/^&?#?\d*;?$/.test(c)) {
-                return '(?<!&#?\\d*)' + temp + '(?!#?\\d*;)';
+                let re_word = temp + '(?!#?\\d*;)';
+                if(!PlatformService.instance.isSafari) {
+                    re_word = '(?<!&#?\\d*)' + re_word
+                }
+                return re_word
             }
             return temp;
         }).join('|');
@@ -43,7 +49,11 @@ export default function (Vue) {
         const template = IsValidColor(colorOrTemplate) ?
             `<em style="color:${colorOrTemplate};font-style: inherit;">$&</em>` :
             colorOrTemplate
-        const re = new RegExp('(?<!<[^<>]*)' + matchStr + '(?![^<>]*>)', 'gi');
+        let re_str = matchStr + '(?![^<>]*>)'
+        if(!PlatformService.instance.isSafari) {
+            re_str = '(?<!<[^<>]*)' + re_str
+        }
+        const re = new RegExp(re_str, 'gi');
         return value.replace(re, template);
     })
 }
