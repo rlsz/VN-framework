@@ -19,6 +19,18 @@ function isWeiXin() {
     }
 }
 
+function isSafari() {
+    const ua = navigator.userAgent.toLowerCase();
+    if (ua.indexOf('safari') != -1) {
+        if (ua.indexOf('chrome') > -1) {
+            // Chrome
+        } else {
+            return true
+        }
+    }
+    return false
+}
+
 let singleton = null
 
 /** platform detection service
@@ -36,6 +48,15 @@ export class PlatformService {
 
     get isWeiXin() {
         return isWeiXin()
+    }
+    get isSafari() {
+        return isSafari()
+    }
+    get isPC() {
+        return this.platform === Platform.pc
+    }
+    get isMobile() {
+        return this.platform === Platform.mobile
     }
 
     constructor() {
