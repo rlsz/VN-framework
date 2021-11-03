@@ -224,9 +224,9 @@ export default function (Vue) {
             this.$injector.ownProviders.forEach(providerInstance => {
                 providerInstance?.diDestroyed && providerInstance.diDestroyed(this)
             })
-            this.$injector.revocableProxy.forEach(revocable => {
-                revocable.revoke();
-            })
+            // this.$injector.revocableProxy.forEach(revocable => {
+            //     revocable.revoke();
+            // })
         },
         activated() {
             this.$injector.ownProviders.forEach(providerInstance => {
