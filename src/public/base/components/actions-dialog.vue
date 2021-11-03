@@ -31,7 +31,7 @@ export default {
 
 <style lang="less" scoped>
 .actions-dialog {
-  padding: 12px;
+  padding: 5px 0px;
   color: #606266;
   line-height: 1.4;
   font-size: 14px;
@@ -42,10 +42,12 @@ export default {
   .action {
     cursor: pointer;
     text-decoration: none;
+    padding: 7px 12px;
 
     &:hover {
       color: #3667D4;
       text-decoration: underline;
+      background: #f5f6f7;
     }
 
     &.active {
@@ -57,9 +59,9 @@ export default {
       color: #C0C4CC;
     }
 
-    & ~ .action {
-      margin-top: 9px;
-    }
+    //& ~ .action {
+    //  margin-top: 9px;
+    //}
   }
 }
 </style>
