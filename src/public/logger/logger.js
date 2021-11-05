@@ -1,4 +1,4 @@
-import {ERROR_MAP} from './error-messages';
+import { ERROR_MAP, ERROR_CALLBACK } from './error-messages';
 
 export const Source = {
   unknown: '[-]',
@@ -45,14 +45,22 @@ export class Log {
     this.time = new Date();
   }
 
-  // todo: add custom error escape function
   escape(str) {
     if (!str || typeof str !== 'string') {
       return str;
     }
     str = str.replace(/https?:\/\/[^\s]+/g, '*');
     str = str.replace(/[/\\][a-zA-Z0-9]+[/\\][^\s]*/g, '*');
-    return ERROR_MAP[str] || str;
+    if (typeof ERROR_MAP[str] === 'string') {
+      return ERROR_MAP[str]
+    }
+    if (typeof ERROR_MAP[ERROR_CALLBACK] === 'function') {
+      const res = ERROR_MAP[ERROR_CALLBACK].call(this, str)
+      if (typeof res === 'string') {
+        return res
+      }
+    }
+    return str;
   }
 
   getSummary(message) {

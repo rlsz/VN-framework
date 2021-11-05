@@ -71,30 +71,31 @@ export class LoggerService {
     insertNewLog(log) {
         if (process.env.VUE_APP_DEBUG === 'false') {
             if (log.level === Level.debug) {
-                return;
+                return log;
             }
         }
         this.log.next(log);
+        return log
     }
 
     debug(...args) {
-        this.insertNewLog(new Log(Level.debug, ...args));
+        return this.insertNewLog(new Log(Level.debug, ...args));
     }
 
     info(...args) {
-        this.insertNewLog(new Log(Level.info, ...args));
+        return this.insertNewLog(new Log(Level.info, ...args));
     }
 
     warning(...args) {
-        this.insertNewLog(new Log(Level.warning, ...args));
+        return this.insertNewLog(new Log(Level.warning, ...args));
     }
 
     success(...args) {
-        this.insertNewLog(new Log(Level.success, ...args));
+        return this.insertNewLog(new Log(Level.success, ...args));
     }
 
     error(...args) {
-        this.insertNewLog(new Log(Level.error, ...args));
+        return this.insertNewLog(new Log(Level.error, ...args));
     }
 
     errorThrow(...args) {
