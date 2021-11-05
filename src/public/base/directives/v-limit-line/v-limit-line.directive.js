@@ -1,4 +1,5 @@
 import "./v-limit-line.less"
+import Vue from 'vue'
 
 import {Directive, DirectiveContext} from "../directive-base";
 class VLimitLineDirective extends DirectiveContext {
@@ -11,9 +12,12 @@ class VLimitLineDirective extends DirectiveContext {
             el.title = el.innerText;
         }
     }
-    update(el, binding){
+    update(el, binding) {
         if (!binding.modifiers.noTitle) {
-          el.title = el.innerText;
+            // 部分场景下(例如拖拽vuedraggable)innerText的更新会滞后于update生命周期，需要矫正时序
+            Vue.nextTick(() => {
+                el.title = el.innerText;
+            })
         }
     }
 }
