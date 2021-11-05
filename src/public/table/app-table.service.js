@@ -53,11 +53,11 @@ export class AppTableService {
                 if (this.total === undefined) {
                     return false
                 }
-                if (this.defaultConfig.tableAlwaysShowPagination) {
-                    return true
-                }
                 if (this.vm.size === 0 || this.vm.size === '0') {
                     return false
+                }
+                if (this.defaultConfig.tableAlwaysShowPagination) {
+                    return true
                 }
                 if (this.pageSize < 0) {
                     return false
@@ -137,9 +137,16 @@ export class AppTableService {
             p = this.vm.query(this.page, this.pageSize)
         } else if (this.vm.data) {
             p = Promise.resolve(this.vm.data).then(data => {
-                return {
-                    data: data.slice(this.page * this.pageSize, (this.page + 1) * this.pageSize),
-                    total: data.length
+                if (this.vm.size === 0 || this.vm.size === '0') {
+                    return {
+                        data: data,
+                        total: data.length
+                    }
+                } else {
+                    return {
+                        data: data.slice(this.page * this.pageSize, (this.page + 1) * this.pageSize),
+                        total: data.length
+                    }
                 }
             })
         }

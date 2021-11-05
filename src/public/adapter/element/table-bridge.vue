@@ -90,11 +90,11 @@ export default {
       if(this.total === undefined) {
         return false
       }
-      if(this.defaultConfig.tableAlwaysShowPagination) {
-        return true
-      }
       if (this.size === 0 || this.size === '0') {
         return false
+      }
+      if(this.defaultConfig.tableAlwaysShowPagination) {
+        return true
       }
       if (this.pageSize < 0) {
         return false
@@ -116,6 +116,12 @@ export default {
   },
   watch: {
     query(val, oldVal) {
+      this.sequence++
+      this.page = 0
+      this.list = []
+      this.getData()
+    },
+    data(val, oldVal) {
       this.sequence++
       this.page = 0
       this.list = []
