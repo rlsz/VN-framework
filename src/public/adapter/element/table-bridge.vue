@@ -14,9 +14,8 @@
                 @select-all="handleSelectAll"
                 @select="handleSelect"
                 :default-expand-all='false'
-                row-key="id"
                 v-loading="loading"
-                v-bind="{...$props, ...$attrs, query: undefined}"
+                v-bind="{'row-key': 'id', ...$props, ...$attrs, query: undefined}"
                 v-on="{...$listeners, 'selection-change': onSelectionChange}"
       >
         <slot></slot>
