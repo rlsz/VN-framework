@@ -1,6 +1,7 @@
 <template>
   <div>
     <button ref="test" class="app-form" @click="basic()">basic popup</button>
+    <button ref="test" class="app-form" @click="fixedPosition()">fixed position popup</button>
   </div>
 </template>
 
@@ -48,11 +49,30 @@ export default {
       instance.afterClosed().then(res => {
         console.log('simpleComp result:', res)
       })
+    },
+    fixedPosition() {
+      this.ds.open({
+        render(h) {
+          return (<app-dialog-bridge>fixed position</app-dialog-bridge>)
+        }
+      }, {
+        anchor: {
+          addEventListener(){},
+          removeEventListener(){},
+          getBoundingClientRect(){
+            const {width,height} = document.body.getBoundingClientRect()
+            return { x: width, y: height/2, width: 0, height: 0 }
+          }
+        },
+        position: Position.left
+      })
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
-
+button {
+  margin: 10px 5px;
+}
 </style>
