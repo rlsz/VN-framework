@@ -1,7 +1,16 @@
 <template>
-  <div>
-    <button ref="test" class="app-form" @click="basic()">basic popup</button>
-    <button ref="test" class="app-form" @click="fixedPosition()">fixed position popup</button>
+  <div class="flex vertical fill-content scroll" style="padding: 20px;align-items: flex-start;border:1px solid gray;">
+    <button class="app-form" @click="fixedPosition({})">fixed position popup</button>
+    <button class="app-form" @click="basic({anchor:$event.target,position: Position.left})">left popup</button>
+    <button class="app-form" @click="basic({anchor:$event.target,position: Position.right})">right popup</button>
+    <button class="app-form" @click="basic({anchor:$event.target,position: Position.top})">top popup</button>
+    <button class="app-form" @click="basic({anchor:$event.target,position: Position.bottom})">bottom popup</button>
+    <div ref="test" class="flex vertical" style="background: rgba(0,0,0,0.1);align-self: stretch;align-items: flex-start;">
+      <div style="height: 500px;width: 10px;"></div>
+      <button class="app-form" @click="basic({anchor:$event.target,position: Position.bottom, offset: 20})">bottom offset popup</button>
+      <button class="app-form" @click="basic({anchor:$event.target,container:$el,position: Position.bottom, offset: 20})">container popup</button>
+      <div style="height: 1500px;width: 10px;"></div>
+    </div>
   </div>
 </template>
 
@@ -19,8 +28,13 @@ export default {
       loading: LoadingService
     }
   },
+  data(){
+    return {
+      Position
+    }
+  },
   methods: {
-    basic() {
+    basic(opts) {
       const instance = this.ds.open({
         render(h) {
           return h('app-dialog-bridge', {
@@ -43,14 +57,14 @@ export default {
           ])
         }
       }, {
-        anchor: this.$refs.test,
-        position: Position.right
+        position: Position.right,
+        ...opts
       })
       instance.afterClosed().then(res => {
         console.log('simpleComp result:', res)
       })
     },
-    fixedPosition() {
+    fixedPosition(opts) {
       this.ds.open({
         render(h) {
           return (<app-dialog-bridge>fixed position</app-dialog-bridge>)
@@ -64,7 +78,8 @@ export default {
             return { x: width, y: height/2, width: 0, height: 0 }
           }
         },
-        position: Position.left
+        position: Position.left,
+        ...opts
       })
     }
   }

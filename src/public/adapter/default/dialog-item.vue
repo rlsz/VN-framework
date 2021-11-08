@@ -14,7 +14,7 @@ function round(num) {
   }
 }
 
-function calcTransform(anchorEl, targetEl, position) {
+function calcTransform(anchorEl, targetEl, params) {
   if (!anchorEl || !targetEl) {
     return null;
   }
@@ -25,35 +25,40 @@ function calcTransform(anchorEl, targetEl, position) {
   }
   let translateX = 0;
   let translateY = 0;
+  const { position, offset, container } = params
   if ([Position.bottom, Position.bottomStrict].indexOf(position) >= 0) {
     // x = -((sx + sw/2) - (ax + aw/2))
     translateX = anchor.x + anchor.width / 2 - self.x - self.width / 2;
     // y = -(sy - ay - ah)
     translateY = anchor.y + anchor.height - self.y;
+    translateY += offset
   }
   if (position === Position.top) {
     // x = -((sx + sw/2) - (ax + aw/2))
     translateX = anchor.x + anchor.width / 2 - self.x - self.width / 2;
     // y = -(sy + sh - ay)
     translateY = anchor.y - self.y - self.height;
+    translateY -= offset
   }
   if (position === Position.left) {
     // x = - (sx + sw - ax)
     translateX = anchor.x - self.x - self.width;
     // y = - ((sy + sh/2) - (ay + ah/2))
     translateY = anchor.y + anchor.height / 2 - self.y - self.height / 2;
+    translateX -= offset
   }
   if (position === Position.right) {
     // x = - (sx - ax - aw)
     translateX = anchor.x + anchor.width - self.x;
     // y = - ((sy + sh/2) - (ay + ah/2))
     translateY = anchor.y + anchor.height / 2 - self.y - self.height / 2;
+    translateX += offset
   }
-  const body = document.body.getBoundingClientRect();
-  translateY = Math.min(body.height - self.height - self.y, translateY);
-  translateY = Math.max(-self.y, translateY);
-  translateX = Math.min(body.width - self.width - self.x, translateX);
-  translateX = Math.max(-self.x, translateX);
+  const body = container.getBoundingClientRect();
+  translateY = Math.min(body.height + body.y - self.height - self.y, translateY)
+  translateY = Math.max(body.y - self.y, translateY)
+  translateX = Math.min(body.width + body.x - self.width - self.x, translateX)
+  translateX = Math.max(body.x - self.x, translateX)
 
   let maxHeight = null;
   if (position === Position.bottomStrict) {
@@ -117,6 +122,14 @@ export default {
         return config.position;
       }
       return Position.bottom;
+    },
+    calcTransformParams() {
+      const config = this.options.instance.config;
+      return {
+        position: this.position,
+        offset: config?.offset || 0,
+        container: config?.container || document.body
+      }
     },
     enableOverlayClose() {
       if (this.options.instance.config) {
@@ -241,7 +254,7 @@ export default {
       const transform = calcTransform(
           this.options.instance.config.anchor,
           this.$refs.dialogPanel,
-          this.position
+          this.calcTransformParams
       );
       if (!transform) {
         this.transform = { x: 0, y: 0 };
@@ -258,7 +271,7 @@ export default {
       const transformPointer = calcTransform(
           this.options.instance.config.anchor,
           this.$refs.dialogAnchorPointer,
-          this.position
+          this.calcTransformParams
       );
       if (!transformPointer) {
         this.transformPointer = { x: 0, y: 0 };
