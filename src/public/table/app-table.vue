@@ -1,19 +1,19 @@
-<template>
-  <div class="table flex vertical">
-    <div class="hidden-columns" ref="hiddenColumns"><slot></slot></div>
-    <AppTableRow header></AppTableRow>
-    <template v-for="(row, index) in ats.list">
-      <AppTableRow :data="row" :index="index" :key="'table-row-'+index"></AppTableRow>
-    </template>
-    <span v-if="ats.loading" class="table-loading flex center">
-      <i class="loading-general"></i>
-    </span>
-    <span v-if="!ats.loading && (!ats.list || !ats.list.length)" class="table-empty">
-      <i class="empty"></i>
-    </span>
-    <AppPagination v-if="ats.showPagination"></AppPagination>
-  </div>
-</template>
+<!--<template>-->
+<!--  <div class="app-table table flex vertical">-->
+<!--    <div class="hidden-columns" ref="hiddenColumns"><slot></slot></div>-->
+<!--    <AppTableRow header></AppTableRow>-->
+<!--    <template v-for="(row, index) in ats.list">-->
+<!--      <AppTableRow :data="row" :index="index" :key="'table-row-'+index+'-level-'+0"></AppTableRow>-->
+<!--    </template>-->
+<!--    <span v-if="ats.loading" class="table-loading flex center">-->
+<!--      <i class="loading-general"></i>-->
+<!--    </span>-->
+<!--    <span v-if="!ats.loading && (!ats.list || !ats.list.length)" class="table-empty">-->
+<!--      <i class="empty"></i>-->
+<!--    </span>-->
+<!--    <AppPagination v-if="ats.showPagination"></AppPagination>-->
+<!--  </div>-->
+<!--</template>-->
 
 <script>
 import {AppTableService} from "./app-table.service";
@@ -27,12 +27,54 @@ import AppPagination from './app-pagination.vue'
  */
 export default {
   name: "app-table",
-  props: ['data', 'query', 'size'],
-  components: { AppTableRow, AppPagination },
+  props: ['data', 'query', 'size', 'tree-props', 'row-key'],
+  components: {AppTableRow, AppPagination},
   di: {
     providers: [AppTableService],
     inject: {
       ats: AppTableService
+    }
+  },
+  render(h) {
+    let loading,empty,children
+    if(this.ats.loading) {
+      loading = (
+          <span className="table-loading flex center">
+            <i className="loading-general"></i>
+          </span>
+      )
+    }
+    if(!this.ats.loading && (!this.ats.list || !this.ats.list.length)) {
+      empty = (
+          <span className="table-empty">
+            <i className="empty"></i>
+          </span>
+      )
+    }
+    if(this.ats.list) {
+      children = this.renderChildren(this.ats.list)
+    }
+
+    return (
+        <div class="app-table table flex vertical">
+          <div class="hidden-columns" ref="hiddenColumns">{this.$slots.default}</div>
+          <AppTableRow header></AppTableRow>
+          { loading }
+          { empty }
+          { children }
+        </div>
+    )
+  },
+  methods: {
+    renderChildren(list, level = 0) {
+      return list.reduce((arr, row, index) => {
+        arr.push(<AppTableRow data={row} index={index} key={'table-row-' + index + '-level-' + level} level={level}></AppTableRow>)
+        const {children} = this.ats.treeProps || {}
+        if(children && row[children]) {
+          arr.push(this.renderChildren(row[children], level + 1))
+        }
+        return arr
+      }, [])
     }
   }
 }
@@ -44,9 +86,11 @@ export default {
   position: absolute;
   z-index: -1;
 }
+
 .table-empty {
   padding: 20px;
 }
+
 .table-loading {
   padding: 40px 20px;
 }

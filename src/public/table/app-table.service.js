@@ -21,6 +21,13 @@ export class AppTableService {
     loading = false
     pageSizeList
     showPagination
+    expendList = []
+    get treeProps() {
+        return this.vm.treeProps
+    }
+    get rowKey() {
+        return this.vm.rowKey
+    }
 
     injector
     vm
@@ -48,6 +55,7 @@ export class AppTableService {
 
     diCreated(vm) {
         this.vm = vm
+        console.log('****', this.treeProps, this.rowKey)
         this.unwatch.push(
             this.vm.$watch(() => {
                 if (this.total === undefined) {
@@ -180,6 +188,14 @@ export class AppTableService {
             this.checkedList = this.list.map(c => c)
         } else {
             this.checkedList = []
+        }
+    }
+    toggleExpend(row) {
+        const index = this.expendList.indexOf(row);
+        if(index >= 0) {
+            this.expendList.splice(index, 1);
+        } else {
+            this.expendList.push(row)
         }
     }
 }

@@ -28,7 +28,8 @@ function getPropByPath(obj, path, strict) {
     v: tempObj ? tempObj[keyArr[i]] : null
   };
 };
-function defaultRenderCell(h, { row, column, $index }) {
+
+function defaultRenderCell(h, {row, column, $index}) {
   const property = column.property;
   const value = property && getPropByPath(row, property).v;
   if (column && column.formatter) {
@@ -36,10 +37,15 @@ function defaultRenderCell(h, { row, column, $index }) {
   }
   return value;
 }
+
 const NewID = GeneratorFactory('table-column-id_')
 export default {
   name: "app-table-column",
-  props: ['type', 'property', 'label', 'align', 'width', 'min-width', 'vertical', 'limit-line', 'highlight'],
+  props: [
+    'type', 'property', 'label', 'align', 'width', 'min-width',
+    'vertical', 'limit-line', 'highlight',
+    'expend-column'
+  ],
   di: {
     inject: {
       ats: AppTableService
@@ -62,20 +68,36 @@ export default {
       } = this
       vertical = vertical === '' || !!vertical
       limitLine = limitLine === '' ? 1 : limitLine
-      highlight = typeof highlight === 'string'? [highlight]: highlight
+      highlight = typeof highlight === 'string' ? [highlight] : highlight
       return {
         id,
         type, label, align, width, minWidth, property,
         vertical, limitLine, highlight
       }
     },
+    isShowExpendIcon() {
+      const {type} = this.propConfig
+      if (type === 'selection') {
+        return false
+      }
+      if (type === 'expend') {
+        return true
+      }
+      if(this.ats.columnsConfig.find(c => c.type === 'expend')) {
+        return false
+      }
+      if (this.ats.columnsConfig.find(c => c.type !== 'selection') === this.config) {
+        return true
+      }
+      return false
+    },
     config() {
-      const { $scopedSlots, propConfig: {type, label, limitLine, highlight} } = this
+      const {$scopedSlots, propConfig: {type, label, limitLine, highlight}} = this
       const renderHeader = (h, scope) => {
         let children
-        if($scopedSlots.header) {
+        if ($scopedSlots.header) {
           children = $scopedSlots.header(scope)
-        } else if(type === 'selection') {
+        } else if (type === 'selection') {
           children = (
               <app-checkbox value={scope.selected}
                             on-input={$event => this.ats.toggleSelectAll($event)}
@@ -85,32 +107,46 @@ export default {
         } else {
           children = label
         }
-        return (<div class={ this.calcCellClass(scope.column) } style={ this.calcCellStyle(scope.column) }>{children}</div>);
+        return (
+            <div class={this.calcCellClass(scope.column)} style={this.calcCellStyle(scope.column)}>{children}</div>);
       }
       const renderCell = (h, scope) => {
         let children
-        if($scopedSlots.default) {
+        if ($scopedSlots.default) {
           children = $scopedSlots.default(scope)
-        } else if(type === 'selection') {
-          children = (<app-checkbox value={scope.selected} on-input={$event => this.ats.toggleSelectRow(scope, $event)}></app-checkbox>)
+        } else if (type === 'selection') {
+          children = (<app-checkbox value={scope.selected}
+                                    on-input={$event => this.ats.toggleSelectRow(scope, $event)}></app-checkbox>)
         } else {
           children = defaultRenderCell(h, scope)
         }
-        if(highlight && highlight.length) {
+        if (highlight && highlight.length) {
           const temp = new (Vue.extend({
-            render: () => ( <span>{children}</span> )
+            render: () => (<span>{children}</span>)
           }))();
           temp.$mount()
-          children = ( <span v-html-new={this.$options.filters.highlight(temp.$el.innerHTML, highlight)}></span> )
+          children = (<span v-html-new={this.$options.filters.highlight(temp.$el.innerHTML, highlight)}></span>)
         }
-        if(limitLine) {
-          children = ( <span v-limit-line={limitLine}>{children}</span> )
+        if (limitLine) {
+          children = (<span v-limit-line={limitLine}>{children}</span>)
+        }
+        let expend, expendIndent
+        if (this.isShowExpendIcon) {
+          const {children} = this.ats.treeProps || {}
+          if (scope.row[children] && scope.row[children].length) {
+            let status = this.ats.expendList.indexOf(scope.row) >= 0
+            expend = (<i class={status ? 'arrow down' : 'arrow right'}
+                         v-on:click={() => this.ats.toggleExpend(scope.row)}></i>)
+          }
+          if(scope.level) {
+            expendIndent = (<span class="app-table_indent" style={'padding-left:'+scope.level*16+'px'}></span>)
+          }
         }
         return (
-            <div class={ this.calcCellClass(scope.column) }
-                 style={ this.calcCellStyle(scope.column) }
-                 // key={ 'cell-row-' + scope.$index + '-column-' + scope.column.id }
-            >{children}</div>
+            <div class={this.calcCellClass(scope.column)}
+                 style={this.calcCellStyle(scope.column)}
+                // key={ 'cell-row-' + scope.$index + '-column-' + scope.column.id }
+            >{expendIndent}{expend}{children}</div>
         );
       };
       return {...this.propConfig, renderHeader, renderCell}
@@ -136,25 +172,25 @@ export default {
     },
     calcCellStyle(column) {
       let style = {}
-      if(column.minWidth) {
+      if (column.minWidth) {
         style['flex'] = `1 0 ${column.minWidth}px`
       }
-      if(column.width) {
+      if (column.width) {
         style['flex'] = `0 0 ${column.width}px`
       }
-      if(column.vertical) {
+      if (column.vertical) {
         style['flex-direction'] = 'column'
-        if(column.align === 'left') {
+        if (column.align === 'left') {
           style['align-items'] = 'flex-start'
         }
-        if(column.align === 'right') {
+        if (column.align === 'right') {
           style['align-items'] = 'flex-end'
         }
       } else {
-        if(column.align === 'left') {
+        if (column.align === 'left') {
           style['justify-content'] = 'flex-start'
         }
-        if(column.align === 'right') {
+        if (column.align === 'right') {
           style['justify-content'] = 'flex-end'
         }
       }

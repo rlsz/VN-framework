@@ -1,6 +1,6 @@
 <template>
   <div class="flex vertical fill-content">
-    <app-table :data="testData.data.data" size="10">
+    <app-table :data="testData.data.data" size="0" :tree-props="{children: 'myChildren'}">
       <app-table-column type="selection" width="55" fixed="left" align="center"/>
 <!--      <app-table-column align="left" min-width="250" label="标题" limit-line>-->
 <!--        <template slot-scope="{row}">-->
@@ -12,7 +12,7 @@
           <div>{{ context.page * context.pageSize + $index + 1 }}</div>
         </template>
       </app-table-column>
-      <app-table-column property="title" align="left" label="标题" :highlight="['资讯', '电力']"></app-table-column>
+      <app-table-column type="expend" property="title" align="left" label="标题" :highlight="['资讯', '电力']"></app-table-column>
       <app-table-column align="left" label="标题" :highlight="['资讯', '电力']">
         <template slot-scope="{row}">
           <span>{{row.title}}</span>
