@@ -139,7 +139,7 @@ export default {
                          v-on:click={() => this.ats.toggleExpend(scope.row)}></i>)
           }
           if(scope.level) {
-            expendIndent = (<span class="app-table_indent" style={'padding-left:'+scope.level*16+'px'}></span>)
+            expendIndent = (<span class="app-table_indent" style={'padding-left:'+scope.level*21+'px'}></span>)
           }
         }
         return (
