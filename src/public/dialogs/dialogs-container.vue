@@ -51,7 +51,7 @@ export default {
       // }
       d.instance.afterClosed().finally(() => {
         this.dialogs.splice(this.dialogs.indexOf(d), 1)
-      })
+      }).catch(err => {})
     })
   },
   mounted() {
