@@ -55,7 +55,7 @@ export class AppTableService {
 
     diCreated(vm) {
         this.vm = vm
-        console.log('****', this.treeProps, this.rowKey)
+        // console.log('****', this.treeProps, this.rowKey)
         this.unwatch.push(
             this.vm.$watch(() => {
                 if (this.total === undefined) {
