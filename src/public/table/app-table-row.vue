@@ -3,7 +3,7 @@ import {AppTableService} from "./app-table.service";
 
 export default {
   name: "app-table-row",
-  props: ['header', 'data', 'index', 'level'],
+  props: ['header', 'data', 'index', 'level', 'parent', 'parents'],
   di: {
     inject: {
       ats: AppTableService
@@ -54,6 +54,8 @@ export default {
         } else {
           return c.renderCell(h, {
             row: this.data,
+            parent: this.parent,
+            parents: this.parents,
             level: this.level,
             column: c,
             $index: this.index,

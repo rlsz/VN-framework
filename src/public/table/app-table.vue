@@ -66,12 +66,21 @@ export default {
     )
   },
   methods: {
-    renderChildren(list, level = 0) {
+    renderChildren(list, parent = null, parents = []) {
+      let level = parents.length
       return list.reduce((arr, row, index) => {
-        arr.push(<AppTableRow data={row} index={index} key={'table-row-' + index + '-level-' + level} level={level}></AppTableRow>)
+        arr.push(
+            <AppTableRow data={row}
+                         index={index} key={'table-row-' + index + '-level-' + level}
+                         level={level}
+                         parent={parent}
+                         parents={parents}
+            >
+            </AppTableRow>
+        )
         const {children} = this.ats.treeProps || {}
         if(children && row[children]) {
-          arr.push(this.renderChildren(row[children], level + 1))
+          arr.push(this.renderChildren(row[children], row, [...parents, row]))
         }
         return arr
       }, [])
