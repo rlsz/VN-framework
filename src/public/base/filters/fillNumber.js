@@ -21,7 +21,7 @@ export default function (Vue) {
      */
     Vue.filter('fillNumber', function (value, format = '0.0') {
         let str = value + ''
-        if (/^(-?)(\d+)(\.?)(\d*)$/g.test(str)) {
+        if (/^(-?)(\d+)(\.?)(\d*)$/.test(str)) {
             let num = [RegExp.$1, RegExp.$2, RegExp.$3, RegExp.$4]
             let [left, right] = format.split('.')
             left = left && Number(left)
