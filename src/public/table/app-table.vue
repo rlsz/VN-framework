@@ -39,15 +39,15 @@ export default {
     let loading,empty,children
     if(this.ats.loading) {
       loading = (
-          <span className="table-loading flex center">
-            <i className="loading-general"></i>
+          <span class="table-loading flex center">
+            <i class="loading-general"></i>
           </span>
       )
     }
     if(!this.ats.loading && (!this.ats.list || !this.ats.list.length)) {
       empty = (
-          <span className="table-empty">
-            <i className="empty"></i>
+          <span class="table-empty">
+            <i class="empty"></i>
           </span>
       )
     }
