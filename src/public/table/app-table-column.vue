@@ -42,7 +42,7 @@ const NewID = GeneratorFactory('table-column-id_')
 export default {
   name: "app-table-column",
   props: [
-    'type', 'property', 'label', 'align', 'width', 'min-width',
+    'type', 'property', 'prop', 'label', 'align', 'width', 'min-width',
     'vertical', 'limit-line', 'highlight',
     'expend-column'
   ],
@@ -61,11 +61,12 @@ export default {
     propConfig() {
       let {
         id,
-        type, label, align, width, minWidth, property,
+        type, label, align, width, minWidth, property, prop,
         vertical,
         limitLine,
         highlight
       } = this
+      property = property || prop
       vertical = vertical === '' || !!vertical
       limitLine = limitLine === '' ? 1 : limitLine
       highlight = typeof highlight === 'string' ? [highlight] : highlight
