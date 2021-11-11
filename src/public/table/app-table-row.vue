@@ -3,7 +3,7 @@ import {AppTableService} from "./app-table.service";
 
 export default {
   name: "app-table-row",
-  props: ['header', 'data', 'index', 'level', 'parent', 'parents'],
+  props: ['header', 'data', 'index', 'indexes', 'level', 'parent', 'parents'],
   di: {
     inject: {
       ats: AppTableService
@@ -22,6 +22,9 @@ export default {
         temp.push('expend-hidden')
       }
       temp.push('row-level-' + (this.level || 0))
+      if(this.indexes) {
+        temp.push('row-' + this.indexes.join('-'))
+      }
       return temp.join(' ')
     },
     isSelected() {
@@ -56,6 +59,7 @@ export default {
             row: this.data,
             parent: this.parent,
             parents: this.parents,
+            indexes: this.indexes,
             level: this.level,
             column: c,
             $index: this.index,

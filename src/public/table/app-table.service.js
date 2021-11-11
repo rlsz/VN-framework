@@ -25,9 +25,6 @@ export class AppTableService {
     get treeProps() {
         return this.vm.treeProps
     }
-    get rowKey() {
-        return this.vm.rowKey
-    }
 
     injector
     vm
@@ -55,7 +52,6 @@ export class AppTableService {
 
     diCreated(vm) {
         this.vm = vm
-        // console.log('****', this.treeProps, this.rowKey)
         this.unwatch.push(
             this.vm.$watch(() => {
                 if (this.total === undefined) {

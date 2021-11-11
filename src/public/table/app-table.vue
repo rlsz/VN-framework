@@ -1,24 +1,8 @@
-<!--<template>-->
-<!--  <div class="app-table table flex vertical">-->
-<!--    <div class="hidden-columns" ref="hiddenColumns"><slot></slot></div>-->
-<!--    <AppTableRow header></AppTableRow>-->
-<!--    <template v-for="(row, index) in ats.list">-->
-<!--      <AppTableRow :data="row" :index="index" :key="'table-row-'+index+'-level-'+0"></AppTableRow>-->
-<!--    </template>-->
-<!--    <span v-if="ats.loading" class="table-loading flex center">-->
-<!--      <i class="loading-general"></i>-->
-<!--    </span>-->
-<!--    <span v-if="!ats.loading && (!ats.list || !ats.list.length)" class="table-empty">-->
-<!--      <i class="empty"></i>-->
-<!--    </span>-->
-<!--    <AppPagination v-if="ats.showPagination"></AppPagination>-->
-<!--  </div>-->
-<!--</template>-->
-
 <script>
 import {AppTableService} from "./app-table.service";
 import AppTableRow from './app-table-row.vue'
 import AppPagination from './app-pagination.vue'
+import {LoggerService} from "../logger/logger.service";
 
 /**
  * data: any[] | Promise<any[]>
@@ -27,12 +11,18 @@ import AppPagination from './app-pagination.vue'
  */
 export default {
   name: "app-table",
-  props: ['data', 'query', 'size', 'tree-props', 'row-key'],
+  props: ['data', 'query', 'size', 'tree-props'],
   components: {AppTableRow, AppPagination},
   di: {
     providers: [AppTableService],
     inject: {
-      ats: AppTableService
+      ats: AppTableService,
+      ls: LoggerService
+    }
+  },
+  data() {
+    return {
+      refreshToken: false
     }
   },
   render(h) {
@@ -61,29 +51,39 @@ export default {
           <AppTableRow header></AppTableRow>
           { loading }
           { empty }
-          { children }
+          { !this.refreshToken && children }
         </div>
     )
   },
   methods: {
-    renderChildren(list, parent = null, parents = []) {
+    renderChildren(list, parent = null, parents = [], indexes = []) {
       let level = parents.length
       return list.reduce((arr, row, index) => {
+        let tempIndexes = [...indexes, index]
+        let key = `table-level-${level}-row-${tempIndexes.join('-')}`
         arr.push(
             <AppTableRow data={row}
-                         index={index} key={'table-row-' + index + '-level-' + level}
+                         index={index}
+                         key={key}
                          level={level}
                          parent={parent}
                          parents={parents}
+                         indexes={tempIndexes}
             >
             </AppTableRow>
         )
         const {children} = this.ats.treeProps || {}
         if(children && row[children]) {
-          arr.push(this.renderChildren(row[children], row, [...parents, row]))
+          arr.push(this.renderChildren(row[children], row, [...parents, row], tempIndexes))
         }
         return arr
       }, [])
+    },
+    refresh() {
+      this.refreshToken = true
+      this.$nextTick(() => {
+        this.refreshToken = false
+      })
     }
   }
 }
