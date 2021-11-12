@@ -8,8 +8,7 @@
 </template>
 
 <script>
-
-import {FormInputAdapter} from "../../adapter/element";
+import {FormInputAdapter} from "../../adapter";
 
 function calcBoxStyle(target) {
   const style = window.getComputedStyle(target);

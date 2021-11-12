@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import {Distinct} from "@/public/base";
+import {Distinct} from "../../base/utils";
 
 /**
  * 注意：需要为el-option选项指定key，否则可能造成options变化时el-tag显示混乱

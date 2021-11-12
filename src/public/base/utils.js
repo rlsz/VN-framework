@@ -144,7 +144,13 @@ export function Distinct(arr, compare = (a, b) => a === b) {
     }, []);
 }
 
-// export type JsType = 'Array' | 'String' | 'Symbol' | 'Number' | 'Null' | 'Undefined' | 'Object' | 'RegExp' | 'Date' | 'Boolean' | 'HTMLAnchorElement' | string;
+/**
+ * export type JsType = 'Array' | 'String' | 'Symbol' | 'Number' | 'Null' | 'Undefined' |
+ *                      'Object' | 'RegExp' | 'Date' | 'Boolean' | 'HTMLAnchorElement' | string;
+ * @param val
+ * @returns {string}
+ * @constructor
+ */
 export function GetJsType(val) {
     return Object.prototype.toString.apply(val).match(/\[object\s([a-zA-Z]+)\]/)[1];
 }
