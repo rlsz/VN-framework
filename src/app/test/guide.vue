@@ -1,11 +1,11 @@
 <template>
-  <div class="flex vertical" style="padding:20px;">
+  <hb-panel>
     <button class="app-form" @click="startGuide">guide start</button>
     <div class="flex vertical" style="align-items: flex-start">
       <el-form :model="form" @submit.native.prevent>
         <el-form-item label="名称">
           <el-input
-              v-guide="{ step: 'step-1', next: 'step-2', description: 'step 1 description' }"
+              v-guide="{ step: 'step-1', next: 'step-2', description: 'step 1 description', showNextButton: true }"
               v-model="form.name"
               placeholder="名称"
               clearable
@@ -14,7 +14,10 @@
         <el-form-item label="状态">
           <el-select v-model="form.status"
                      placeholder="请选择"
-                     v-guide="{ step: 'step-2', next: '/test/guide1:step-3', description: 'step 2 description' }"
+                     v-guide="{ step: 'step-2',
+                     position: 'bottom', showNextButton: true,
+                     next: {path:'/test/guide1',step:'step-3', autoJump: true},
+                     description: 'step 2 description' }"
           >
             <el-option v-for="item in statusMap"
                        :key="item.value" :label="item.name" :value="item.value">
@@ -23,7 +26,7 @@
         </el-form-item>
       </el-form>
     </div>
-  </div>
+  </hb-panel>
 </template>
 
 <script>
@@ -60,6 +63,7 @@ export default {
   },
   methods: {
     startGuide() {
+      this.guide.start = true
       this.guide.next('step-1')
     }
   }

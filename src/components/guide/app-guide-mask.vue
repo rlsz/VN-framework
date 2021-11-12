@@ -12,6 +12,7 @@
 
 <script>
 import {GuideService} from "./guide.service";
+import {getScrollParent} from "@/public/base";
 
 export default {
   name: "app-guide-mask",
@@ -24,27 +25,48 @@ export default {
     return {
       layoutParams: null,
       viewportWidth: 0,
-      viewportHeight: 0
+      viewportHeight: 0,
+      offset: 4,
+      lastScrollParent: null
     }
   },
   computed: {
     topHeight() {
-      return (this.layoutParams.top - 1) + 'px'
+      return (this.layoutParams.top - this.offset) + 'px'
     },
     bottomHeight() {
-      return (this.viewportHeight - this.layoutParams.bottom - 1) + 'px'
+      return (this.viewportHeight - this.layoutParams.bottom - this.offset) + 'px'
     },
     leftWidth() {
-      return (this.layoutParams.left - 1) + 'px'
+      return (this.layoutParams.left - this.offset) + 'px'
     },
     rightWidth() {
-      return (this.viewportWidth - this.layoutParams.right - 1) + 'px'
+      return (this.viewportWidth - this.layoutParams.right - this.offset) + 'px'
+    },
+    scrollParent() {
+      if(!this.guide.target) {
+        return null
+      }
+      return getScrollParent(this.guide.target);
     }
   },
   watch: {
     'guide.target': {
       handler(el) {
         this.refresh()
+      },
+      immediate: true
+    },
+    'scrollParent': {
+      handler(el) {
+        if(this.lastScrollParent) {
+          this.lastScrollParent.removeEventListener("scroll", this.onScroll);
+          this.lastScrollParent = null
+        }
+        if(el) {
+          el.addEventListener("scroll", this.onScroll);
+          this.lastScrollParent = el
+        }
       },
       immediate: true
     }
@@ -66,6 +88,9 @@ export default {
       } else {
         this.layoutParams = null
       }
+    },
+    onScroll() {
+      this.refresh()
     }
   }
 }

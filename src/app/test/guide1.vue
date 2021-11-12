@@ -4,7 +4,14 @@
       <el-form :model="form" @submit.native.prevent>
         <el-form-item label="名称1">
           <el-input
-              v-guide="{ step: 'step-3', next: 'step-4', description: 'step 3 description' }"
+              v-guide="{
+                step: 'step-3',
+                next: 'step-4',
+                title: 'step-3',
+                description: 'step 3 description',
+                state: '3/4',
+                showNextButton: true
+              }"
               v-model="form.name"
               placeholder="名称1"
               clearable
@@ -13,7 +20,7 @@
         <el-form-item label="状态1">
           <el-select v-model="form.status"
                      placeholder="请选择"
-                     v-guide="{ step: 'step-4', description: 'step 4 description' }"
+                     v-guide="{ step: 'step-4', description: 'step 4 description', next: null }"
           >
             <el-option v-for="item in statusMap"
                        :key="item.value" :label="item.name" :value="item.value">

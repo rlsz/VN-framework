@@ -1,11 +1,13 @@
 import {Directive, DirectiveContext} from "@/public/base";
 import {GuideService} from "./guide.service";
+import Vue from 'vue'
 
 class VGuideDirective extends DirectiveContext {
 
     el
     guide
     subscription = null
+    path
 
     /**
      * @param binding.value: { step: string, next: string, description: string }
@@ -20,17 +22,20 @@ class VGuideDirective extends DirectiveContext {
         super.inserted(...arguments);
         const componentInstance = vnode.componentInstance || vnode.context
         this.guide = componentInstance.$injector.get(GuideService)
-        if(this.guide.step._value === this.value.step) {
-            this.active()
-        }
-        this.subscription = this.guide.step.subscribe(id => {
-            if(id === this.value.step) {
-                this.active()
-            }
+        this.path = componentInstance.$route.path
+        this.check(this.guide.step._value)
+
+        this.subscription = this.guide.step.subscribe(step => {
+            this.check(step)
         })
     }
     update(el, binding){
         super.update(...arguments);
+        if(this.guide.target === el) {
+            Vue.nextTick(() => {
+                this.guide.locationChange()
+            })
+        }
     }
     unbind(el, binding, vnode, oldVnode) {
         super.unbind(...arguments);
@@ -40,16 +45,23 @@ class VGuideDirective extends DirectiveContext {
         }
     }
 
+    check(step) {
+        if(step) {
+            if(step.path === this.path && step.step === this.value.step) {
+                this.active()
+            }
+        }
+    }
+
     active() {
-        this.guide.active(this.el, this.value).then(res => {
+        this.guide.active(this.el, this.value).afterClosed().then(res => {
             if(res) {
                 this.guide.next(this.value.next)
             } else {
-                this.guide.next()
+                this.guide.next(null)
             }
-        })
+        }).catch(err => {})
     }
-
 }
 
 export default function(Vue) {
