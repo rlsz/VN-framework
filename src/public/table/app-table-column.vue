@@ -136,11 +136,12 @@ export default {
           const {children} = this.ats.treeProps || {}
           if (scope.row[children] && scope.row[children].length) {
             let status = this.ats.expendList.indexOf(scope.row) >= 0
-            expend = (<i class={status ? 'arrow down' : 'arrow right'}
-                         v-on:click={() => this.ats.toggleExpend(scope.row)}></i>)
+            expend = (<i class={status ? 'arrow down' : 'arrow right'} v-on:click={() => this.ats.toggleExpend(scope.row)}></i>)
+          } else {
+            expend = (<span class="app-table_expend_placeholder" style={'padding-left:21px'}></span>)
           }
           if(scope.level) {
-            expendIndent = (<span class="app-table_indent" style={'padding-left:'+scope.level*32+'px'}></span>)
+            expendIndent = (<span class="app-table_indent" style={'padding-left:'+scope.level*21+'px'}></span>)
           }
         }
         return (
