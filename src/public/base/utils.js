@@ -831,3 +831,13 @@ export function GetFileExtension(fileName, lower = true) {
 }
 
 export const PART_SELECTION = Symbol('part-selection')
+
+export function InjectAdapter(key, vm) {
+    if(!key || !vm) {
+        return undefined
+    }
+    if(vm._provided && vm._provided[key] !== undefined) {
+        return vm._provided[key]
+    }
+    return InjectAdapter(key, vm.$parent)
+}

@@ -51,7 +51,7 @@ Object.defineProperty(PopupManagerSrc, 'zIndex', {
     }
 })
 
-import {throttle} from '../../base/utils'
+import {InjectAdapter, throttle} from '../../base/utils'
 export function initUIMessage(subject) {
     const showLog = throttle(log => {
         const level = log.level && log.level.replace('[', '').replace(']', '');
@@ -100,6 +100,8 @@ export function confirm(opts) {
     }, opt)
     return msgbox(opt)
 }
+
+export * from './form-input-adapter'
 
 import VElSelectModifyDirective from './v-el-select-modify.directive'
 import MultiSelectBridge from './multi-select-bridge'

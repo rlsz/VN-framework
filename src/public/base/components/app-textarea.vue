@@ -2,11 +2,14 @@
   <textarea :value="value"
             v-bind="{...$attrs}"
             @input="onInput($event)"
+            @blur="onBlur"
             ref="textarea"
   ></textarea>
 </template>
 
 <script>
+
+import {FormInputAdapter} from "../../adapter/element";
 
 function calcBoxStyle(target) {
   const style = window.getComputedStyle(target);
@@ -70,6 +73,12 @@ export default {
       return this.$refs.textarea
     }
   },
+  di: {
+    providers: [FormInputAdapter],
+    inject: {
+      formInput: FormInputAdapter
+    }
+  },
   created() {
   },
   mounted() {
@@ -81,6 +90,14 @@ export default {
   methods: {
     onInput(e) {
       this.$emit('input', e.target.value)
+      if (this.formInput) {
+        this.formInput.validate("change");
+      }
+    },
+    onBlur() {
+      if (this.formInput) {
+        this.formInput.validate("blur");
+      }
     },
     refresh() {
       const {scrollHeight, clientHeight} = calcBoxStyle(this.textarea)
