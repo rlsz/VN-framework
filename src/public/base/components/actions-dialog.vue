@@ -3,6 +3,7 @@
     <span v-for="(action,index) in actions"
           :key="'dialog-action-item-'+index"
           class="action"
+          :class="{disabled:action.disabled}"
           @click="action.handler(dialog)"
     >{{action.text}}</span>
   </div>
