@@ -55,8 +55,11 @@ export class PersistenceBase {
     get persistenceKey() {
         return btoa(getObjectId(this))
     }
+    get session() {
+        return this.injector.get(SessionStorageService)
+    }
 
-    persistenceEscape = ['injector', 'vm', 'persistenceKey', 'persistenceEscape', '_init']
+    persistenceEscape = ['injector', 'vm', 'persistenceKey', 'persistenceEscape', '_init', 'session']
 
     store() {
         if (!this._init) {
@@ -75,8 +78,7 @@ export class PersistenceBase {
     }
 
     clear() {
-        const session = this.injector.get(SessionStorageService)
-        session.remove(this.persistenceKey)
+        this.session.remove(this.persistenceKey)
     }
 }
 
