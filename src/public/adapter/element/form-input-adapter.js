@@ -9,6 +9,8 @@ export class FormInputAdapter {
     }
 
     validate(event) {
-        this.elFormItem.validate(event)
+        if(this.elFormItem) {
+            this.elFormItem.validate(event)
+        }
     }
 }
