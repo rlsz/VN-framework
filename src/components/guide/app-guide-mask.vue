@@ -90,7 +90,9 @@ export default {
       }
     },
     onScroll() {
-      this.refresh()
+      if(this.guide.target) {
+        this.refresh()
+      }
     }
   }
 }

@@ -56,7 +56,7 @@ export class GuideService {
             this.step.next(null)
         } else if (step === undefined) {
             if(this.dialog) {
-                this.dialog.close(true)
+                return this.dialog.close(true)
             }
         } else {
             throw 'unknown step'
