@@ -130,5 +130,9 @@ textarea {
   border: 1px solid rgb(220, 223, 230);
   border-radius: 4px;
   resize: vertical;
+  &:focus {
+    border-color: #409EFF;
+    outline: 0;
+  }
 }
 </style>
