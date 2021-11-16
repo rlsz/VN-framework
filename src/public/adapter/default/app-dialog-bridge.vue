@@ -20,19 +20,19 @@
 import {Dialog, Model} from "../../dialogs/dialog";
 import {PlatformService} from '../../platform/platform.service'
 import {Platform} from '../../platform/platform'
-import {IsInFullScreen, ToggleFullScreen} from "../../../public/base/utils";
+import {FullscreenService} from "../../base/services/fullscreen.service";
 
 export default {
   name: "app-dialog-bridge",
   di: {
     inject: {
-      dialog: Dialog
+      dialog: Dialog,
+      fs: FullscreenService
     }
   },
   data() {
     return {
-      Model,
-      isInFullScreen: IsInFullScreen()
+      Model
     }
   },
   computed: {
@@ -58,6 +58,9 @@ export default {
     },
     noFooter() {
       return !this.$slots.footer
+    },
+    isInFullScreen() {
+      return this.fs.state._value
     }
   },
   methods: {
@@ -65,9 +68,7 @@ export default {
       this.dialog.close()
     },
     toggleFullScreen() {
-      Promise.resolve(ToggleFullScreen(this.$el)).then(() => {
-        this.isInFullScreen = IsInFullScreen()
-      })
+      this.fs.toggle(this.$el)
     }
   }
 }

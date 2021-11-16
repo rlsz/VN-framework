@@ -8,7 +8,8 @@ import {
     LocalStorageService,
     LoadingService,
     SessionStorageService,
-    CookieStorageService
+    CookieStorageService,
+    FullscreenService
 } from './base'
 import logger from './logger'
 import dialogs from './dialogs'
@@ -30,7 +31,8 @@ export const RootProviders = [
     SessionStorageService,
     CookieStorageService,
     AjaxService,
-    ConfigService
+    ConfigService,
+    FullscreenService
 ]
 
 export function FindVueRoot() {
