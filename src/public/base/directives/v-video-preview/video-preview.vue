@@ -8,17 +8,18 @@
 
 <script>
 import {Dialog} from "../../../dialogs/dialog";
-import {ToggleFullScreen} from "../../utils";
+import {FullscreenService} from "../../services/fullscreen.service";
 
 export default {
   di: {
     inject: {
-      dialog: Dialog
+      dialog: Dialog,
+      fs: FullscreenService
     }
   },
   mounted() {
     if(this.dialog.config?.fullscreen) {
-      ToggleFullScreen(this.$refs.video)
+      this.fs.toggle(this.$refs.video)
     }
   },
   methods: {
