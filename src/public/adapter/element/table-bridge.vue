@@ -184,7 +184,7 @@ export default {
         if (currentSeq !== this.sequence) {
           return
         }
-        this.list = newData.data;
+        this.list = newData.data || [];
         this.total = newData.total;
       }).catch(err => {
         if (currentSeq !== this.sequence) {
