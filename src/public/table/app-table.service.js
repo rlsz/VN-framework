@@ -141,6 +141,7 @@ export class AppTableService {
             p = this.vm.query(this.page, this.pageSize)
         } else if (this.vm.data) {
             p = Promise.resolve(this.vm.data).then(data => {
+                data = data || []
                 if (this.vm.size === 0 || this.vm.size === '0') {
                     return {
                         data: data,
