@@ -77,6 +77,9 @@ export default {
       }
     },
     isShowExpendIcon() {
+      if(!this.ats.treeProps) {
+        return false
+      }
       const {type} = this.propConfig
       if (type === 'selection') {
         return false
