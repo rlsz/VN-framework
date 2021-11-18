@@ -176,6 +176,7 @@ export default {
       let style = {}
       if (column.minWidth) {
         style['flex'] = `1 0 ${column.minWidth}px`
+        style['min-width'] = `${column.minWidth}px`
       }
       if (column.width) {
         style['flex'] = `0 0 ${column.width}px`
