@@ -103,4 +103,7 @@ export default {
 .table-loading {
   padding: 40px 20px;
 }
+.app-table {
+  min-width: fit-content;
+}
 </style>
