@@ -106,7 +106,7 @@ export class ElFormValidators {
                 }
                 return callback()
             },
-            trigger: 'blur'
+            trigger: ['blur', 'change']
         }
     }
 
@@ -137,7 +137,7 @@ export class ElFormValidators {
                 }
                 return callback()
             },
-            trigger: 'blur'
+            trigger: ['blur', 'change']
         }
     }
 
@@ -168,7 +168,7 @@ export class ElFormValidators {
                 }
                 return callback()
             },
-            trigger: 'blur'
+            trigger: ['blur', 'change']
         }
     }
     static regexp(msg, reg) {
@@ -179,7 +179,7 @@ export class ElFormValidators {
                 }
                 return callback()
             },
-            trigger: 'blur'
+            trigger: ['blur', 'change']
         }
     }
 
@@ -191,7 +191,7 @@ export class ElFormValidators {
                 }
                 return callback()
             },
-            trigger: 'blur'
+            trigger: ['blur', 'change']
         }
     }
 
@@ -222,7 +222,7 @@ export class ElFormValidators {
                     }
                     return callback()
                 },
-                trigger: 'blur'
+                trigger: ['blur', 'change']
             }
         )
     }
@@ -251,7 +251,7 @@ export class ElFormValidators {
                 }
                 return callback()
             },
-            trigger: 'change'
+            trigger: ['blur', 'change']
         }
     }
 }
