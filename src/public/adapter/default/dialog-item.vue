@@ -62,8 +62,8 @@ function calcTransform(anchorEl, targetEl, params) {
 
   let maxHeight = null;
   if (position === Position.bottomStrict) {
-    translateY = Math.max(anchor.y + anchor.height - self.y, translateY);
-    maxHeight = body.height - anchor.y - anchor.height - 4;
+    translateY = Math.max(anchor.y + anchor.height - self.y + offset, translateY);
+    maxHeight = body.height - anchor.y - anchor.height - 4 - offset;
   }
 
   translateX = round(translateX);
