@@ -58,7 +58,7 @@ export default {
     )
   },
   updated() {
-    if(this.dialog && this.dialog.config?.anchor) {
+    if(this.dialog) {
       this.dialog._vm.fixPositionByAnchor()
     }
   },
