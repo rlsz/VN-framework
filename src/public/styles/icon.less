@@ -134,7 +134,7 @@ i {
     width: 24px;
     height: 24px;
     font-style: inherit;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     border: 2px solid rgba(255, 165, 36, 1);
@@ -142,6 +142,21 @@ i {
     border-radius: 50%;
     &::after{
       content: '!';
+    }
+  }
+  &.info-1{
+    width: 16px;
+    height: 16px;
+    font-style: inherit;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #3667D4;
+    color: #3667D4;
+    border-radius: 50%;
+    &::after{
+      content: '!';
+      transform: rotate(180deg);
     }
   }
   &.question{
