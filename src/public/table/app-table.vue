@@ -3,6 +3,7 @@ import {AppTableService} from "./app-table.service";
 import AppTableRow from './app-table-row.vue'
 import AppPagination from './app-pagination.vue'
 import {LoggerService} from "../logger/logger.service";
+import {Dialog} from "../dialogs/dialog";
 
 /**
  * data: any[] | Promise<any[]>
@@ -22,7 +23,8 @@ export default {
   },
   data() {
     return {
-      refreshToken: false
+      refreshToken: false,
+      dialog: this.$injector.get(Dialog, {mute:true})
     }
   },
   render(h) {
@@ -54,6 +56,11 @@ export default {
           { !this.refreshToken && children }
         </div>
     )
+  },
+  updated() {
+    if(this.dialog && this.dialog.config?.anchor) {
+      this.dialog._vm.fixPositionByAnchor()
+    }
   },
   methods: {
     renderChildren(list, parent = null, parents = [], indexes = []) {

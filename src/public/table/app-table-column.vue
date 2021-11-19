@@ -187,7 +187,13 @@ export default {
         }
       }
       if (column.width) {
-        style['flex'] = `0 0 ${column.width}px`
+        if(typeof column.width === "number" || /\d+/.test(column.width)) {
+          style['flex'] = `0 0 ${column.width}px`
+          style['width'] = `${column.width}px`
+        } else {
+          style['flex'] = `1 0 ${column.width}`
+          style['width'] = `${column.width}`
+        }
       }
       if (column.vertical) {
         style['flex-direction'] = 'column'
