@@ -241,5 +241,12 @@ export default {
                 title: '引导测试1'
             }
         },
+        {
+            path: 'gridTest',
+            component: () => import(/* webpackChunkName: "test" */ './grid-test.vue'),
+            meta: {
+                title: 'grid测试'
+            }
+        },
     ]
 }
