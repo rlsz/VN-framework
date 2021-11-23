@@ -100,5 +100,4 @@ export default function (Vue, router) {
     AppendComponentToRoot(Vue, DialogsContainer).then(inc => {
         dialogRoot = inc
     })
-    Vue.prototype.$ls = LoggerService.instance
 }

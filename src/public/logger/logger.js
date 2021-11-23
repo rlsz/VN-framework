@@ -1,4 +1,4 @@
-import { ERROR_MAP, ERROR_CALLBACK } from './error-messages';
+import {ERROR_MAP, ERROR_CALLBACK, ERROR_CALLBACK_SUMMARY} from './error-messages';
 
 export const Source = {
   unknown: '[-]',
@@ -41,7 +41,13 @@ export class Log {
     this.source = this.extractSource(args);
     this.outputMethod = this.extractOutputMethod(args);
     this.details = args;
-    this.summary = this.getSummary(args);
+    if (typeof ERROR_MAP[ERROR_CALLBACK_SUMMARY] === 'function') {
+      this.summary = ERROR_MAP[ERROR_CALLBACK_SUMMARY].apply(this, args)
+    }
+    if(this.summary === undefined) {
+      this.summary = this.getSummary(args);
+    }
+
     this.time = new Date();
   }
 

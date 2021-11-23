@@ -1,4 +1,5 @@
 export const ERROR_CALLBACK = Symbol('error-callback')
+export const ERROR_CALLBACK_SUMMARY = Symbol('error-callback-summary')
 export const ERROR_MAP = {
   'ajax error': '请求失败',
   'ajax timeout': '请求超时',
@@ -8,5 +9,6 @@ export const ERROR_MAP = {
   'Http failure response for * 404 Not Found': '请求资源不存在',
   'Missing request header \'Authorization\' for method parameter of type String': '请求未授权',
   'I/O error while reading input message; nested exception is java.io.IOException: Stream closed': '服务异常',
-  [ERROR_CALLBACK]: undefined
+  [ERROR_CALLBACK]: undefined,
+  [ERROR_CALLBACK_SUMMARY]: undefined
 };
