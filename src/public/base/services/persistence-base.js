@@ -21,8 +21,13 @@ export class PersistenceBase {
         this.injector = injector
         this.toJSON = () => {
             return Object.keys(this)
-                .filter(key => this.persistenceEscape.indexOf(key) < 0 && typeof key === 'string')
-                .reduce((value, key) => {
+                .filter(key => {
+                    if(this.persistenceEscapeWhiteList && this.persistenceEscapeWhiteList.length) {
+                        return this.persistenceEscapeWhiteList.indexOf(key) >= 0
+                    } else {
+                        return this.persistenceEscape.indexOf(key) < 0 && typeof key === 'string'
+                    }
+                }).reduce((value, key) => {
                     // @ts-ignore
                     value[key] = this[key]
                     return value
@@ -31,8 +36,16 @@ export class PersistenceBase {
         return new Proxy(this, {
             set: function (target, property, value, receiver) {
                 const temp = Reflect.set(...arguments);
-                if (temp && target.persistenceEscape.indexOf(property) < 0) {
-                    target.store()
+                if(temp) {
+                    if(target.persistenceEscapeWhiteList && target.persistenceEscapeWhiteList.length) {
+                        if(target.persistenceEscapeWhiteList.indexOf(property) >= 0) {
+                            target.store()
+                        }
+                    } else {
+                        if(target.persistenceEscape.indexOf(property) < 0) {
+                            target.store()
+                        }
+                    }
                 }
                 return temp
             }
@@ -60,6 +73,7 @@ export class PersistenceBase {
     }
 
     persistenceEscape = ['injector', 'vm', 'persistenceKey', 'persistenceEscape', '_init', 'session']
+    persistenceEscapeWhiteList = null
 
     store() {
         if (!this._init) {
