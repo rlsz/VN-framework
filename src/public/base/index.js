@@ -23,6 +23,7 @@ import sendSmsCode from './components/app-send-sms-code.vue'
 import textarea from './components/app-textarea.vue'
 import checkbox from './components/app-checkbox.vue'
 import appSwitch from './components/app-switch.vue'
+import appDragIcon from './components/app-drag-icon.vue'
 import vCopy from './directives/v-copy.directive'
 import vLimitLine from './directives/v-limit-line/v-limit-line.directive'
 import vLink from './directives/v-link.directive'
@@ -36,6 +37,7 @@ import vImgPreview from './directives/v-img-preview/v-img-preview.directive'
 import vVideoPreview from './directives/v-video-preview/v-video-preview.directive'
 import vFilePreview from './directives/v-file-preview/v-file-preview.directive'
 import vLoadingTarget from './directives/v-loading-target.directive'
+import vDrag from './directives/v-drag'
 
 export default function (Vue) {
     Vue.component(fileSelector.name, fileSelector)
@@ -46,6 +48,7 @@ export default function (Vue) {
     Vue.component(textarea.name, textarea)
     Vue.component(checkbox.name, checkbox)
     Vue.component(appSwitch.name, appSwitch)
+    Vue.component(appDragIcon.name, appDragIcon)
     Vue.use(vCopy)
     Vue.use(vLimitLine)
     Vue.use(vLink)
@@ -59,4 +62,5 @@ export default function (Vue) {
     Vue.use(vVideoPreview)
     Vue.use(vFilePreview)
     Vue.use(vLoadingTarget)
+    Vue.use(vDrag) // v-drag-start="data"; v-drag-end="onDragEnd", onDragEnd: (data, sourceElement) => void
 }

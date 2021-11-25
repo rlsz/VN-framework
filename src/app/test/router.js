@@ -255,5 +255,12 @@ export default {
                 title: 'drag测试'
             }
         },
+        {
+            path: 'dragTest1',
+            component: () => import(/* webpackChunkName: "test" */ './dragTest1.vue'),
+            meta: {
+                title: 'drag测试1'
+            }
+        },
     ]
 }

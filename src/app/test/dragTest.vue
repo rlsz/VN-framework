@@ -98,7 +98,7 @@ export default {
       console.log('ondragleave', ev.target.id, ev.dataTransfer.getData("text/plain"), ev.dataTransfer.getData("text/html"), ev)
     },
     ondragoverRoot(ev) {
-      console.log('ondragoverRoot', ev.target.id, ev.dataTransfer.getData("text/plain"), ev.dataTransfer.getData("text/html"), ev)
+      // console.log('ondragoverRoot', ev.target.id, ev.dataTransfer.getData("text/plain"), ev.dataTransfer.getData("text/html"), ev)
       this.dragTarget = ev.target
     }
   }
