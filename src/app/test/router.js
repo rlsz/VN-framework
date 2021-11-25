@@ -248,5 +248,12 @@ export default {
                 title: 'grid测试'
             }
         },
+        {
+            path: 'dragTest',
+            component: () => import(/* webpackChunkName: "test" */ './dragTest.vue'),
+            meta: {
+                title: 'drag测试'
+            }
+        },
     ]
 }
