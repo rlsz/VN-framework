@@ -37,7 +37,9 @@ class VDragStartDirective extends DirectiveContext {
             data: this.value
         }
         const dropArea = findParent(ev.target, DROP_AREA_CLASS)
-        dropArea.classList.add(DROP_AREA_DISABLED_CLASS)
+        if(dropArea) {
+            dropArea.classList.add(DROP_AREA_DISABLED_CLASS)
+        }
         ev.target.classList.add(DRAG_START_CLASS)
         document.body.classList.add(DRAG_FRAMEWORK_CLASS)
     }

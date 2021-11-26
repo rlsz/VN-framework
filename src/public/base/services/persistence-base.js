@@ -72,7 +72,7 @@ export class PersistenceBase {
         return this.injector.get(SessionStorageService)
     }
 
-    persistenceEscape = ['injector', 'vm', 'persistenceKey', 'persistenceEscape', '_init', 'session']
+    persistenceEscape = ['injector', 'vm', 'persistenceKey', 'persistenceEscape', 'persistenceEscapeWhiteList', '_init', 'session']
     persistenceEscapeWhiteList = null
 
     store() {
