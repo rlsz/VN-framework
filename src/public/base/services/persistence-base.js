@@ -83,8 +83,7 @@ export class PersistenceBase {
     }
 
     restore() {
-        const session = this.injector.get(SessionStorageService)
-        const value = session.get(this.persistenceKey)
+        const value = this.session.get(this.persistenceKey)
         value && Object.keys(value).forEach(key => {
             this[key] = value[key]
         })
