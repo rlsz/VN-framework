@@ -1,6 +1,7 @@
 <template>
   <div class="flex vertical fill-content">
     <app-table :data="testData.data.data" size="0" :tree-props="{children: 'myChildren'}">
+      <app-table-column type="drag" width="55" fixed="left" align="center"/>
       <app-table-column type="selection" width="55" fixed="left" align="center"/>
 <!--      <app-table-column align="left" min-width="250" label="标题" limit-line>-->
 <!--        <template slot-scope="{row}">-->

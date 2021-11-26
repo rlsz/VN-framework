@@ -1,5 +1,6 @@
 <script>
 import {AppTableService} from "./app-table.service";
+import {timer} from "../base/utils"
 
 export default {
   name: "app-table-row",
@@ -46,7 +47,7 @@ export default {
     }
   },
   render(h) {
-    return (<div class={ this.rowClass }>{
+    return (<div class={ this.rowClass } v-drag-end={this.onDrop}>{
       this.ats.columnsConfig.map((c, index) => {
         if (this.isHeader) {
           return c.renderHeader(h, {
@@ -71,7 +72,9 @@ export default {
     }</div>)
   },
   methods: {
-
+    onDrop(fromScope, sourceElement) {
+      timer(50).then(() => this.ats.moveRow(fromScope.indexes, this.indexes))
+    }
   }
 }
 </script>

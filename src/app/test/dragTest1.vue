@@ -9,7 +9,10 @@
     <span id="target-1">target to drop 1 (invalid drop: no dragover listener)</span>
     <span id="target-2">target to drop 2</span>
     <span id="target-3">target to drop 3, allow move</span>
-    <span id="target-4" v-drag-end="onDragEnd">target to drop 4, allow copy</span>
+    <span id="target-4" v-drag-end="onDragEnd">
+      <span>target to drop 4, allow copy</span>
+      <span>inner item</span>
+    </span>
   </div>
 </template>
 

@@ -1,3 +1,8 @@
-.v-drag-dragover {
-  border-bottom: 1px solid green;
+.v-drag-framework {
+  .v-drag-dragover {
+    border-bottom: 1px solid green;
+  }
+  .v-drop-area:not(.v-drop-area-disabled) * {
+    pointer-events: none;
+  }
 }

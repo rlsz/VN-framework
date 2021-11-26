@@ -121,6 +121,8 @@ export default {
         } else if (type === 'selection') {
           children = (<app-checkbox value={scope.selected}
                                     on-input={$event => this.ats.toggleSelectRow(scope, $event)}></app-checkbox>)
+        } else if (type === 'drag') {
+          children = (<app-drag-icon v-drag-start={scope}></app-drag-icon>)
         } else {
           children = defaultRenderCell(h, scope)
         }

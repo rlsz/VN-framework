@@ -1,5 +1,6 @@
-import {Distinct, PART_SELECTION, SimpleClone} from "../base/utils";
+import {Distinct, getScrollParent, PART_SELECTION, SimpleClone} from "../base/utils";
 import {ConfigService} from "../config.service";
+import {LoggerService} from "../logger/logger.service";
 
 export class AppTableService {
     columnsConfig = [] // { renderHeader: (h, data) => html, renderCell: (h, data) => html }; data: { ...app-table-column-props }
@@ -44,6 +45,10 @@ export class AppTableService {
             return PART_SELECTION
         }
         return false
+    }
+
+    get ls() {
+        return this.injector.get(LoggerService)
     }
 
     constructor(injector) {
@@ -195,4 +200,47 @@ export class AppTableService {
             this.expendList.push(row)
         }
     }
+    moveRow(fromIndexes, toIndexes) {
+        // return
+        // console.log('moveRow', fromIndexes.join('.'), '-->', toIndexes.join('.'))
+        if(toIndexes.join('.').startsWith(fromIndexes.join('.'))) {
+            return this.ls.warning('无法将父节点移动到自己的子节点')
+        }
+        // test1(this.list, this.treeProps.children)
+        const scroll = getScrollParent(this.vm.$el)
+        const scrollPosition = scroll.scrollTop
+        // console.log('scroll', scroll, scroll.scrollTop)
+        const fromIndex = fromIndexes.pop()
+        const toIndex = toIndexes.pop()
+        const fromParent = fromIndexes.reduce((target, index) => target[index][this.treeProps.children], this.list)
+        const toParent = toIndexes.reduce((target, index) => target[index][this.treeProps.children], this.list)
+        // console.log('from parent', fromParent.title || 'root')
+        // console.log('to parent', toParent.title || 'root')
+        const fromRow = fromParent.splice(fromIndex, 1)[0]
+        // test1(this.list, this.treeProps.children)
+        if(fromParent === toParent && fromIndex < toIndex) {
+            toParent.splice(toIndex, 0, fromRow)
+        } else {
+            toParent.splice(toIndex + 1, 0, fromRow)
+        }
+        setTimeout(() => {
+            // console.log('scroll', scroll, scroll.scrollTop, scrollPosition)
+            scroll.scrollTop = scrollPosition
+        }, 0)
+        // test1(this.list, this.treeProps.children)
+    }
 }
+// function adapterTree(list, childrenKey) {
+//   return list.map(c => {
+//     if(c[childrenKey] && c[childrenKey].length) {
+//       return [c.title, adapterTree(c[childrenKey])]
+//     } else {
+//       return c.title
+//     }
+//   })
+// }
+// window.test1 = (list, childrenKey) => {
+//   let data = SimpleClone(list)
+//   const temp = adapterTree(data, childrenKey)
+//   console.log(JSON.stringify(temp, null, '  '))
+// }
