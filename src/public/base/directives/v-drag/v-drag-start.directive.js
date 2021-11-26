@@ -1,6 +1,7 @@
 import {Directive, DirectiveContext} from "../directive-base";
 import {serialize} from "../../utils";
-import {DRAG_ID} from './v-drag'
+import {DRAG_ID, DRAGOVER_CLASS} from './v-drag'
+
 class VDragStartDirective extends DirectiveContext {
     constructor(directive) {
         super(directive);
@@ -29,6 +30,9 @@ class VDragStartDirective extends DirectiveContext {
         if(ev.target.id === DRAG_ID) {
             ev.target.removeAttribute('id')
         }
+        document.querySelectorAll('.' + DRAGOVER_CLASS).forEach(element => {
+            element.classList.remove(DRAGOVER_CLASS)
+        })
     }
 
     bind(el, binding, vNode) {

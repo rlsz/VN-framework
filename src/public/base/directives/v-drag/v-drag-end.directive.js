@@ -1,6 +1,8 @@
 import './v-drag.less'
 import {Directive, DirectiveContext} from "../directive-base";
 import {deserialize} from "../../utils";
+import {DRAGOVER_CLASS} from "./v-drag";
+
 class VDragStartDirective extends DirectiveContext {
     constructor(directive) {
         super(directive);
@@ -14,16 +16,18 @@ class VDragStartDirective extends DirectiveContext {
         ev.preventDefault();
         ev.dataTransfer.dropEffect = "copy";
         console.log('ondragenter', ev.target.id, ev)
+        ev.target.classList.add(DRAGOVER_CLASS)
     }
     onDragLeaveRef
     onDragLeave(ev) {
         console.log('ondragleave', ev.target.id, ev)
+        ev.target.classList.remove(DRAGOVER_CLASS)
     }
     onDragOverRef
     onDragOver(ev) {
         ev.preventDefault();
         ev.dataTransfer.dropEffect = "copy";
-        console.log('ondragover', ev.target.id, ev)
+        // console.log('ondragover', ev.target.id, ev)
     }
     onDropRef
     onDrop(ev) {
