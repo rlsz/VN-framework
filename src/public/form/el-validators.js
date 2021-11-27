@@ -99,8 +99,8 @@ export class ElFormValidators {
 
     static number(label) {
         return {
-            validator: (rule, value, callback) => {
-                rule[NumberSymbol] = true
+            validator: (rule, value, callback, source, options) => {
+                options[NumberSymbol] = true
                 if (!/^\s*-?\d*\.?\d*\s*$/.test(value)) {
                     return callback(new Error(label + '必须为数字'))
                 }
@@ -112,8 +112,8 @@ export class ElFormValidators {
 
     static max(label, max, includeEdge = true) {
         return {
-            validator: (rule, value, callback) => {
-                if (typeof value === 'number' || rule[NumberSymbol]) {
+            validator: (rule, value, callback, source, options) => {
+                if (typeof value === 'number' || options[NumberSymbol]) {
                     if(includeEdge) {
                         if (value > max) {
                             return callback(new Error(label + '不能超过' + max))
@@ -143,8 +143,8 @@ export class ElFormValidators {
 
     static min(label, min, includeEdge = true) {
         return {
-            validator: (rule, value, callback) => {
-                if (typeof value === 'number' || rule[NumberSymbol]) {
+            validator: (rule, value, callback, source, options) => {
+                if (typeof value === 'number' || options[NumberSymbol]) {
                     if(includeEdge) {
                         if (value < min) {
                             return callback(new Error(label + '不能小于' + min))
