@@ -77,6 +77,7 @@ export class ScrollMonitorService {
         const {height: viewHeight, top: viewTop} = scrollParent.getBoundingClientRect()
         const distance = top - viewTop - (viewHeight - height) / 2 // distance of dom middle to scroll target middle
         const bottomDistance = distance - viewHeight / 2 // distance of dom middle to scroll target bottom
-        return bottomDistance < 0
+        const topDistance = distance + viewHeight / 2 // distance of dom middle to scroll target top
+        return bottomDistance < 0 && topDistance > 0
     }
 }

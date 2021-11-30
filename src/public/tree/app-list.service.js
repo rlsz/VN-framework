@@ -6,12 +6,13 @@ export class AppListService {
     pageSize = 20
     sequence = 0
     loading = false
+    updateDetect = false
 
     injector
     vm
     unwatch = []
 
-    get shs() {
+    get sms() {
         return this.injector.get(ScrollMonitorService)
     }
     constructor(injector) {
@@ -26,7 +27,7 @@ export class AppListService {
             }, {
                 immediate: true
             }),
-            this.vm.$watch(() => this.shs.visible, val => {
+            this.vm.$watch(() => this.sms.visible, val => {
                 // console.log('dom visible', val, this.vm.$el)
                 if(val) {
                     this.next()
@@ -40,9 +41,14 @@ export class AppListService {
         const lastChild = this.vm.$el.children[this.vm.$el.children.length - 1]
         // console.log('diUpdated', this.vm.$el, lastChild)
         if(lastChild) {
-            this.shs.watch(lastChild, () => {
-                console.log('on child show', lastChild)
-            })
+            const before = this.sms.visible
+            this.sms.watch(lastChild)
+            const after = this.sms.visible
+            if(this.updateDetect && before && after) {
+                // console.log('updateDetect', this.page)
+                this.updateDetect = false
+                this.next()
+            }
         }
     }
     diDestroyed(vm) {
@@ -58,7 +64,7 @@ export class AppListService {
         this.getData()
     }
     next() {
-        if (!this.loading) {
+        if (!this.loading && !this.finished) {
             this.page++
             this.getData()
         }
@@ -104,6 +110,7 @@ export class AppListService {
                 return
             }
             if (newData && newData.length) {
+                this.updateDetect = true
                 this.list = this.list.concat(newData)
             }
         }).catch(err => {
