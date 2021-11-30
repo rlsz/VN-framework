@@ -697,18 +697,25 @@ export function getScrollParent(element) {
         }
     }
 
+    if(isScrollContainer(parent)) {
+        return parent
+    }
+    return getScrollParent(element.parentNode);
+}
+
+export function isScrollContainer(dom) {
     // Firefox want us to check `-x` and `-y` variations as well
     if (
-        ['scroll', 'auto'].indexOf(getStyleComputedProperty(parent, 'overflow')) !== -1 ||
-        ['scroll', 'auto'].indexOf(getStyleComputedProperty(parent, 'overflow-x')) !== -1 ||
-        ['scroll', 'auto'].indexOf(getStyleComputedProperty(parent, 'overflow-y')) !== -1
+        ['scroll', 'auto'].indexOf(getStyleComputedProperty(dom, 'overflow')) !== -1 ||
+        ['scroll', 'auto'].indexOf(getStyleComputedProperty(dom, 'overflow-x')) !== -1 ||
+        ['scroll', 'auto'].indexOf(getStyleComputedProperty(dom, 'overflow-y')) !== -1
     ) {
         // If the detected scrollParent is body, we perform an additional check on its parentNode
         // in this way we'll get body if the browser is Chrome-ish, or documentElement otherwise
         // fixes issue #65
-        return parent;
+        return true;
     }
-    return getScrollParent(element.parentNode);
+    return false
 }
 
 /**
