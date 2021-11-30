@@ -1,5 +1,6 @@
 import "./styles"
 import table from "./table"
+import tree from "./tree"
 import adapter from './adapter'
 
 import {
@@ -97,6 +98,7 @@ export default function (Vue, router) {
     Vue.use(scroll, {hold: router})
     Vue.use(form)
     Vue.use(table)
+    Vue.use(tree)
     AppendComponentToRoot(Vue, DialogsContainer).then(inc => {
         dialogRoot = inc
     })

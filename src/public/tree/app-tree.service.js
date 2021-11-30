@@ -1,0 +1,83 @@
+export class AppTreeService {
+    injector
+    vm
+    unwatch = []
+    treeProps
+    checkedList = []
+    expendList = []
+    list = []
+    get editable() {
+        return !!this.vm.$listeners.input
+    }
+    get lazy() {
+        return !!this.vm.query
+    }
+    constructor(injector) {
+        this.injector = injector
+    }
+    diCreated(vm) {
+        this.vm = vm
+        this.treeProps = {
+            key: 'id',
+            label: 'label',
+            children: 'children',
+            hasChildren: 'hasChildren',
+            ...this.vm.treeProps
+        }
+        this.unwatch.push(
+            this.vm.$watch(() => this.vm.value, val => {
+                // this.checkedList = this.vm.value || []
+            }, {
+                immediate: true
+            }),
+            // this.vm.$watch(() => this.vm.data, val => {
+            //     this.list = val || []
+            // }, {
+            //     immediate: true
+            // })
+        )
+    }
+    diDestroyed(vm) {
+        this.unwatch.forEach(c => c())
+        this.unwatch = []
+    }
+
+    toggleExpend(node) {
+        const index = this.expendList.indexOf(node);
+        if(index >= 0) {
+            this.expendList.splice(index, 1);
+        } else {
+            this.expendList.push(node)
+        }
+    }
+
+    getPaths(indexes) {
+        const {children} = this.treeProps
+        let list = this.list
+        const parents = []
+        indexes.forEach(index => {
+            const item = list && list[index]
+            if(item) {
+                parents.push(item)
+                list = item[children]
+            } else {
+                console.error('can\'t found parents', this.list, indexes)
+            }
+        })
+        return parents
+    }
+
+    hasChildren(node) {
+        if(this.lazy) {
+            const {hasChildren} = this.treeProps
+            if(typeof hasChildren === 'function') {
+                return hasChildren(node)
+            } else {
+                return node[hasChildren]
+            }
+        } else {
+            const {children} = this.treeProps
+            return node[children] && node[children].length
+        }
+    }
+}

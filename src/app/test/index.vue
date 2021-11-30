@@ -1,6 +1,6 @@
 <template>
-  <div class="page-frame frame-padding">
-    <div class="body">
+  <div class="flex vertical fill-content frame-padding">
+    <div class="flex vertical fill-content scroll">
       <div class="flex wrap">
         <router-link
             v-for="item in menus"

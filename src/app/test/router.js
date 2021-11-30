@@ -262,5 +262,12 @@ export default {
                 title: 'drag测试1'
             }
         },
+        {
+            path: 'testTree',
+            component: () => import(/* webpackChunkName: "test" */ './testTree.vue'),
+            meta: {
+                title: 'tree测试1'
+            }
+        },
     ]
 }
