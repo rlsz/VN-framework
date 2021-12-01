@@ -64,7 +64,7 @@ export default {
         },
         render(h) {
           if(label) {
-            return (<span>{label(scope)}</span>)
+            return (<span class="flex cross-center">{label(scope)}</span>)
           } else {
             return (<span>{scope.value[this.ats.treeProps.label]}</span>)
           }
