@@ -4,7 +4,7 @@ const listener_context = '__vue_scroll_listener_context'
 export class ScrollParent {
     scrollDom
     events = new SimpleSubject()
-    constructor(injector, dom) {
+    constructor(dom) {
         this.scrollDom = dom
         this.onScrollRef = debounceTime((e) => {
             this.onScroll.call(this, e)
@@ -44,7 +44,7 @@ export class ScrollMonitorService {
                 throw new Error(`can't found scroll parent of ${vm.$el}`)
             }
             if(!temp[listener_context]) {
-                temp[listener_context] = new ScrollParent(this.injector, temp)
+                temp[listener_context] = new ScrollParent(temp)
             }
             // console.log('__vue_scroll_listener_context', temp[listener_context])
             this.context = temp[listener_context]

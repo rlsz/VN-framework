@@ -6,7 +6,7 @@ export class AppListService {
     pageSize = 20
     sequence = 0
     loading = false
-    updateDetect = false
+    listUpdated = false
 
     injector
     vm
@@ -32,21 +32,21 @@ export class AppListService {
                 if(val) {
                     this.next()
                 }
-            }, {
-                immediate: false
+            }),
+            this.vm.$watch(() => this.list, val => {
+                this.listUpdated = true
             })
         )
     }
     diUpdated(vm) {
         const lastChild = this.vm.$el.children[this.vm.$el.children.length - 1]
-        // console.log('diUpdated', this.vm.$el, lastChild)
         if(lastChild) {
             const before = this.sms.visible
             this.sms.watch(lastChild)
             const after = this.sms.visible
-            if(this.updateDetect && before && after) {
-                // console.log('updateDetect', this.page)
-                this.updateDetect = false
+            if(this.listUpdated && before && after) {
+                // console.log('listUpdated', this.page, lastChild)
+                this.listUpdated = false
                 this.next()
             }
         }
@@ -110,7 +110,6 @@ export class AppListService {
                 return
             }
             if (newData && newData.length) {
-                this.updateDetect = true
                 this.list = this.list.concat(newData)
             }
         }).catch(err => {
