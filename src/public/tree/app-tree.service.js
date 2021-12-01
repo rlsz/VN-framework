@@ -6,8 +6,10 @@ export class AppTreeService {
     checkedList = []
     expendList = []
     list = []
+    // todo
     get editable() {
-        return !!this.vm.$listeners.input
+        return false
+        // return !!this.vm.$listeners.input
     }
     get lazy() {
         return !!this.vm.query
