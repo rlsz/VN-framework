@@ -9,7 +9,7 @@ import {AppTreeService} from "./app-tree.service";
 
 /**
  * options: Array<any>
- * treeProps: { key: string, children: string, hasChildren: string | (this: undefined, node: any) => boolean, label: string }
+ * treeProps: { key: string, children: string, hasChildren: string | (this: undefined, context: VNode) => boolean, label: string }
  *
  * data: Array<any>
  * query: (page:number, size:number) => Promise<Array<any>>
@@ -36,7 +36,7 @@ export default {
         return null
       }
       return (page, size) => {
-        return this.query([], page, size)
+        return this.query(page, size, null)
       }
     }
   }

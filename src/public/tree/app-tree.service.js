@@ -67,17 +67,17 @@ export class AppTreeService {
         return parents
     }
 
-    hasChildren(node) {
+    hasChildren(vm) {
         if(this.lazy) {
             const {hasChildren} = this.treeProps
             if(typeof hasChildren === 'function') {
-                return hasChildren(node)
+                return hasChildren(vm)
             } else {
-                return node[hasChildren]
+                return vm.value[hasChildren]
             }
         } else {
             const {children} = this.treeProps
-            return node[children] && node[children].length
+            return vm.value[children] && vm.value[children].length
         }
     }
 }

@@ -47,12 +47,14 @@ export default {
       return null
     },
     hasChildren() {
-      return this.ats.hasChildren(this.value)
+      return this.ats.hasChildren(this)
     },
     label() {
       const label = this.ats.vm.$scopedSlots.label
       const scope = {
-        value: this.value
+        value: this.value,
+        level: this.level,
+        indexes: this.indexes
       }
       return {
         di: {
@@ -96,7 +98,7 @@ export default {
     isExpend(val) {
       if(val && !this.currentQuery && this.ats.vm.query) {
         this.currentQuery = (page, size) => {
-          return this.ats.vm.query(this.paths, page, size)
+          return this.ats.vm.query(page, size, this)
         }
       }
     }

@@ -22,8 +22,10 @@ export default {
     return {
       treeProps: {
         hasChildren: (node) => {
-          // console.log('hasChildren', this, node)
-          return true
+          if(node.level === 0) {
+            return true
+          }
+          return false
         }
       },
       users: [],
@@ -62,9 +64,10 @@ export default {
     }
   },
   created() {
-    this.query = (parents, page, size) => {
+    this.query = (page, size, node) => {
+      const parents = node?.paths || []
       return timer(1000).then(() => {
-        console.log('query', parents, page, size)
+        console.log('query', node, parents, page, size)
         if(page > 3) {
           return null
         }

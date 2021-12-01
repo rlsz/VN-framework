@@ -6,10 +6,9 @@
                :indexes="[...indexes, index]"
                :level="level"
     ></tree-node>
-    <template name="loading" v-if="!als.finished && als.loading">
-      <span class="padding flex center">正在加载...</span>
-    </template>
-    <i class="no-more" v-if="als.list && als.list.length && als.finished"></i>
+    <i v-if="isExpend && !als.finished && als.loading" class="loading"></i>
+    <span v-if="isExpend && !als.finished && !als.loading" class="more">...</span>
+<!--    <i v-if="isExpend && level === 0 && als.list && als.list.length && als.finished" class="no-more"></i>-->
   </div>
   <div v-else class="no-result flex center">
     <span class="padding flex center">暂无数据</span>
@@ -54,6 +53,18 @@ export default {
       ats: AppTreeService
     }
   },
+  computed: {
+    isExpend() {
+      if(this.parents.length) {
+        const parent = this.parents[this.parents.length - 1]
+        return this.ats.expendList.indexOf(parent) >= 0
+      }
+      return true
+    },
+    parents() {
+      return this.ats.getPaths(this.indexes)
+    }
+  },
   watch: {
     'als.list'(val) {
       const parents = this.ats.getPaths(this.indexes)
@@ -75,5 +86,13 @@ export default {
   &:not(.level-0) {
     padding-left: 16px;
   }
+}
+.more {
+  opacity: 0.3;
+  font-size: 14px;
+  line-height: 20px;
+}
+i.no-more {
+  padding: 0;
 }
 </style>
