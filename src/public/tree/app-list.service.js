@@ -59,7 +59,7 @@ export class AppListService {
     reset() {
         this.sequence++
         this.page = 0
-        this.data = []
+        this.list = []
         this.finished = false
         this.getData()
     }
