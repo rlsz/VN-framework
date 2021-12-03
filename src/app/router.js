@@ -7,6 +7,7 @@ import {menuAdapter} from './menuAdapter'
 
 const originalPush = VueRouter.prototype.push
 VueRouter.prototype.push = function push(location) {
+    // 处理导航失败: https://router.vuejs.org/zh/guide/advanced/navigation-failures.html#navigationfailuretype
     return originalPush.call(this, location).catch(err => err)
 }
 Vue.use(VueRouter)
