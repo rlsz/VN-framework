@@ -24,7 +24,6 @@ import {AppTreeService} from "./app-tree.service";
 export default {
   name: "tree-node",
   components: {
-    treeNode: () => import('./tree-node'),
     treeList: () => import('./tree-list')
   },
   props: ['value', 'level', 'indexes'],
