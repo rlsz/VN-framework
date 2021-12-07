@@ -9,7 +9,6 @@
                 :border="borderAttr"
                 fit
                 highlight-current-row
-                :header-cell-style="headerCellStyle"
                 :data="list"
                 @select-all="handleSelectAll"
                 @select="handleSelect"
@@ -136,9 +135,6 @@ export default {
     }
   },
   methods: {
-    headerCellStyle() {
-      return  this.defaultConfig.headerCellStyle ||  "background: #F8F8FA;color:#565659;font-size:12px;"
-    },
     handleSizeChange(val) {
       this.pageSize = val || Number(this.size) || this.defaultConfig.tablePageSize || 20;
       this.page = 0;
