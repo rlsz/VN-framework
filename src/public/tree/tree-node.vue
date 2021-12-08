@@ -53,7 +53,8 @@ export default {
       const scope = {
         value: this.value,
         level: this.level,
-        indexes: this.indexes
+        indexes: this.indexes,
+        hasChildren: this.hasChildren
       }
       return {
         di: {

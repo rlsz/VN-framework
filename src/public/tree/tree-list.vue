@@ -70,8 +70,10 @@ export default {
       const parents = this.ats.getPaths(this.indexes)
       const parent = parents[parents.length - 1]
       if(parent) {
-        const {children} = this.ats.treeProps
-        parent[children] = val
+        if(this.ats.lazy) {
+          const {children} = this.ats.treeProps
+          parent[children] = val
+        }
       } else {
         this.ats.list = val
       }
