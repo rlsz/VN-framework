@@ -97,7 +97,7 @@ class VTooltipDirective extends DirectiveContext {
         if(this.dialog) {
             this.dialog.close().then(() => {
                 this.dialog = null
-            })
+            }).catch(err => {})
         }
     }
 }
