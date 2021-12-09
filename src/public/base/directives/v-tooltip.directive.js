@@ -46,6 +46,9 @@ class VTooltipDirective extends DirectiveContext {
                 this.hover = hover
             })
         )
+        if(binding.modifiers.debug) {
+            this.onShow()
+        }
     }
 
     unbind(el, binding, vnode) {
@@ -54,6 +57,7 @@ class VTooltipDirective extends DirectiveContext {
         this.unwatch = []
         this.subs.forEach(c => c.unsubscribe())
         this.subs = []
+        this.onClose()
     }
 
     isHover(target) {
