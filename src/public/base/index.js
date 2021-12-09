@@ -37,6 +37,7 @@ import vImgPreview from './directives/v-img-preview/v-img-preview.directive'
 import vVideoPreview from './directives/v-video-preview/v-video-preview.directive'
 import vFilePreview from './directives/v-file-preview/v-file-preview.directive'
 import vLoadingTarget from './directives/v-loading-target.directive'
+import vTooltip from './directives/v-tooltip.directive'
 import vDrag from './directives/v-drag'
 
 export default function (Vue) {
@@ -62,5 +63,6 @@ export default function (Vue) {
     Vue.use(vVideoPreview)
     Vue.use(vFilePreview)
     Vue.use(vLoadingTarget)
+    Vue.use(vTooltip)
     Vue.use(vDrag) // v-drag-start="data"; v-drag-end="onDragEnd", onDragEnd: (data, sourceElement) => void
 }

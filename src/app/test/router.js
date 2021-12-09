@@ -269,5 +269,12 @@ export default {
                 title: 'tree测试1'
             }
         },
+        {
+            path: 'tooltipTest',
+            component: () => import(/* webpackChunkName: "test" */ './tooltipTest.vue'),
+            meta: {
+                title: 'tooltip测试'
+            }
+        },
     ]
 }

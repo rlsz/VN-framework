@@ -116,6 +116,9 @@ export default {
           ? Model.float
           : Model.fillAvailable;
     },
+    theme() {
+      return this.options.instance.config?.theme || '';
+    },
     position() {
       const config = this.options.instance.config;
       if (config && config.position) {
@@ -157,6 +160,7 @@ export default {
           class: {
             "dialog-container": true,
             [this.model]: true,
+            [this.theme]: true
           },
           on: {
             click: this.onOverlayClick,
@@ -386,6 +390,17 @@ export default {
     .dialog-panel {
       pointer-events: auto;
       border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  &.theme-dark {
+    > .dialog-panel {
+      background: #303133;
+      box-shadow: none;
+      color: #fff;
+    }
+    > i.dialog-anchor-pointer:after {
+      background: #303133;
     }
   }
 }

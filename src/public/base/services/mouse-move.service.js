@@ -1,21 +1,25 @@
-import {debounceTime} from "../utils";
+import {getContext, MouseMoveContext} from "@/public/base/event-context";
 
 export class MouseMoveService {
+    context
     target = null
-    constructor() {
-        this.onMouseMoveRef = debounceTime((e) => {
-            this.onMouseMove.call(this, e)
-        }, 50)
+    vm
+    unwatch = []
+    injector
+    constructor(injector) {
+        this.injector = injector
+        this.context = getContext(MouseMoveContext)
     }
     diCreated(vm) {
-        document.body.addEventListener('mousemove', this.onMouseMoveRef, false)
+        this.vm = vm
+        this.unwatch.push(
+            this.vm.$watch(() => this.context.target, val => {
+                this.target = val
+            })
+        )
     }
-    diDestroyed(vm) {
-        document.body.removeEventListener('mousemove', this.onMouseMoveRef, false)
-    }
-
-    onMouseMoveRef
-    onMouseMove(e) {
-        this.target = e.target
+    diDestroyed() {
+        this.unwatch.forEach(c => c())
+        this.unwatch = []
     }
 }

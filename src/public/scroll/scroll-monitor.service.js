@@ -1,32 +1,5 @@
-import {debounceTime, getScrollParent, isScrollContainer, SimpleSubject} from '../base/utils'
-
-const listener_context = '__vue_scroll_listener_context'
-export class ScrollParent {
-    scrollDom
-    events = new SimpleSubject()
-    constructor(dom) {
-        this.scrollDom = dom
-        this.onScrollRef = debounceTime((e) => {
-            this.onScroll.call(this, e)
-        }, 50)
-        this.init()
-    }
-    onScrollRef
-    onScroll(e) {
-        // console.log('onScroll', e)
-        const {offsetHeight, scrollHeight, scrollTop} = this.scrollDom
-        if (offsetHeight !== scrollHeight) {
-            this.events.next(e)
-        }
-    }
-
-    init() {
-        this.scrollDom.addEventListener('scroll', this.onScrollRef, false)
-    }
-    dispose() {
-        this.scrollDom.removeEventListener('scroll', this.onScrollRef, false)
-    }
-}
+import {getScrollParent, isScrollContainer} from '../base/utils'
+import {getContext, ScrollContext} from "../base/event-context";
 
 export class ScrollMonitorService {
     visible = false
@@ -38,17 +11,11 @@ export class ScrollMonitorService {
         this.injector = injector
     }
     diMounted(vm) {
-        if(!this.context) {
-            const temp = isScrollContainer(vm.$el) ? vm.$el : getScrollParent(vm.$el)
-            if(!temp) {
-                throw new Error(`can't found scroll parent of ${vm.$el}`)
-            }
-            if(!temp[listener_context]) {
-                temp[listener_context] = new ScrollParent(temp)
-            }
-            // console.log('__vue_scroll_listener_context', temp[listener_context])
-            this.context = temp[listener_context]
+        const temp = isScrollContainer(vm.$el) ? vm.$el : getScrollParent(vm.$el)
+        if(!temp) {
+            throw new Error(`can't found scroll parent of ${vm.$el}`)
         }
+        this.context = getContext(ScrollContext, temp)
     }
     diDestroyed() {
         if(this.sub) {

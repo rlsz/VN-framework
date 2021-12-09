@@ -1,13 +1,5 @@
 import {SessionStorageService} from "./session-storage.service";
-
-export function getObjectId(obj, paths = []) {
-    const protoName = obj.__proto__.constructor.name
-    paths.push(protoName)
-    if (protoName === 'Object') {
-        return paths.join('.')
-    }
-    return getObjectId(obj.__proto__, paths)
-}
+import {getObjectId} from "../utils";
 
 /** 持久化存储基类，使用类名作为持久化唯一ID，如果同一个类包含多个实例的话将会造成冲突，建议在更上层使用一个唯一实例的类作为容器实现持久化
  *
