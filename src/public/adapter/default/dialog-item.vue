@@ -392,17 +392,6 @@ export default {
       border: 1px solid rgba(0, 0, 0, 0.1);
     }
   }
-
-  &.theme-dark {
-    > .dialog-panel {
-      background: #303133;
-      box-shadow: none;
-      color: #fff;
-    }
-    > i.dialog-anchor-pointer:after {
-      background: #303133;
-    }
-  }
 }
 i.dialog-anchor-pointer {
   display: inline-flex;
