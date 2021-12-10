@@ -4,7 +4,7 @@ import {DialogService} from "../../dialogs/dialog.service";
 import {Position} from "../../dialogs/dialog";
 
 /**
- *  value: string | vueComponentOptions | (directiveContext, optionsRef) => vueComponentOptions
+ *  value: string | vueComponentOptions | (componentInstance, createElement, directiveContext, optionsRef) => vNode
  */
 class VTooltipDirective extends DirectiveContext {
     el
@@ -90,7 +90,12 @@ class VTooltipDirective extends DirectiveContext {
                     }
                 }
             } else if(typeof value === 'function') {
-                comp = value(this, options)
+                const _this = this
+                comp = {
+                    render(h) {
+                        return value(this, h, _this, options)
+                    }
+                }
             } else {
                 comp = value
             }
