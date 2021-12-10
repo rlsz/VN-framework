@@ -3,7 +3,7 @@
     <div v-tooltip.top="'test tooltip'">short tooltip</div>
     <div v-tooltip.bottom="'test tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltiptest tooltip'">long tooltip</div>
     <div v-tooltip.top="comp">component tooltip</div>
-    <div v-tooltip.top="getComp">function tooltip</div>
+    <div v-tooltip.top="renderComp">function tooltip</div>
   </div>
 </template>
 
@@ -17,10 +17,10 @@ export default {
     }
   },
   methods: {
-    getComp(componentInstance, createElement, directiveContext, optionsRef) {
-      // return createElement('div', 'jdlsakjdlaskjdl')
+    renderComp(createElement, componentInstance, directiveContext, optionsRef) {
+      return createElement('div', 'jdlsakjdlaskjdl')
       // console.log(this, h, h === createElement, arguments)
-      return (<div>test tooltip function</div>)
+      // return (<div>test tooltip function</div>)
     }
   }
 }
