@@ -93,7 +93,7 @@ class VTooltipDirective extends DirectiveContext {
                 const _this = this
                 comp = {
                     render(h) {
-                        return value(this, h, _this, options)
+                        return value(h, this, _this, options)
                     }
                 }
             } else {
