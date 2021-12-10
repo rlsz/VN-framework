@@ -56,8 +56,10 @@ export function GetRandomString(len = 32, exists = []) {
 /** 格式化日期(可添加新的短语)
  *  '2020-03-09 14:13:20.756 星期一'
  *  'yyyy-MM-dd HH:mm:ss.nnn 星期w'
+ *
+ *  timeZone: e.g. UTC、UTC+8、UTC-2
  */
-export function FormatDate(d, format = 'yyyy-MM-dd HH:mm:ss') {
+export function FormatDate(d, format = 'yyyy-MM-dd HH:mm:ss', timeZone) {
     if (!d) {
         return '-';
     }
@@ -75,8 +77,20 @@ export function FormatDate(d, format = 'yyyy-MM-dd HH:mm:ss') {
     } else {
         date = d;
     }
-    if (!date) {
+    if (!(date instanceof Date)) {
         return '-';
+    }
+    if(typeof timeZone === 'string') {
+        let offset
+        if(/^UTC([+\-\d]*$)/.test(timeZone)) {
+            // offset: minutes for time zone, e.g. -480 for UTC+8, 0 for UTC, 120 for UTC-2
+            offset = -60 * Number(RegExp.$1)
+        } else {
+            throw new Error('invalid zone ' + timeZone)
+        }
+        const span = offset - date.getTimezoneOffset()
+        date = new Date(date.getTime())
+        date.setMinutes(date.getMinutes() - span)
     }
     if (format) {
         const rules = {
