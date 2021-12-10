@@ -82,9 +82,16 @@ export function FormatDate(d, format = 'yyyy-MM-dd HH:mm:ss', timeZone) {
     }
     if(typeof timeZone === 'string') {
         let offset
-        if(/^UTC([+\-\d]*$)/.test(timeZone)) {
+        if(/^UTC([+\-\d]*)(?::(\d+))?$/.test(timeZone)) {
             // offset: minutes for time zone, e.g. -480 for UTC+8, 0 for UTC, 120 for UTC-2
-            offset = -60 * Number(RegExp.$1)
+            const neg = Number(RegExp.$1) < 0
+            let temp = 60 * Number(RegExp.$1)
+            if(neg) {
+                temp -= Number(RegExp.$2)
+            } else {
+                temp += Number(RegExp.$2)
+            }
+            offset = -temp
         } else {
             throw new Error('invalid zone ' + timeZone)
         }
