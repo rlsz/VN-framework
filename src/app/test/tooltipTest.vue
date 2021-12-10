@@ -17,7 +17,7 @@ export default {
     }
   },
   methods: {
-    renderComp(createElement, componentInstance, directiveContext, optionsRef) {
+    renderComp(createElement, { componentInstance, directiveContext, optionsRef }) {
       return createElement('div', 'jdlsakjdlaskjdl')
       // console.log(this, h, h === createElement, arguments)
       // return (<div>test tooltip function</div>)
