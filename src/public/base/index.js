@@ -1,4 +1,5 @@
 export * from './utils'
+export * from './event-context'
 export * from './directives/directive-base'
 export * from './services/local-storage.service'
 export * from './services/session-storage.service'
