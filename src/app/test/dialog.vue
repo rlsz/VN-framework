@@ -9,6 +9,8 @@
     <button class="app-form" @click="openLoading()" v-loading-target>打开loading弹窗</button>
     <button class="app-form" @click="ajaxSimulator()" v-loading-target>模拟接口请求</button>
     <button class="app-form" @click="parentDialogTest()">弹窗父组件测试</button>
+    <button class="app-form" @click="fillBody()">填充模式-网页全屏</button>
+    <button class="app-form" @click="fillContainer()">填充模式-dom填充</button>
   </div>
 </template>
 
@@ -149,6 +151,21 @@ export default {
     parentDialogTest() {
       this.ds.open(test1Dialog).afterClosed().then(() => {
         console.log('closed', this)
+      })
+    },
+    fillBody() {
+      this.ds.open({
+        render(h){
+          return (<div>fill container</div>)
+        }
+      }, {
+        model: Model.fillAvailable
+      })
+    },
+    fillContainer() {
+      this.ds.open(test1Dialog, {
+        model: Model.fillAvailable,
+        container: this.$el
       })
     }
   }

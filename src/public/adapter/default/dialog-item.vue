@@ -108,6 +108,7 @@ export default {
       listener: null,
       maxHeight: null,
       hide: false,
+      fixPosition: { left: '0', right: '0', top: '0', bottom: '0' },
       subs: []
     };
   },
@@ -175,6 +176,7 @@ export default {
           },
           style: {
             opacity: this.hide ? "0" : "1",
+            ...this.fixPosition
           },
         },
         [
@@ -207,28 +209,10 @@ export default {
   },
   mounted() {
     this.options.instance.setOpen(this);
-    if(this.model === Model.positionByAnchor && this.options.instance.config?.anchor) {
-      const target = getScrollParent(this.options.instance.config.anchor);
-      const scrollContext = getContext(RealTimeScrollContext, target)
-      const resizeContext = getContext(ResizeContext)
-      const mouseClickContext = getContext(MouseClickContext)
-      let currentEvent = window.event
-      this.subs.push(
-          scrollContext.events.subscribe(this.updatePosition),
-          resizeContext.events.subscribe(this.updatePosition),
-          mouseClickContext.events.subscribe(ev => {
-            if(currentEvent && ev === currentEvent) {
-              currentEvent = null
-              return
-            }
-            this.onBodyClick(ev)
-          })
-      )
-    }
-    this.updatePosition();
+    this.watchPosition()
   },
   updated() {
-    this.updatePosition();
+    this.fixPositionByAnchor();
   },
   destroyed() {
     this.subs.forEach(c => c.unsubscribe())
@@ -241,6 +225,19 @@ export default {
           this.options.instance.close();
         }
       }
+    },
+    watchBodyClick() {
+      const mouseClickContext = getContext(MouseClickContext)
+      let currentEvent = window.event
+      this.subs.push(
+          mouseClickContext.events.subscribe(ev => {
+            if(currentEvent && ev === currentEvent) {
+              currentEvent = null
+              return
+            }
+            this.onBodyClick(ev)
+          })
+      )
     },
     onBodyClick(event) {
       if (
@@ -297,8 +294,39 @@ export default {
         };
       }
     },
-    updatePosition() {
-      this.fixPositionByAnchor();
+    watchPosition() {
+      const anchor = this.options.instance.config?.anchor
+      if(this.model === Model.positionByAnchor && anchor) {
+        const scrollContext = getContext(RealTimeScrollContext, getScrollParent(anchor))
+        const resizeContext = getContext(ResizeContext)
+        this.subs.push(
+            scrollContext.events.subscribe(ev => this.fixPositionByAnchor()),
+            resizeContext.events.subscribe(ev => this.fixPositionByAnchor())
+        )
+        this.watchBodyClick()
+        this.fixPositionByAnchor()
+      }
+      const container = this.options.instance.config?.container
+      if(this.model === Model.fillAvailable && container && container !== document.body) {
+        const calcPosition = () => {
+          const {left, top, right, bottom} = container.getBoundingClientRect()
+          const {left: bodyLeft, top: bodyTop, right: bodyRight, bottom: bodyBottom} = document.body.getBoundingClientRect()
+          this.fixPosition = {
+            left: Math.max(round(left), 0) + 'px',
+            top: Math.max(round(top), 0) + 'px',
+            right: Math.max(round(bodyRight - right ), 0)+ 'px',
+            bottom: Math.max(round(bodyBottom - bottom), 0) + 'px'
+          }
+        }
+        const scrollContext = getContext(RealTimeScrollContext, getScrollParent(container))
+        const resizeContext = getContext(ResizeContext)
+        this.subs.push(
+            scrollContext.events.subscribe(ev => calcPosition()),
+            resizeContext.events.subscribe(ev => calcPosition())
+        )
+        this.watchBodyClick()
+        calcPosition()
+      }
     }
   },
 };
@@ -358,6 +386,10 @@ export default {
           left: 18px;
           top: 18px;
         }
+      }
+      > * {
+        flex: 1 1 0px;
+        border: 1px dashed rgba(0,0,0,0.1)
       }
     }
   }
