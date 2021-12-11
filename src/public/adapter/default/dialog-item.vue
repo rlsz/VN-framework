@@ -214,8 +214,8 @@ export default {
       const mouseClickContext = getContext(MouseClickContext)
       let currentEvent = window.event
       this.subs.push(
-          scrollContext.events.subscribe(this.onAnchorMove),
-          resizeContext.events.subscribe(this.onAnchorMove),
+          scrollContext.events.subscribe(ev => this.fixPositionByAnchor()),
+          resizeContext.events.subscribe(ev => this.fixPositionByAnchor()),
           mouseClickContext.events.subscribe(ev => {
             if(currentEvent && ev === currentEvent) {
               currentEvent = null
@@ -296,9 +296,6 @@ export default {
           y: y + transformPointer.y,
         };
       }
-    },
-    onAnchorMove(ev) {
-      this.fixPositionByAnchor();
     },
   },
 };
