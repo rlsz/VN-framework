@@ -35,8 +35,8 @@ class VTooltipDirective extends DirectiveContext {
 
         )
         this.subs.push(
-            this.context.events.subscribe(val => {
-                const hover = this.isHover(val)
+            this.context.events.subscribe(ev => {
+                const hover = this.isHover(ev.target)
                 if(!this.hover && hover) {
                     this.onShow()
                 }

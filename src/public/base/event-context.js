@@ -76,7 +76,7 @@ export class MouseMoveContext extends EventContextBase {
         this.init()
     }
     listener(e) {
-        this.events.next(e.target)
+        this.events.next(e)
         this.target = e.target
     }
 }
