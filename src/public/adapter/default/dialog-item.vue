@@ -214,8 +214,8 @@ export default {
       const mouseClickContext = getContext(MouseClickContext)
       let currentEvent = window.event
       this.subs.push(
-          scrollContext.events.subscribe(ev => this.fixPositionByAnchor()),
-          resizeContext.events.subscribe(ev => this.fixPositionByAnchor()),
+          scrollContext.events.subscribe(this.updatePosition),
+          resizeContext.events.subscribe(this.updatePosition),
           mouseClickContext.events.subscribe(ev => {
             if(currentEvent && ev === currentEvent) {
               currentEvent = null
@@ -225,10 +225,10 @@ export default {
           })
       )
     }
-    this.fixPositionByAnchor();
+    this.updatePosition();
   },
   updated() {
-    this.fixPositionByAnchor();
+    this.updatePosition();
   },
   destroyed() {
     this.subs.forEach(c => c.unsubscribe())
@@ -297,6 +297,9 @@ export default {
         };
       }
     },
+    updatePosition() {
+      this.fixPositionByAnchor();
+    }
   },
 };
 </script>
