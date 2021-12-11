@@ -5,6 +5,13 @@ import { PlatformService } from "../../platform/platform.service";
 import { Platform } from "../../platform/platform";
 import { getScrollParent } from "../../base/utils";
 import {ConfigService} from "../../config.service";
+import {
+  getContext,
+  MouseClickContext,
+  RealTimeScrollContext,
+  ResizeContext,
+  ScrollContext
+} from "../../base/event-context";
 
 function round(num) {
   if (num >= 0) {
@@ -101,6 +108,7 @@ export default {
       listener: null,
       maxHeight: null,
       hide: false,
+      subs: []
     };
   },
   computed: {
@@ -199,22 +207,32 @@ export default {
   },
   mounted() {
     this.options.instance.setOpen(this);
+    if(this.model === Model.positionByAnchor && this.options.instance.config?.anchor) {
+      const target = getScrollParent(this.options.instance.config.anchor);
+      const scrollContext = getContext(RealTimeScrollContext, target)
+      const resizeContext = getContext(ResizeContext)
+      const mouseClickContext = getContext(MouseClickContext)
+      let currentEvent = window.event
+      this.subs.push(
+          scrollContext.events.subscribe(this.onAnchorMove),
+          resizeContext.events.subscribe(this.onAnchorMove),
+          mouseClickContext.events.subscribe(ev => {
+            if(currentEvent && ev === currentEvent) {
+              currentEvent = null
+              return
+            }
+            this.onBodyClick(ev)
+          })
+      )
+    }
     this.fixPositionByAnchor();
   },
   updated() {
     this.fixPositionByAnchor();
   },
   destroyed() {
-    if (this.listener) {
-      this.listener.target.removeEventListener(
-          "scroll",
-          this.listener.onScroll
-      );
-      window.removeEventListener('resize', this.listener.onScroll);
-      setTimeout(() => {
-        document.body.removeEventListener("click", this.onBodyClick);
-      }, 0);
-    }
+    this.subs.forEach(c => c.unsubscribe())
+    this.subs = []
   },
   methods: {
     onOverlayClick(event) {
@@ -242,19 +260,6 @@ export default {
         this.transform = { x: 0, y: 0 };
         return;
       }
-      if (!this.listener) {
-        const target = getScrollParent(this.options.instance.config.anchor);
-        this.listener = {
-          target: target,
-          onScroll: this.onAnchorMove.bind(this),
-        };
-        target.addEventListener("scroll", this.listener.onScroll);
-        window.addEventListener('resize', this.listener.onScroll);
-        setTimeout(() => {
-          document.body.addEventListener("click", this.onBodyClick, false);
-        }, 0);
-      }
-
       const transform = calcTransform(
           this.options.instance.config.anchor,
           this.$refs.dialogPanel,
@@ -292,7 +297,7 @@ export default {
         };
       }
     },
-    onAnchorMove() {
+    onAnchorMove(ev) {
       this.fixPositionByAnchor();
     },
   },

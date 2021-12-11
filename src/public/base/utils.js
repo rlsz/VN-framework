@@ -876,15 +876,16 @@ export function InjectAdapter(key, vm) {
     return InjectAdapter(key, vm.$parent)
 }
 export function getObjectId(obj, paths = []) {
-    let protoName
+    let proto
     if(!paths.length && typeof obj === 'function') {
-        protoName = obj.name
+        proto = obj.prototype
     } else {
-        protoName = obj.__proto__.constructor.name
+        proto = obj.__proto__
     }
-    paths.push(protoName)
+    let protoName = proto.constructor.name
+    paths.push(proto.constructor.name)
     if (protoName === 'Object') {
         return paths.join('.')
     }
-    return getObjectId(obj.__proto__, paths)
+    return getObjectId(proto, paths)
 }

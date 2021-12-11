@@ -1,7 +1,10 @@
 import {debounceTime, SimpleSubject} from "./utils";
 import {getObjectId} from "./utils";
 
-export function getContext(constructor, dom = document.body) {
+export function getContext(constructor, dom) {
+    if(!dom) {
+        dom = constructor.defaultDom
+    }
     const listener_context = '__vue_app_context_' + btoa(getObjectId(constructor))
     if(!dom[listener_context]) {
         dom[listener_context] = new constructor(dom)
@@ -10,6 +13,8 @@ export function getContext(constructor, dom = document.body) {
 }
 
 export class EventContextBase {
+    static defaultDom = document.body
+    delay = 50 // ms
     dom
     eventName
     events = new SimpleSubject()
@@ -19,13 +24,17 @@ export class EventContextBase {
     }
     listenerRef
     listener(e) {
-        console.error('not implement', e)
+        this.events.next(e)
     }
 
     init() {
-        this.listenerRef = debounceTime((e) => {
-            this.listener.call(this, e)
-        }, 50)
+        if(this.delay) {
+            this.listenerRef = debounceTime((e) => {
+                this.listener.call(this, e)
+            }, this.delay)
+        } else {
+            this.listenerRef = this.listener.bind(this)
+        }
         this.dom.addEventListener(this.eventName, this.listenerRef, false)
     }
     dispose() {
@@ -39,7 +48,21 @@ export class ScrollContext extends EventContextBase {
         this.init()
     }
     listener(e) {
-        const {offsetHeight, scrollHeight} = this.scrollDom
+        const {offsetHeight, scrollHeight} = e.target
+        if (offsetHeight !== scrollHeight) {
+            this.events.next(e)
+        }
+    }
+}
+
+export class RealTimeScrollContext extends EventContextBase {
+    delay = 0
+    constructor(dom) {
+        super(dom, 'scroll')
+        this.init()
+    }
+    listener(e) {
+        const {offsetHeight, scrollHeight} = e.target
         if (offsetHeight !== scrollHeight) {
             this.events.next(e)
         }
@@ -55,5 +78,19 @@ export class MouseMoveContext extends EventContextBase {
     listener(e) {
         this.events.next(e.target)
         this.target = e.target
+    }
+}
+
+export class ResizeContext extends EventContextBase {
+    static defaultDom = window
+    constructor(dom) {
+        super(dom, 'resize')
+        this.init()
+    }
+}
+export class MouseClickContext extends EventContextBase {
+    constructor(dom) {
+        super(dom, 'click')
+        this.init()
     }
 }
