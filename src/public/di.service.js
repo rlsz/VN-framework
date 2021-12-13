@@ -114,6 +114,10 @@ class DependencyInjection {
                 mute: opts
             }
         }
+        if(token && token[OptionalFlag]) {
+            opts.optional = true
+            token = token.provide
+        }
         try {
             if(!token) {
                 throw new Error(`invalid token ${token}`)
@@ -124,12 +128,16 @@ class DependencyInjection {
             } else {
                 symbol = token.InjectionSymbol
                 if (!symbol || (token.name && symbol.description !== token.name)) {
-                    throw new Error(`target token is not generated for now: ${token && token.toString()}`)
+                    if(opts.optional) {
+                        return null
+                    } else {
+                        throw new Error(`target token is not generated for now: ${token && token.toString()}`)
+                    }
                 }
             }
             const target = this.instanceMap[symbol]
             if (target !== undefined) {
-                if(opts.checkProxy && target[ServiceProxyHandlerProperty]) {
+                if(opts.checkProxy && target && target[ServiceProxyHandlerProperty]) {
                     if(typeof target[ServiceProxyHandlerProperty] === "function") {
                         const handler = new target[ServiceProxyHandlerProperty](opts.proxyBridge)
                         const revocable = Proxy.revocable(target, handler)
@@ -142,7 +150,11 @@ class DependencyInjection {
                 return target
             }
             if (!this.vm.$parent) {
-                throw new Error(`token instance can't be found: ${token && token.toString()}`)
+                if(opts.optional) {
+                    return null
+                } else {
+                    throw new Error(`token instance can't be found: ${token && token.toString()}`)
+                }
             }
             return this.vm.$parent.$injector.get(token, opts)
         } catch (e) {
@@ -257,5 +269,12 @@ export class SimpleServiceProxyHandler {
     }
     set(target, property, value, receiver) {
         return Reflect.set(...arguments);
+    }
+}
+export const OptionalFlag = Symbol('OptionalFlag')
+export function Optional(token) {
+    return {
+        provide: token,
+        [OptionalFlag]: true
     }
 }
