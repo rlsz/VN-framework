@@ -49,7 +49,7 @@ export let dialogParent = {
 
 export class DialogRoot {
     constructor(injector) {
-        if(injector.get(Dialog, true)) {
+        if(injector.get(Dialog, {mute:true})) {
             throw new Error("can not set DialogRoot in dialogs")
         }
     }
