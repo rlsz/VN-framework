@@ -70,7 +70,7 @@ export class AppTreeService {
     }
 
     hasChildren(vm) {
-        if(this.lazy) {
+        if(this.lazy || this.vm.treeProps?.hasChildren) {
             const {hasChildren} = this.treeProps
             if(typeof hasChildren === 'function') {
                 return hasChildren(vm)
