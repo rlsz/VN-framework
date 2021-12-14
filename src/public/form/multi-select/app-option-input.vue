@@ -1,6 +1,6 @@
 <template>
   <span class="app-option-input" v-if="!editing" @click="onAdd"><slot>+添加</slot></span>
-  <span class="app-option-input" v-else>
+  <span class="app-option-input fix-line" v-else>
     <input ref="input"
            v-model="text"
            :placeholder="placeholder || '请输入内容'"
@@ -14,6 +14,7 @@ import {MultiSelectService} from "./multi-select.service";
 import {DialogService} from "../../dialogs/dialog.service";
 import OptionsDialog from './options-dialog'
 import {Position} from "../../dialogs/dialog";
+import {getContext, MouseClickContext} from "../../base/event-context";
 
 export default {
   name: "app-option-input",
@@ -28,14 +29,19 @@ export default {
     return {
       text: '',
       editing: false,
-      optionsDialog: null
+      optionsDialog: null,
+      subs: []
     }
   },
   mounted() {
-    document.body.addEventListener('click', this.onBodyClick, false);
+    const mouseClickContext = getContext(MouseClickContext)
+    this.subs.push(
+        mouseClickContext.events.subscribe(this.onBodyClick)
+    )
   },
   destroyed() {
-    document.body.removeEventListener('click', this.onBodyClick);
+    this.subs.forEach(c => c.unsubscribe())
+    this.subs = []
     if(this.optionsDialog) {
       this.optionsDialog.close()
     }
@@ -58,7 +64,8 @@ export default {
           mss: this.mss,
           anchor,
           'close-on-click-overlay': false,
-          position: Position.bottomStrict
+          position: Position.bottomStrict,
+          offset: 3
         })
         this.optionsDialog.afterClosed().then(item => {
           this.editing = false
@@ -90,21 +97,24 @@ export default {
 
 <style lang="less" scoped>
 .app-option-input {
-  font-family: PingFang SC;
   font-size: 14px;
-  line-height: 20px;
-  color: #6257DC;
+  font-family: PingFang SC, PingFang SC-Regular;
+  font-weight: 400;
+  text-align: LEFT;
+  color: #0d2b5e;
+
+  margin: 4px 5px;
   cursor: pointer;
-
-  margin-right: 10px;
-  margin-bottom: 4px;
-
   input {
+    outline: none;
     background: #FFFFFF;
-    border: 1px solid #0D2B5E;
+    border: 1px solid #409EFF;
     box-sizing: border-box;
     border-radius: 4px;
     padding: 6px 12px;
   }
+}
+.fix-line {
+  flex: 0 0 100%;
 }
 </style>

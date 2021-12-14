@@ -28,17 +28,16 @@ export default {
 
 <style lang="less" scoped>
 .app-option {
-  padding: 4px 6px;
-  background: #E9E7FF;
-  border-radius: 4px;
-
-  font-family: PingFang SC;
+  background: #e9eef8;
+  border-radius: 2px;
   font-size: 14px;
-  line-height: 20px;
-  color: #6257DC;
+  font-family: PingFang SC, PingFang SC-Regular;
+  font-weight: 400;
+  text-align: LEFT;
+  color: #0d2b5e;
 
-  margin-right: 10px;
-  margin-bottom: 4px;
+  margin: 4px 5px;
+  padding: 2px 6px;
   svg {
     margin-left: 6px;
     cursor: pointer;

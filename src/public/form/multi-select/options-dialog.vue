@@ -96,7 +96,7 @@ export default {
   font-size: 16px;
   line-height: 22px;
   color: #0D2B5E;
-  padding: 0 12px;
+  padding: 6px 0;
 
   flex-basis: auto;
   > .option {
