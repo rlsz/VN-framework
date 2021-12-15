@@ -11,7 +11,7 @@
 <!--    <i v-if="isExpend && level === 0 && als.list && als.list.length && als.finished" class="no-more"></i>-->
   </div>
   <div v-else class="no-result flex center">
-    <span class="padding flex center">暂无数据</span>
+    <span class="flex center">暂无数据</span>
   </div>
 </template>
 

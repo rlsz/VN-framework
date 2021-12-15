@@ -1,11 +1,12 @@
 <template>
   <span class="app-option-input" v-if="!editing" @click="onAdd"><slot>+添加</slot></span>
-  <span class="app-option-input fix-line" v-else>
+  <span class="app-option-input fix-line flex vertical" v-else>
     <input ref="input"
            v-model="text"
            :placeholder="placeholder || '请输入内容'"
+           @input="triggerSearch"
            @focus="onFocus"
-           @keyup.enter="onEnter"/>
+           @keyup.enter="triggerSearch"/>
   </span>
 </template>
 
@@ -15,6 +16,7 @@ import {DialogService} from "../../dialogs/dialog.service";
 import OptionsDialog from './options-dialog'
 import {Position} from "../../dialogs/dialog";
 import {getContext, MouseClickContext} from "../../base/event-context";
+import {debounceTime} from "@/public/base";
 
 export default {
   name: "app-option-input",
@@ -30,7 +32,10 @@ export default {
       text: '',
       editing: false,
       optionsDialog: null,
-      subs: []
+      subs: [],
+      triggerSearch: debounceTime(() => {
+        this.onFocus(this.$refs.input)
+      })
     }
   },
   mounted() {
@@ -87,9 +92,6 @@ export default {
           this.$refs.input.focus()
         }
       })
-    },
-    onEnter(e) {
-      this.onFocus(e.target)
     }
   }
 }

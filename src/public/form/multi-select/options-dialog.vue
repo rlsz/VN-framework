@@ -49,12 +49,9 @@ export default {
       index: i,
       active: this.mss.isActive(c)
     }))
-    return h('div', {
-      class: 'options-dialog scroll',
-      style: {
-        minWidth: this.minWidth+'px'
-      }
-    }, options)
+    return (<div class="options-dialog scroll" style={`min-width: ${this.minWidth}px`}>{
+      options.length?options:(<app-option-empty></app-option-empty>)
+    }</div>)
   },
   watch: {
     options() {
