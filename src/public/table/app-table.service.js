@@ -143,7 +143,7 @@ export class AppTableService {
         this.loading = true
         let p
         if(this.vm.query) {
-            p = this.vm.query(this.page, this.pageSize)
+            p = Promise.resolve(this.vm.query(this.page, this.pageSize))
         } else if (this.vm.data) {
             p = Promise.resolve(this.vm.data).then(data => {
                 data = data || []
