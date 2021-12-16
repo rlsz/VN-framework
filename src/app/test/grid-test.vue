@@ -22,6 +22,13 @@
       <span>subTypes</span>
       <span style="grid-row:7/11;" class="merge-row">为<span class="hs-tag-1 color-2">输出字段</span>与<span class="hs-tag-1 color-4">排序字段</span>，对应字段类型为keyword。</span>
     </div>
+    <div class="test-grid-1">
+      <span class="menu">menu area</span>
+      <span class="header">header area</span>
+      <span class="navigation">navigation area</span>
+      <span class="content">content area</span>
+      <span class="footer">footer area</span>
+    </div>
   </div>
 </template>
 
@@ -108,6 +115,54 @@ export default {
   &.color-4 {
     background: #e6f6fd;
     color: #0ea5e9;
+  }
+}
+.test-grid-1 {
+  display: grid;
+  grid-template-areas:
+      "menu header"
+      "menu navigation"
+      "menu content"
+      "menu footer";
+  grid-template-columns: 200px 1fr;
+  //gap: 1px;
+
+  background: #fafafa;
+  border: 1px solid #cfd2d6;
+  border-radius: 4px;
+  //padding: 5px 8px;
+  margin: 4px 0;
+
+  font-size: 12px;
+  font-family: PingFangSC, PingFangSC-Light;
+  font-weight: 300;
+  text-align: left;
+  color: #303235;
+  line-height: 20px;
+  > * {
+    padding: 0 8px;
+  }
+
+  .menu {
+    grid-area: menu;
+    border: 1px dashed rgba(0,0,0,0.1);
+  }
+  .header {
+    grid-area: header;
+    border: 1px dashed rgba(0,0,0,0.1);
+  }
+  .navigation {
+    grid-area: navigation;
+    border: 1px dashed rgba(0,0,0,0.1);
+  }
+  .content {
+    grid-area: content;
+    border: 1px dashed rgba(0,0,0,0.1);
+    min-height: 200px;
+  }
+  .footer {
+    grid-area: footer;
+    border: 1px dashed rgba(0,0,0,0.1);
   }
 }
 </style>
