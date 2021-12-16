@@ -107,7 +107,7 @@ export class AppTableService {
             }),
             this.vm.$watch(() => this.pageSize, val => {
                 if (val != this.vm.size) {
-                    this.$emit('size', val + '')
+                    this.vm.$emit('size', val + '')
                 }
             }),
             this.vm.$watch(() => this.checkedList, val => {

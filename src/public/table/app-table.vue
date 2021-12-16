@@ -48,12 +48,15 @@ export default {
     }
 
     return (
-        <div class="app-table table flex vertical">
-          <div class="hidden-columns" ref="hiddenColumns">{this.$slots.default}</div>
-          <AppTableRow header></AppTableRow>
-          { loading }
-          { empty }
-          { !this.refreshToken && children }
+        <div class="app-table flex vertical">
+          <div class="table flex vertical">
+            <div class="hidden-columns" ref="hiddenColumns">{this.$slots.default}</div>
+            <AppTableRow header></AppTableRow>
+            {loading}
+            {empty}
+            {!this.refreshToken && children}
+          </div>
+          {this.$slots.pagination}
         </div>
     )
   },
@@ -110,7 +113,7 @@ export default {
 .table-loading {
   padding: 40px 20px;
 }
-.app-table {
+.table {
   min-width: fit-content;
 }
 </style>

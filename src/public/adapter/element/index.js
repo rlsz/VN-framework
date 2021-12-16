@@ -107,10 +107,12 @@ import VElSelectModifyDirective from './v-el-select-modify.directive'
 import MultiSelectBridge from './multi-select-bridge'
 import TableBridge from './table-bridge'
 import AsyncSelect from './async-select'
+import PaginationBridge from './pagination-bridge'
 
 export default function (Vue) {
     Vue.use(VElSelectModifyDirective)
     Vue.component(MultiSelectBridge.name, MultiSelectBridge)
     Vue.component(TableBridge.name, TableBridge)
     Vue.component(AsyncSelect.name,AsyncSelect)
+    Vue.component(PaginationBridge.name,PaginationBridge)
 }
