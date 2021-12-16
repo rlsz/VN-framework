@@ -1,3 +1,4 @@
+import './v-tooltip.less'
 import {Directive, DirectiveContext} from "./directive-base";
 import {getContext, MouseMoveContext} from "../event-context";
 import {DialogService} from "../../dialogs/dialog.service";
@@ -86,7 +87,7 @@ class VTooltipDirective extends DirectiveContext {
             if(typeof value === 'string') {
                 comp = {
                     render(h) {
-                        return (<div style="padding: 4px 8px;max-width:30vw;max-height:30vh;overflow-y:auto;word-break:break-all;">{value}</div>)
+                        return (<div class="v-tooltip-default">{value}</div>)
                     }
                 }
             } else if(typeof value === 'function') {
