@@ -18,7 +18,7 @@ import {ConfigService} from "../../config.service";
 
 export default {
   name: "pagination-bridge",
-  props: ['layout'],
+  props: ['layout', 'show'],
   di: {
     inject: {
       ats: AppTableService,
@@ -33,6 +33,9 @@ export default {
       return this.ats.page + 1;
     },
     showPagination() {
+      if(this.show !== undefined) {
+        return this.show
+      }
       if(this.ats.total === undefined) {
         return false
       }
