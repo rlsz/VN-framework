@@ -22,10 +22,11 @@
       <span>subTypes</span>
       <span style="grid-row:7/11;" class="merge-row">为<span class="hs-tag-1 color-2">输出字段</span>与<span class="hs-tag-1 color-4">排序字段</span>，对应字段类型为keyword。</span>
     </div>
-    <div>
+    <div class="flex">
       <button class="app-form" @click="showMenu = !showMenu">{{showMenu?'隐藏菜单':'显示菜单'}}</button>
+      <button class="app-form" @click="expend = !expend">{{expend?'收起菜单':'展开菜单'}}</button>
     </div>
-    <div class="test-grid-1" :class="{'hide-menu':!showMenu}">
+    <div class="test-grid-1" :class="{'hide-menu':!showMenu, fold: !expend}">
       <span class="menu">menu area</span>
       <span class="header">header area</span>
       <span class="navigation">navigation area</span>
@@ -40,7 +41,8 @@ export default {
   name: "grid-test",
   data() {
     return {
-      showMenu: true
+      showMenu: true,
+      expend: true
     }
   }
 }
@@ -181,6 +183,9 @@ export default {
     .menu {
       display: none;
     }
+  }
+  &.fold {
+    grid-template-columns: 60px 1fr;
   }
 }
 </style>
