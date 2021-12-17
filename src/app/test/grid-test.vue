@@ -135,7 +135,7 @@ export default {
       "menu navigation"
       "menu content"
       "menu footer";
-  grid-template-columns: 200px 1fr;
+  grid-template-columns: auto 1fr;
   grid-gap: 10px;
 
   background: #fafafa;
@@ -157,6 +157,7 @@ export default {
   .menu {
     grid-area: menu;
     border: 1px dashed rgba(0,0,0,0.1);
+    width: 200px;
   }
   .header {
     grid-area: header;
@@ -177,7 +178,6 @@ export default {
   }
 
   &.hide-menu {
-    grid-template-columns: 0px 1fr;
     grid-column-gap: 0;
     grid-row-gap: 1px;
     .menu {
@@ -185,7 +185,9 @@ export default {
     }
   }
   &.fold {
-    grid-template-columns: 60px 1fr;
+    .menu {
+      width: 60px;
+    }
   }
 }
 </style>

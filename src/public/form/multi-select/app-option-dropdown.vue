@@ -1,5 +1,5 @@
 <template>
-  <span class="app-option-dropdown" :class="{active: mss.isActive(option)}" @click="onClick">
+  <span class="app-option-dropdown" :class="{active: mss.isActive(option), disabled: disabled}" @click="onClick">
     <slot>{{option}}</slot>
     <span class="fill"></span>
   </span>
@@ -10,7 +10,7 @@ import {MultiSelectService} from "./multi-select.service";
 
 export default {
   name: "app-option-dropdown",
-  props: ['option'],
+  props: ['option', 'disabled'],
   di: {
     inject: {
       mss: MultiSelectService
@@ -57,6 +57,10 @@ export default {
       transform: rotate(45deg) translateY(-2px);
       //margin-left: auto;
     }
+  }
+  &.disabled {
+    opacity: 0.3;
+    pointer-events: none;
   }
 }
 </style>
