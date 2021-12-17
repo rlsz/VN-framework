@@ -54,6 +54,7 @@ export default {
 
   display: grid;
   grid-template-columns: auto 1fr;
+  //grid-template-columns: repeat(12, minmax(0,1fr));
   column-gap: 8px;
 
   > *:nth-child(2n + 1) {
@@ -128,7 +129,7 @@ export default {
   //gap: 1px;
 
   background: #fafafa;
-  border: 1px solid #cfd2d6;
+  //border: 1px solid #cfd2d6;
   border-radius: 4px;
   //padding: 5px 8px;
   margin: 4px 0;
