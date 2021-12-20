@@ -84,11 +84,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.tree-list {
-  &:not(.level-0) {
-    padding-left: 16px;
-  }
-}
+//.tree-list {
+//  &:not(.level-0) {
+//    padding-left: 16px;
+//  }
+//}
 .more {
   opacity: 0.3;
   font-size: 14px;
