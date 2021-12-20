@@ -1,8 +1,12 @@
 import {MIME_TYPE} from "./mime/mime-type";
 
 let path = require('path')
-export function resolvePath(...paths) {
-    return path.resolve(...paths)
+export function resolvePath(root, ...paths) {
+    if (root.startsWith('http://') || root.startsWith('https://')) {
+        return root.replace(/\/+$/, '') + path.resolve(...paths)
+    } else {
+        return path.resolve(root, ...paths)
+    }
 }
 export function GetQuery(str) {
     const query = {};
