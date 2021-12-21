@@ -49,9 +49,11 @@ export default {
 
     return (
         <div class="app-table flex vertical">
-          <div class="table flex vertical">
+          <div class="table flex vertical table-header">
             <div class="hidden-columns" ref="hiddenColumns">{this.$slots.default}</div>
             <AppTableRow header></AppTableRow>
+          </div>
+          <div class="table flex vertical table-body">
             {loading}
             {empty}
             {!this.refreshToken && children}
@@ -115,5 +117,14 @@ export default {
 }
 .table {
   min-width: fit-content;
+}
+.table-header {
+  box-shadow: none;
+  border-bottom: none;
+  > .row:last-child {
+    /deep/ .cell {
+      border-bottom: none;
+    }
+  }
 }
 </style>

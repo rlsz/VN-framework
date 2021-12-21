@@ -106,9 +106,7 @@ export class AppTableService {
                 this.getData()
             }),
             this.vm.$watch(() => this.pageSize, val => {
-                if (val != this.vm.size) {
-                    this.vm.$emit('size', val + '')
-                }
+                this.handleSizeChange(val)
             }),
             this.vm.$watch(() => this.checkedList, val => {
                 this.vm.$emit('selection-change', val)
