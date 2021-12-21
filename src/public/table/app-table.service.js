@@ -110,6 +110,11 @@ export class AppTableService {
             }),
             this.vm.$watch(() => this.checkedList, val => {
                 this.vm.$emit('selection-change', val)
+            }),
+            this.vm.$watch(() => this.list, val => {
+                if(this.checkedList.length) {
+                    this.checkedList = []
+                }
             })
         )
     }
