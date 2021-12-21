@@ -135,4 +135,19 @@ textarea {
     outline: 0;
   }
 }
+textarea::-webkit-input-placeholder {
+  color: rgba(0,0,0,0.3);;
+}
+textarea:-moz-placeholder { /* Firefox 18- */
+  color: rgba(0,0,0,0.3);;
+}
+textarea::-moz-placeholder {  /* Firefox 19+ */
+  color: rgba(0,0,0,0.3);;
+}
+textarea:-ms-input-placeholder {
+  color: rgba(0,0,0,0.3);;
+}
+textarea::placeholder {
+  color: rgba(0,0,0,0.3);;
+}
 </style>
