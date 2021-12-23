@@ -14,6 +14,7 @@
                :query="currentQuery"
                :level="level + 1"
                :indexes="indexes"
+               ref="treeList"
     ></tree-list>
   </div>
 </template>
@@ -54,7 +55,8 @@ export default {
         value: this.value,
         level: this.level,
         indexes: this.indexes,
-        hasChildren: this.hasChildren
+        hasChildren: this.hasChildren,
+        context: this
       }
       return {
         di: {

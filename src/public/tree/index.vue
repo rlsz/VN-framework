@@ -1,6 +1,6 @@
 <template>
   <div class="app-tree-root scroll">
-    <tree-list :data="data" :query="currentQuery"></tree-list>
+    <tree-list :data="data" :query="currentQuery" ref="treeList"></tree-list>
   </div>
 </template>
 
