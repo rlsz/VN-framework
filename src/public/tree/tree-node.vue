@@ -1,6 +1,6 @@
 <template>
   <div class="tree-node" :class="{['level-'+level]:true, 'expend-hidden': isHidden}">
-    <div class="flex cross-center">
+    <div class="flex cross-center label-container" :style="{paddingLeft}">
       <app-checkbox v-if="ats.editable"></app-checkbox>
       <component :is="label"></component>
       <i v-if="hasChildren"
@@ -94,6 +94,9 @@ export default {
     },
     paths() {
       return this.ats.getPaths(this.indexes)
+    },
+    paddingLeft() {
+      return this.ats.treeProps.indent * this.level + 'px'
     }
   },
   watch: {

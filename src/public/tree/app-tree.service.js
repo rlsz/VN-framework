@@ -24,6 +24,7 @@ export class AppTreeService {
             label: 'label',
             children: 'children',
             hasChildren: 'hasChildren',
+            indent: 16,
             ...this.vm.treeProps
         }
         this.unwatch.push(

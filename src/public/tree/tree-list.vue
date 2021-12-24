@@ -6,8 +6,8 @@
                :indexes="[...indexes, index]"
                :level="level"
     ></tree-node>
-    <i v-if="isExpend && !als.finished && als.loading" class="loading"></i>
-    <span v-if="isExpend && !als.finished && !als.loading" class="more">...</span>
+    <i v-if="isExpend && !als.finished && als.loading" class="loading" :style="{paddingLeft}"></i>
+    <span v-if="isExpend && !als.finished && !als.loading" class="more" :style="{paddingLeft}">...</span>
 <!--    <i v-if="isExpend && level === 0 && als.list && als.list.length && als.finished" class="no-more"></i>-->
   </div>
   <div v-else class="no-result flex center">
@@ -63,6 +63,9 @@ export default {
     },
     parents() {
       return this.ats.getPaths(this.indexes)
+    },
+    paddingLeft() {
+      return this.ats.treeProps.indent * this.level + 'px'
     }
   },
   watch: {
