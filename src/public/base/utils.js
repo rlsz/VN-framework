@@ -88,8 +88,8 @@ export function FormatDate(d, format = 'yyyy-MM-dd HH:mm:ss', timeZone) {
         let offset
         if(/^UTC([+\-\d]*)(?::(\d+))?$/.test(timeZone)) {
             // offset: minutes for time zone, e.g. -480 for UTC+8, 0 for UTC, 120 for UTC-2
-            const neg = Number(RegExp.$1) < 0
             let temp = 60 * Number(RegExp.$1)
+            const neg = temp < 0
             if(neg) {
                 temp -= Number(RegExp.$2)
             } else {
