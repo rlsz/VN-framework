@@ -12,19 +12,19 @@ export function CombineValidators(...args) {
         }
         return {
             required: required === undefined ? res.required : required,
-            validator: (rule, value, callback) => {
+            validator: (rule, value, callback, source, options) => {
                 return res.validator(rule, value, err => {
                     if (err) {
                         return callback(err)
                     } else {
-                        return validator(rule, value, callback)
+                        return validator(rule, value, callback, source, options)
                     }
-                })
+                }, source, options)
             },
             trigger: Distinct([...res.trigger, ...trigger], (a, b) => a === b)
         }
     }, {
-        validator: (rule, value, callback) => callback(),
+        validator: (rule, value, callback, source, options) => callback(),
         trigger: []
     })
 }
