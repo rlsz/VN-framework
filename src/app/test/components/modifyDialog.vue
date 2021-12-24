@@ -118,7 +118,7 @@
 
 <script>
 import {Dialog} from "@/public/dialogs";
-import {FormBuilder, FormArray} from "@/public/form";
+// import {FormBuilder, FormArray} from "@/public/form";
 
 export default {
   name: "modify",
@@ -128,28 +128,28 @@ export default {
     }
   },
   data() {
-    const form = new FormBuilder().group({
-      id: [null],
-      name: ['', [{ required: true, message: '名称不能为空', trigger: 'blur' }]],
-      indexFieldMappingId: [null, [{ required: true, message: '索引映射不能为空', trigger: 'change' }]],
-      strategy: [new FormArray(
-        [],
-        {
-          fileName: [null, [{ required: true, message: '字段名称不能为空', trigger: 'change' }]],
-          path: [''],
-          weight: [null, [{ required: true, message: '权重不能为空', trigger: 'blur' }]],
-          sortType: [null, [{ required: true, message: '计分方式不能为空', trigger: 'change' }]],
-          filterType: [null, [{ required: true, message: '过滤条件不能为空', trigger: 'change' }]],
-          filterCondition: [null, [{ required: true, message: '过滤条件不能为空', trigger: 'blur' }]],
-          isReturn: [false]
-        }
-      ), [{ required: true, message: '配置项不能为空', trigger: 'change' }]],
-      status: [null, [{ required: true, message: '请选择状态', trigger: 'change' }]],
-      sortScript: [''],
-      sortScriptParam: [''],
-      fileName: ['test']
-    })
-    console.log(form)
+    // const form = new FormBuilder().group({
+    //   id: [null],
+    //   name: ['', [{ required: true, message: '名称不能为空', trigger: 'blur' }]],
+    //   indexFieldMappingId: [null, [{ required: true, message: '索引映射不能为空', trigger: 'change' }]],
+    //   strategy: [new FormArray(
+    //     [],
+    //     {
+    //       fileName: [null, [{ required: true, message: '字段名称不能为空', trigger: 'change' }]],
+    //       path: [''],
+    //       weight: [null, [{ required: true, message: '权重不能为空', trigger: 'blur' }]],
+    //       sortType: [null, [{ required: true, message: '计分方式不能为空', trigger: 'change' }]],
+    //       filterType: [null, [{ required: true, message: '过滤条件不能为空', trigger: 'change' }]],
+    //       filterCondition: [null, [{ required: true, message: '过滤条件不能为空', trigger: 'blur' }]],
+    //       isReturn: [false]
+    //     }
+    //   ), [{ required: true, message: '配置项不能为空', trigger: 'change' }]],
+    //   status: [null, [{ required: true, message: '请选择状态', trigger: 'change' }]],
+    //   sortScript: [''],
+    //   sortScriptParam: [''],
+    //   fileName: ['test']
+    // })
+    // console.log(form)
     return {
       loading: false,
       form,
