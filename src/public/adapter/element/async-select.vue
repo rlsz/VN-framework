@@ -1,11 +1,17 @@
 <template>
   <el-select
       :loading="loading"
-      v-bind="{...$props, ...$attrs, asyncOptions: undefined}"
+      v-bind="{...$props, ...$attrs, asyncOptions: undefined, valueKey: idKey || valueKey}"
       v-on="{...$listeners}"
       v-if="$listeners.input"
   >
-    <slot v-for="(item,index) in options" v-bind:value="item" v-bind:index="index"></slot>
+    <slot v-for="(item,index) in options" v-bind:value="item" v-bind:index="index">
+      <el-option
+          :key="getId(item)"
+          :label="getLabel(item)"
+          :value="getValue(item)"
+      ></el-option>
+    </slot>
   </el-select>
   <span v-else-if="multipleProp" class="multiple-selections">
     <slot name="value"
@@ -13,10 +19,12 @@
           v-bind:value="item"
           v-bind:index="index"
           v-bind:optionsMap="optionsMap"
-    ></slot>
+    >
+      <span>{{getLabel(item)}}</span>
+    </slot>
   </span>
   <span v-else-if="optionsMap[value]">
-    <slot name="value" v-bind:value="optionsMap[value]"></slot>
+    <slot name="value" v-bind:value="optionsMap[value]">{{getLabel(optionsMap[value])}}</slot>
   </span>
   <span v-else>{{value}}</span>
 </template>
@@ -24,7 +32,7 @@
 <script>
 export default {
   name: "async-select",
-  props: ['asyncOptions', 'value', 'valueKey', 'multiple'], // asyncOptions: Promise instance
+  props: ['asyncOptions', 'value', 'valueKey', 'labelKey', 'idKey', 'multiple'], // asyncOptions: Promise instance
   data() {
     return {
       options: [],
@@ -34,7 +42,7 @@ export default {
   computed: {
     optionsMap() {
       return this.options.reduce((obj, item) => {
-        obj[item[this.valueKey || 'value']] = item
+        obj[this.getId(item)] = item
         return obj
       }, {})
     },
@@ -58,6 +66,29 @@ export default {
       }).finally(() => {
         this.loading = false
       })
+    },
+    getValue(val) {
+      if(this.valueKey) {
+        return val[this.valueKey]
+      } else {
+        return val
+      }
+    },
+    getLabel(val) {
+      if(this.labelKey) {
+        return val[this.labelKey]
+      } else {
+        return val
+      }
+    },
+    getId(val) {
+      if(this.idKey) {
+        return val[this.idKey]
+      } else if (this.valueKey) {
+        return val[this.valueKey]
+      } else {
+        return val
+      }
     }
   }
 }

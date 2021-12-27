@@ -81,7 +81,7 @@ export class AppTableService {
                 immediate: true
             }),
             this.vm.$watch(() => {
-                const size = this.pageSize
+                const size = Number(this.vm.size) || this.defaultConfig.tablePageSize
                 const arr = Distinct([...this.defaultConfig.tablePageSizeList, size])
                 arr.sort((a, b) => {
                     if (a < b) return -1;
