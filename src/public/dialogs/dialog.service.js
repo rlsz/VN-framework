@@ -26,6 +26,9 @@ export class DialogService {
     }
     return singleton
   }
+  static set instance(inc) {
+    singleton = inc
+  }
 
   [ServiceProxyHandlerProperty] = DialogServiceProxyHandler
 
