@@ -45,12 +45,23 @@ export class AppTreeService {
         this.unwatch = []
     }
 
-    toggleExpend(node) {
+    toggleExpend(node, status) {
         const index = this.expendList.indexOf(node);
-        if(index >= 0) {
+        if(index >= 0 && status !== true) {
             this.expendList.splice(index, 1);
-        } else {
+        }
+        if(index < 0 && status !== false) {
             this.expendList.push(node)
+        }
+    }
+
+    toggleChecked(node, status) {
+        const index = this.checkedList.indexOf(node);
+        if(index >= 0 && status !== true) {
+            this.checkedList.splice(index, 1);
+        }
+        if(index < 0 && status !== false) {
+            this.checkedList.push(node)
         }
     }
 

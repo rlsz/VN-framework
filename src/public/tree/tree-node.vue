@@ -1,5 +1,5 @@
 <template>
-  <div class="tree-node" :class="{['level-'+level]:true, 'expend-hidden': isHidden}">
+  <div class="tree-node" :class="{['level-'+level]:true, 'expend-hidden': isHidden, 'selected': isSelected}">
     <div class="flex cross-center label-container" :style="{paddingLeft}">
       <app-checkbox v-if="ats.editable"></app-checkbox>
       <component :is="label"></component>
@@ -120,5 +120,9 @@ export default {
 }
 i.arrow {
   margin-left: 6px;
+}
+.selected {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
 }
 </style>
