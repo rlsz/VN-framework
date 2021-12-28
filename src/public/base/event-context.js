@@ -47,12 +47,6 @@ export class ScrollContext extends EventContextBase {
         super(dom, 'scroll')
         this.init()
     }
-    listener(e) {
-        const {offsetHeight, scrollHeight} = e.target
-        if (offsetHeight !== scrollHeight) {
-            this.events.next(e)
-        }
-    }
 }
 
 export class RealTimeScrollContext extends EventContextBase {
@@ -60,12 +54,6 @@ export class RealTimeScrollContext extends EventContextBase {
     constructor(dom) {
         super(dom, 'scroll')
         this.init()
-    }
-    listener(e) {
-        const {offsetHeight, scrollHeight} = e.target
-        if (offsetHeight !== scrollHeight) {
-            this.events.next(e)
-        }
     }
 }
 

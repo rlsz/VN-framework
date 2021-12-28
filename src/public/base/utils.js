@@ -728,6 +728,26 @@ export function getScrollParent(element) {
     return getScrollParent(element.parentNode);
 }
 
+export function getAllScrollParent(element) {
+    const parent = element.parentNode;
+    if (!parent) {
+        return [element];
+    }
+    if (parent === root.document) {
+        // Firefox puts the scrollTOp value on `documentElement` instead of `body`, we then check which of them is
+        // greater than 0 and return the proper element
+        if (root.document.body.scrollTop || root.document.body.scrollLeft) {
+            return [root.document.body];
+        } else {
+            return [root.document.documentElement];
+        }
+    }
+    if(isScrollContainer(parent)) {
+        return [parent, ...getAllScrollParent(parent)].distinct()
+    }
+    return getAllScrollParent(parent).distinct();
+}
+
 export function isScrollContainer(dom) {
     // Firefox want us to check `-x` and `-y` variations as well
     if (

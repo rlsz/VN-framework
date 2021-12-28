@@ -3,7 +3,7 @@ import { Dialog, Model, Position } from "../../dialogs/dialog";
 import { DialogParent } from "../../dialogs/dialog-parent";
 import { PlatformService } from "../../platform/platform.service";
 import { Platform } from "../../platform/platform";
-import { getScrollParent } from "../../base/utils";
+import {getAllScrollParent, getScrollParent} from "../../base/utils";
 import {ConfigService} from "../../config.service";
 import {
   getContext,
@@ -297,11 +297,9 @@ export default {
     watchPosition() {
       const anchor = this.options.instance.config?.anchor
       if(this.model === Model.positionByAnchor && anchor) {
-        const scrollContext = getContext(RealTimeScrollContext, getScrollParent(anchor))
-        const resizeContext = getContext(ResizeContext)
         this.subs.push(
-            scrollContext.events.subscribe(ev => this.fixPositionByAnchor()),
-            resizeContext.events.subscribe(ev => this.fixPositionByAnchor())
+            ...getAllScrollParent(anchor).map(c => getContext(RealTimeScrollContext, c).events.subscribe(ev => this.fixPositionByAnchor())),
+            getContext(ResizeContext).events.subscribe(ev => this.fixPositionByAnchor())
         )
         this.watchBodyClick()
         this.fixPositionByAnchor()
@@ -318,11 +316,9 @@ export default {
             bottom: Math.max(round(bodyBottom - bottom), 0) + 'px'
           }
         }
-        const scrollContext = getContext(RealTimeScrollContext, getScrollParent(container))
-        const resizeContext = getContext(ResizeContext)
         this.subs.push(
-            scrollContext.events.subscribe(ev => calcPosition()),
-            resizeContext.events.subscribe(ev => calcPosition())
+            ...getAllScrollParent(anchor).map(c => getContext(RealTimeScrollContext, c).events.subscribe(ev => calcPosition())),
+            getContext(ResizeContext).events.subscribe(ev => calcPosition())
         )
         this.watchBodyClick()
         calcPosition()
