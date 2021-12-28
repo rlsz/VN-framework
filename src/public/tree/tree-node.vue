@@ -121,7 +121,7 @@ export default {
 i.arrow {
   margin-left: 6px;
 }
-.selected {
+.selected > .label-container {
   background: rgba(0, 0, 0, 0.1);
   border-radius: 2px;
 }
