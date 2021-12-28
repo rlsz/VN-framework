@@ -1,5 +1,6 @@
 <template>
-  <div class="tree-list" :class="{['level-'+level]:true}" v-if="level !== 0 || (als.list && als.list.length) || als.loading">
+  <div class="tree-list" :class="{['level-'+level]:true}"
+       v-if="level !== 0 || (als.list && als.list.length) || als.loading">
     <tree-node v-for="(item, index) in als.list"
                :key="'app-tree-item-'+level+'-'+index"
                :value="item"
@@ -8,7 +9,7 @@
     ></tree-node>
     <i v-if="isExpend && !als.finished && als.loading" class="loading" :style="{paddingLeft}"></i>
     <span v-if="isExpend && !als.finished && !als.loading" class="more" :style="{paddingLeft}">...</span>
-<!--    <i v-if="isExpend && level === 0 && als.list && als.list.length && als.finished" class="no-more"></i>-->
+    <!--    <i v-if="isExpend && level === 0 && als.list && als.list.length && als.finished" class="no-more"></i>-->
   </div>
   <div v-else class="no-result flex center">
     <span class="flex center">暂无数据</span>
@@ -55,7 +56,7 @@ export default {
   },
   computed: {
     isExpend() {
-      if(this.parents.length) {
+      if (this.parents.length) {
         const parent = this.parents[this.parents.length - 1]
         return this.ats.expendList.indexOf(parent) >= 0
       }
@@ -69,16 +70,23 @@ export default {
     }
   },
   watch: {
-    'als.list'(val) {
+    'als.list'(val, oldVal) {
       const parents = this.ats.getPaths(this.indexes)
       const parent = parents[parents.length - 1]
-      if(parent) {
-        if(this.ats.lazy) {
+      if (parent) {
+        if (this.ats.lazy) {
           const {children} = this.ats.treeProps
-          parent[children] = val
+          this.$set(parent, children, val)
+          // parent[children] = val
         }
       } else {
         this.ats.list = val
+      }
+      if (val.length < oldVal.length) {
+        const newExpendList = this.ats.expendList.filter(c => oldVal.indexOf(c) < 0)
+        if (newExpendList.length < this.ats.expendList.length) {
+          this.ats.expendList = newExpendList
+        }
       }
       // console.log('als.list ', val, this.indexes.join('->'), this.ats.list, !!parent)
     }
@@ -97,6 +105,7 @@ export default {
   font-size: 14px;
   line-height: 20px;
 }
+
 i.no-more {
   padding: 0;
 }

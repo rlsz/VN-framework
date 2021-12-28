@@ -94,4 +94,8 @@ export class AppTreeService {
             return vm.value[children] && vm.value[children].length
         }
     }
+
+    dispose() {
+
+    }
 }
