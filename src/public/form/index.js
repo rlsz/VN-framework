@@ -1,6 +1,8 @@
 export * from './el-validators'
 export * from './tabs/tabs.service'
 export * from './multi-select/multi-select.service'
+export * from './form-model'
+
 import tabs from './tabs/app-tabs'
 import tab from './tabs/app-tab'
 import tabEmpty from './tabs/app-tab-empty'

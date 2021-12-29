@@ -4,11 +4,15 @@
             @input="onInput($event)"
             @blur="onBlur"
             ref="textarea"
+            v-if="editable"
   ></textarea>
+  <div v-else class="app-textarea-mode-detail">{{value}}</div>
 </template>
 
 <script>
 import {FormInputAdapter} from "../../adapter";
+import {Optional} from "../../di.service";
+import {FORM_MODEL, FormModel} from "../../form/form-model";
 
 function calcBoxStyle(target) {
   const style = window.getComputedStyle(target);
@@ -67,15 +71,25 @@ function calcBoxStyle(target) {
 export default {
   name: "app-textarea",
   props: ['value'],
-  computed: {
-    textarea() {
-      return this.$refs.textarea
-    }
-  },
   di: {
     providers: [FormInputAdapter],
     inject: {
-      formInput: FormInputAdapter
+      formInput: FormInputAdapter,
+      formModel: Optional(FORM_MODEL)
+    }
+  },
+  computed: {
+    textarea() {
+      return this.$refs.textarea
+    },
+    editable() {
+      if(this.formModel === FormModel.detail) {
+        return false
+      }
+      if(this.$listeners.input) {
+        return true
+      }
+      return false
     }
   },
   created() {
@@ -99,6 +113,9 @@ export default {
       }
     },
     refresh() {
+      if(!this.textarea) {
+        return
+      }
       const {scrollHeight, clientHeight} = calcBoxStyle(this.textarea)
       if(scrollHeight !== clientHeight) {
         this.textarea.style.height = 'auto';
@@ -116,6 +133,18 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.app-textarea-mode-detail {
+  display: block;
+  width: 100%;
+  min-height: 78px;
+  padding: 5px 15px;
+  line-height: 1.5;
+  color: rgb(96, 98, 102);
+  background-color: rgb(255, 255, 255);
+  background-image: none;
+  border: 1px solid rgb(220, 223, 230);
+  border-radius: 4px;
+}
 textarea {
   //box-sizing: content-box;
   //box-sizing: border-box;

@@ -3,7 +3,7 @@
       :loading="loading"
       v-bind="{...$props, ...$attrs, asyncOptions: undefined, valueKey: idKey || valueKey}"
       v-on="{...$listeners}"
-      v-if="$listeners.input"
+      v-if="editable"
   >
     <slot v-for="(item,index) in options" v-bind:value="item" v-bind:index="index">
       <el-option
@@ -30,9 +30,17 @@
 </template>
 
 <script>
+import {FORM_MODEL, FormModel} from "../../form/form-model";
+import {Optional} from "../../di.service";
+
 export default {
   name: "async-select",
   props: ['asyncOptions', 'value', 'valueKey', 'labelKey', 'idKey', 'multiple'], // asyncOptions: Promise instance
+  di: {
+    inject: {
+      formModel: Optional(FORM_MODEL)
+    }
+  },
   data() {
     return {
       options: [],
@@ -48,6 +56,15 @@ export default {
     },
     multipleProp() {
       return this.multiple === '' ? true : this.multiple;
+    },
+    editable() {
+      if(this.formModel === FormModel.detail) {
+        return false
+      }
+      if(this.$listeners.input) {
+        return true
+      }
+      return false
     }
   },
   watch: {

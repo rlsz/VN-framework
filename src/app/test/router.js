@@ -276,5 +276,12 @@ export default {
                 title: 'tooltip测试'
             }
         },
+        {
+            path: 'scopeTest',
+            component: () => import(/* webpackChunkName: "test" */ './scopeTest.vue'),
+            meta: {
+                title: 'scope测试'
+            }
+        },
     ]
 }

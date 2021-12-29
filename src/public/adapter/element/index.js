@@ -24,8 +24,9 @@ Vue.component('el-select', Select);
  *
  */
 import {Table} from './fixTableBug'
-
 Vue.component('el-table', Table);
+import NewElInput from './el-input.vue'
+Vue.component('el-input', NewElInput);
 
 // export {default as DialogItem} from './dialog-item.vue'
 // export {default as DialogBridge} from './app-dialog-bridge.vue'
