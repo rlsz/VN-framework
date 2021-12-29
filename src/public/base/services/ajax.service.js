@@ -8,19 +8,25 @@ import {Position} from "@/public/dialogs";
 
 const virtual_a = document.createElement('a')
 
+/**
+ * reference: https://github.com/axios/axios
+ */
 export class AjaxService {
 
     injector
+
     get ls() {
         return this.injector.get(LoggerService)
     }
+
     get ds() {
         return this.injector.get(DialogService)
     }
+
     get progressAnchor() {
         const id = 'progress-bar-anchor'
         let temp = document.getElementById(id)
-        if(!temp) {
+        if (!temp) {
             temp = document.createElement('span')
             temp.id = id
             temp.style.position = 'fixed'
@@ -31,6 +37,7 @@ export class AjaxService {
         }
         return temp
     }
+
     host
     loading
 
@@ -81,7 +88,7 @@ export class AjaxService {
 
     post(url, data, config) {
         let progress, progressBar
-        if(config && config.progress) {
+        if (config && config.progress) {
             progress = new SimpleSubject(0)
             progressBar = this.ds.open(ProgressBarDialog, {
                 data: progress,
@@ -99,8 +106,8 @@ export class AjaxService {
                     return true
                 },
                 onUploadProgress(progressEvent) {
-                    if(progress) {
-                        const { loaded, total } = progressEvent
+                    if (progress) {
+                        const {loaded, total} = progressEvent
                         progress.next(loaded / total)
                     }
                 },
@@ -108,7 +115,7 @@ export class AjaxService {
                 headers
             }
         ), config, data).finally(() => {
-            if(progressBar) {
+            if (progressBar) {
                 progressBar.close()
             }
         })
@@ -218,7 +225,7 @@ export class AjaxService {
      */
     // eslint-disable-next-line no-unused-vars
     interceptorAfter(response, retryCallback, config) {
-        if(response.data instanceof Blob && response.data.type === "application/json") {
+        if (response.data instanceof Blob && response.data.type === "application/json") {
             // axios请求的responseType为blob时，即使服务端响应失败，response.data也会被强制转成blob，必须检测特定的blob并通过FileReader再转回json
             return new Promise((r, j) => {
                 const reader = new FileReader();
