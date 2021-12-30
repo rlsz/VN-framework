@@ -43,7 +43,7 @@ export class LoadingService {
                 backgroundCover: false
             })
 
-            this.loadingInstance.afterClosed().then(() => {
+            this.loadingInstance.afterClosed().finally(() => {
                 this.loadingInstance = null
             })
         }
