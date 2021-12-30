@@ -2,6 +2,7 @@
   <el-input-original
       v-bind="{ ...$attrs, value }"
       v-on="{ ...$listeners }"
+      ref="originalInput"
       v-if="editable"
   >
     <template v-for="(_, slot) of $slots" :slot="slot">
@@ -38,11 +39,16 @@ export default {
       if(this.$listeners.input) {
         return true
       }
-      return true
+      return false
     }
   },
   created() {
 
+  },
+  methods: {
+    focus() {
+      this.$refs.originalInput?.focus()
+    }
   }
 }
 </script>

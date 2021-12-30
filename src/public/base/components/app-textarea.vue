@@ -89,7 +89,7 @@ export default {
       if(this.$listeners.input) {
         return true
       }
-      return true
+      return false
     }
   },
   created() {
