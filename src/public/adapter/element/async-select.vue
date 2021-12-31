@@ -23,13 +23,13 @@
           v-bind:index="index"
           v-bind:optionsMap="optionsMap"
     >
-      <span>{{getLabel(item)}}</span>
+      <span>{{ getLabel(item) }}</span>
     </slot>
   </span>
   <span v-else-if="optionsMap[value]">
-    <slot name="value" v-bind:value="optionsMap[value]">{{getLabel(optionsMap[value])}}</slot>
+    <slot name="value" v-bind:value="optionsMap[value]">{{ getLabel(optionsMap[value]) }}</slot>
   </span>
-  <span v-else>{{value}}</span>
+  <span v-else>{{ value }}</span>
 </template>
 
 <script>
@@ -39,7 +39,16 @@ import {Distinct} from "../../base/utils";
 
 export default {
   name: "async-select",
-  props: ['asyncOptions', 'value', 'valueKey', 'labelKey', 'idKey', 'multiple', 'remoteMethod'], // asyncOptions: Promise instance
+  props: [
+    'asyncOptions',
+    'value',
+    'valueKey',
+    'labelKey',
+    'idKey',
+    'multiple',
+    'remoteMethod',
+    'defaultKeyword'
+  ], // asyncOptions: Promise instance
   di: {
     inject: {
       formModel: Optional(FORM_MODEL)
@@ -54,7 +63,7 @@ export default {
   },
   computed: {
     optionsMap() {
-      if(!this.options) {
+      if (!this.options) {
         return {}
       }
       return this.options.reduce((obj, item) => {
@@ -66,10 +75,10 @@ export default {
       return this.multiple === '' ? true : this.multiple;
     },
     editable() {
-      if(this.formModel === FormModel.detail) {
+      if (this.formModel === FormModel.detail) {
         return false
       }
-      if(this.$listeners.input) {
+      if (this.$listeners.input) {
         return true
       }
       return false
@@ -94,19 +103,22 @@ export default {
   },
   watch: {
     asyncOptions(val) {
-      if(!this.remoteMethod) {
+      if (!this.remoteMethod) {
         this.getData()
       }
     },
     value(newVal, oldVal) {
-      if(newVal !== oldVal) {
+      if (newVal !== oldVal) {
         this.refresh()
       }
     }
   },
   created() {
     this.options = this.valueOptions || []
-    if(this.asyncOptions) {
+    if(this.defaultKeyword !== undefined) {
+      this.customRemoteMethod(this.defaultKeyword)
+    }
+    if (this.asyncOptions) {
       this.getData()
     }
   },
@@ -120,21 +132,21 @@ export default {
       })
     },
     getValue(val) {
-      if(this.valueKey) {
+      if (this.valueKey) {
         return val[this.valueKey]
       } else {
         return val
       }
     },
     getLabel(val) {
-      if(this.labelKey) {
+      if (this.labelKey) {
         return val[this.labelKey]
       } else {
         return val
       }
     },
     getId(val) {
-      if(this.idKey) {
+      if (this.idKey) {
         return val[this.idKey]
       } else if (this.valueKey) {
         return val[this.valueKey]
