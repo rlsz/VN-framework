@@ -75,10 +75,10 @@ export default {
       return false
     },
     valueOptions() {
-      if (this.multiple === false) {
-        return this.value ? [this.value] : []
-      } else {
+      if (this.multipleProp) {
         return this.value
+      } else {
+        return this.value ? [this.value] : []
       }
     },
     allOptions() {
@@ -94,7 +94,9 @@ export default {
   },
   watch: {
     asyncOptions(val) {
-      this.getData()
+      if(!this.remoteMethod) {
+        this.getData()
+      }
     },
     value(newVal, oldVal) {
       if(newVal !== oldVal) {
@@ -103,7 +105,7 @@ export default {
     }
   },
   created() {
-    this.options = this.valueOptions
+    this.options = this.valueOptions || []
     if(this.asyncOptions) {
       this.getData()
     }
