@@ -54,6 +54,9 @@ export default {
   },
   computed: {
     optionsMap() {
+      if(!this.options) {
+        return {}
+      }
       return this.options.reduce((obj, item) => {
         obj[this.getId(item)] = item
         return obj
@@ -101,7 +104,9 @@ export default {
   },
   created() {
     this.options = this.valueOptions
-    this.getData()
+    if(this.asyncOptions) {
+      this.getData()
+    }
   },
   methods: {
     getData() {
