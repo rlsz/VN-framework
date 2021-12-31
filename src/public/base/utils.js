@@ -729,6 +729,9 @@ export function getScrollParent(element) {
 }
 
 export function getAllScrollParent(element) {
+    if(!element) {
+        return []
+    }
     const parent = element.parentNode;
     if (!parent) {
         return [element];
