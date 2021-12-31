@@ -92,8 +92,12 @@ export default {
     },
     allOptions() {
       if (this.idKey || this.valueKey) {
+        let valueOptions = this.valueOptions || []
+        if (this.valueKey) {
+          valueOptions = valueOptions.map(c => this.optionsMap[c]).filter(c => c !== undefined)
+        }
         return Distinct(
-            [].concat(this.options || [], this.valueOptions || []),
+            [].concat(this.options || [], valueOptions),
             (a, b) => this.getId(a) === this.getId(b)
         )
       } else {
@@ -115,7 +119,7 @@ export default {
   },
   created() {
     this.options = this.valueOptions || []
-    if(this.defaultKeyword !== undefined) {
+    if (this.defaultKeyword !== undefined) {
       this.customRemoteMethod(this.defaultKeyword)
     }
     if (this.asyncOptions) {
