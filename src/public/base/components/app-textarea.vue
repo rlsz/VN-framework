@@ -5,8 +5,9 @@
             @blur="onBlur"
             ref="textarea"
             v-if="editable"
+            class="app-textarea"
   ></textarea>
-  <div v-else class="app-textarea-mode-detail">{{value}}</div>
+  <div v-else class="app-textarea app-textarea-mode-detail">{{value}}</div>
 </template>
 
 <script>

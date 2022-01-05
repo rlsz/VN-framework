@@ -244,7 +244,8 @@ export default {
           this.enableOverlayClose &&
           event.target &&
           !this.$el.contains(event.target) &&
-          document.body.querySelector("#app").contains(event.target)
+          // document.body.querySelector("#app").contains(event.target)
+          document.body.contains(event.target)
       ) {
         this.options.instance.close();
       }
