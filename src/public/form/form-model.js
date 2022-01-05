@@ -49,6 +49,9 @@ export class FormControlService {
                     if(ev === FormModelEvent.cancel) {
                         this.vm.$emit('input', this.originalValue)
                     }
+                    if(ev === FormModelEvent.confirm) {
+                        this.originalValue = SimpleClone(this.vm.value)
+                    }
                 })
             )
         }
