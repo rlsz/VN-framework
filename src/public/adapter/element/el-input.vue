@@ -17,7 +17,7 @@
 
 <script>
 import {Input} from 'element-ui';
-import {FORM_MODEL, FormModel} from "../../form/form-model";
+import {FormModelService, FormModel, FormControlService} from "../../form/form-model";
 import {Optional} from "../../di.service";
 
 export default {
@@ -27,13 +27,14 @@ export default {
   },
   props: ['value'],
   di: {
+    providers: [FormControlService],
     inject: {
-      formModel: Optional(FORM_MODEL)
+      fms: Optional(FormModelService)
     }
   },
   computed: {
     editable() {
-      if(this.formModel === FormModel.detail) {
+      if(this.fms?.formModel === FormModel.detail) {
         return false
       }
       if(this.$listeners.input) {

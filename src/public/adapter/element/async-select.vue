@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import {FORM_MODEL, FormModel} from "../../form/form-model";
+import {FormModelService, FormModel, FormControlService} from "../../form/form-model";
 import {Optional} from "../../di.service";
 import {Distinct} from "../../base/utils";
 
@@ -50,8 +50,9 @@ export default {
     'defaultKeyword'
   ], // asyncOptions: Promise instance
   di: {
+    providers: [FormControlService],
     inject: {
-      formModel: Optional(FORM_MODEL)
+      fms: Optional(FormModelService)
     }
   },
   data() {
@@ -75,7 +76,7 @@ export default {
       return this.multiple === '' ? true : this.multiple;
     },
     editable() {
-      if (this.formModel === FormModel.detail) {
+      if (this.fms?.formModel === FormModel.detail) {
         return false
       }
       if (this.$listeners.input) {

@@ -12,7 +12,7 @@
 <script>
 import {FormInputAdapter} from "../../adapter";
 import {Optional} from "../../di.service";
-import {FORM_MODEL, FormModel} from "../../form/form-model";
+import {FormModelService, FormModel, FormControlService} from "../../form/form-model";
 
 function calcBoxStyle(target) {
   const style = window.getComputedStyle(target);
@@ -72,10 +72,10 @@ export default {
   name: "app-textarea",
   props: ['value'],
   di: {
-    providers: [FormInputAdapter],
+    providers: [FormInputAdapter, FormControlService],
     inject: {
       formInput: FormInputAdapter,
-      formModel: Optional(FORM_MODEL)
+      fms: Optional(FormModelService)
     }
   },
   computed: {
@@ -83,7 +83,7 @@ export default {
       return this.$refs.textarea
     },
     editable() {
-      if(this.formModel === FormModel.detail) {
+      if(this.fms?.formModel === FormModel.detail) {
         return false
       }
       if(this.$listeners.input) {
