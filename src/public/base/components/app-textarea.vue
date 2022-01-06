@@ -135,6 +135,7 @@ export default {
   display: block;
   width: 100%;
   //min-height: 78px;
+  min-height: 48px;
   padding: 5px 15px;
   line-height: 1.5;
   color: rgb(96, 98, 102);
