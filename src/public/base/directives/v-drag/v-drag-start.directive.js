@@ -7,20 +7,7 @@ import {
     DROP_AREA_CLASS,
     DROP_AREA_DISABLED_CLASS
 } from './v-drag'
-
-function findParent(el, className) {
-    if(!el || !el.parentNode) {
-        return null
-    }
-    if(el.parentNode === document.documentElement) {
-        return null
-    }
-    if(el.parentNode.classList.contains(className)) {
-        return el.parentNode
-    } else {
-        return findParent(el.parentNode, className)
-    }
-}
+import {findParent} from "../../utils";
 
 class VDragStartDirective extends DirectiveContext {
     constructor(directive) {

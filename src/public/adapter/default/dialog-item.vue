@@ -3,7 +3,7 @@ import { Dialog, Model, Position } from "../../dialogs/dialog";
 import { DialogParent } from "../../dialogs/dialog-parent";
 import { PlatformService } from "../../platform/platform.service";
 import { Platform } from "../../platform/platform";
-import {getAllScrollParent, getScrollParent} from "../../base/utils";
+import {findParent, getAllScrollParent, getScrollParent} from "../../base/utils";
 import {ConfigService} from "../../config.service";
 import {
   getContext,
@@ -178,6 +178,9 @@ export default {
             opacity: this.hide ? "0" : "1",
             ...this.fixPosition
           },
+          attrs: {
+            id: this.dialog.id,
+          }
         },
         [
           h(
@@ -243,11 +246,20 @@ export default {
       if (
           this.enableOverlayClose &&
           event.target &&
-          !this.$el.contains(event.target) &&
-          // document.body.querySelector("#app").contains(event.target)
-          document.body.contains(event.target)
+          !this.$el.contains(event.target)
       ) {
-        this.options.instance.close();
+        if(document.body.querySelector("#app").contains(event.target)) {
+          this.options.instance.close();
+        }
+        if(document.body.querySelector(".dialog-root").contains(event.target)) {
+          /**
+           * https://stackoverflow.com/questions/56680928/compare-order-of-two-html-elements/56681103
+           * https://developer.mozilla.org/en-US/docs/Web/API/Node/compareDocumentPosition
+           */
+          if(event.target.compareDocumentPosition(this.$el) & Node.DOCUMENT_POSITION_FOLLOWING) {
+            this.options.instance.close();
+          }
+        }
       }
     },
     fixPositionByAnchor() {

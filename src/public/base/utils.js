@@ -769,6 +769,20 @@ export function isScrollContainer(dom) {
     return false
 }
 
+export function findParent(el, className) {
+    if(!el || !el.parentNode) {
+        return null
+    }
+    if(el.parentNode === document.documentElement) {
+        return null
+    }
+    if(el.parentNode.classList.contains(className)) {
+        return el.parentNode
+    } else {
+        return findParent(el.parentNode, className)
+    }
+}
+
 /**
  * Get CSS computed property of the given element
  * @function
