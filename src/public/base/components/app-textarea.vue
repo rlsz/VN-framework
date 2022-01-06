@@ -80,9 +80,6 @@ export default {
     }
   },
   computed: {
-    textarea() {
-      return this.$refs.textarea
-    },
     editable() {
       if(this.fms?.formModel === FormModel.detail) {
         return false
@@ -114,18 +111,18 @@ export default {
       }
     },
     refresh() {
-      if(!this.textarea) {
+      if(!this.$refs.textarea) {
         return
       }
-      const {scrollHeight, clientHeight} = calcBoxStyle(this.textarea)
+      const {scrollHeight, clientHeight} = calcBoxStyle(this.$refs.textarea)
       if(scrollHeight !== clientHeight) {
-        this.textarea.style.height = 'auto';
-        const style = calcBoxStyle(this.textarea)
+        this.$refs.textarea.style.height = 'auto';
+        const style = calcBoxStyle(this.$refs.textarea)
         const initialHeight = parseFloat(style.height)
         const offset = style.scrollHeight - style.clientHeight
         const newHeight = offset + initialHeight;
         if(offset > 0) {
-          this.textarea.style.height = newHeight + 'px'
+          this.$refs.textarea.style.height = newHeight + 'px'
         }
       }
     }
