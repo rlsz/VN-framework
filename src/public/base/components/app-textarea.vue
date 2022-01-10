@@ -143,6 +143,8 @@ export default {
   background-image: none;
   border: 1px solid rgb(220, 223, 230);
   border-radius: 4px;
+
+  white-space: pre-wrap;
 }
 textarea {
   //box-sizing: content-box;
