@@ -8,6 +8,7 @@ export const FormModel = {
     disabled: 'disabled'
 }
 export const FormModelEvent = {
+    edit: 'edit',
     confirm: 'confirm',
     cancel: 'cancel'
 }
@@ -16,6 +17,10 @@ export class FormModelService {
     event = new SimpleSubject()
     constructor(injector, model = FormModel.detail) {
         this.formModel = model
+    }
+    edit() {
+        this.formModel = FormModel.edit
+        this.event.next(FormModelEvent.edit)
     }
     confirm() {
         this.formModel = FormModel.detail
@@ -43,14 +48,17 @@ export class FormControlService {
     diCreated(vm) {
         this.vm = vm
         if(this.fms) {
-            this.originalValue = SimpleClone(this.vm.value)
+            this.storeValue()
             this.subs.push(
                 this.fms.event.subscribe(ev => {
                     if(ev === FormModelEvent.cancel) {
                         this.vm.$emit('input', this.originalValue)
                     }
                     if(ev === FormModelEvent.confirm) {
-                        this.originalValue = SimpleClone(this.vm.value)
+                        this.storeValue()
+                    }
+                    if(ev === FormModelEvent.edit) {
+                        this.storeValue()
                     }
                 })
             )
@@ -61,5 +69,9 @@ export class FormControlService {
             this.subs.forEach(item => item.unsubscribe())
             this.subs = []
         }
+    }
+
+    storeValue() {
+        this.originalValue = SimpleClone(this.vm.value)
     }
 }
