@@ -98,7 +98,7 @@ export default {
     this.refresh()
   },
   updated() {
-    // this.refresh()
+    this.refresh()
   },
   methods: {
     onInput(e) {
