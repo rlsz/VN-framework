@@ -14,6 +14,7 @@
 import {FormInputAdapter} from "../../adapter";
 import {Optional} from "../../di.service";
 import {FormModelService, FormModel, FormControlService} from "../../form/form-model";
+import {BenchmarkService} from "@/public/base";
 
 function calcBoxStyle(target) {
   const style = window.getComputedStyle(target);
@@ -73,6 +74,7 @@ export default {
   name: "app-textarea",
   props: ['value'],
   di: {
+    // providers: [FormInputAdapter, FormControlService, BenchmarkService],
     providers: [FormInputAdapter, FormControlService],
     inject: {
       formInput: FormInputAdapter,
@@ -96,7 +98,7 @@ export default {
     this.refresh()
   },
   updated() {
-    this.refresh()
+    // this.refresh()
   },
   methods: {
     onInput(e) {

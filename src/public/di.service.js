@@ -232,6 +232,11 @@ export default function (Vue) {
                 providerInstance?.diMounted && providerInstance.diMounted(this)
             })
         },
+        beforeUpdate() {
+            this.$injector.ownProviders.forEach(providerInstance => {
+                providerInstance?.diBeforeUpdate && providerInstance.diBeforeUpdate(this)
+            })
+        },
         updated() {
             this.$injector.ownProviders.forEach(providerInstance => {
                 providerInstance?.diUpdated && providerInstance.diUpdated(this)

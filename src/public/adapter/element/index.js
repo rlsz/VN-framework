@@ -27,6 +27,8 @@ import {Table} from './fixTableBug'
 Vue.component('el-table', Table);
 import NewElInput from './el-input.vue'
 Vue.component('el-input', NewElInput);
+import NewElFormItem from './el-form-item.vue'
+Vue.component('el-form-item', NewElFormItem);
 
 // export {default as DialogItem} from './dialog-item.vue'
 // export {default as DialogBridge} from './app-dialog-bridge.vue'
