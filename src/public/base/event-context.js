@@ -82,3 +82,21 @@ export class MouseClickContext extends EventContextBase {
         this.init()
     }
 }
+
+export class SelectionChangeContext extends EventContextBase {
+    static defaultDom = document
+    text
+    constructor(dom) {
+        super(dom, 'selectionchange')
+        this.init()
+    }
+
+    listener(e) {
+        const selection = document.getSelection()
+        this.events.next({
+            event: e,
+            selection: selection
+        })
+        this.text = selection.toString()
+    }
+}
