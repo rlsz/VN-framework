@@ -1,5 +1,6 @@
 <template>
-  <span class="app-option-input" v-if="!editing" @click="onAdd"><slot>+添加</slot></span>
+  <span class="app-option-input" style="display: none" v-if="!editable"></span>
+  <span class="app-option-input" v-else-if="!editing" @click="onAdd"><slot>+添加</slot></span>
   <span class="app-option-input fix-line flex vertical" v-else>
     <input ref="input"
            v-model="text"
@@ -16,7 +17,9 @@ import {DialogService} from "../../dialogs/dialog.service";
 import OptionsDialog from './options-dialog'
 import {Position} from "../../dialogs/dialog";
 import {getContext, MouseClickContext} from "../../base/event-context";
-import {debounceTime} from "@/public/base";
+import {debounceTime} from "../../base/utils";
+import {Optional} from "../../di.service";
+import {FormModel, FormModelService} from "../form-model";
 
 export default {
   name: "app-option-input",
@@ -24,7 +27,8 @@ export default {
   di: {
     inject: {
       mss: MultiSelectService,
-      ds: DialogService
+      ds: DialogService,
+      fms: Optional(FormModelService)
     }
   },
   data() {
@@ -36,6 +40,14 @@ export default {
       triggerSearch: debounceTime(() => {
         this.onFocus(this.$refs.input)
       })
+    }
+  },
+  computed: {
+    editable() {
+      if(this.fms?.formModel === FormModel.detail) {
+        return false
+      }
+      return true
     }
   },
   mounted() {
