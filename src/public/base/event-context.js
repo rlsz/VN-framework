@@ -75,6 +75,10 @@ export class MouseMoveContext extends EventContextBase {
     }
 }
 
+export class RealTimeMouseMoveContext extends MouseMoveContext {
+    delay = 0
+}
+
 export class ResizeContext extends EventContextBase {
     static defaultDom = window
 
@@ -90,34 +94,21 @@ export class MouseClickContext extends EventContextBase {
         this.init()
     }
 }
+export class MouseDownContext extends EventContextBase {
+    constructor(dom) {
+        super(dom, 'mousedown')
+        this.init()
+    }
+}
+export class MouseUpContext extends EventContextBase {
+    constructor(dom) {
+        super(dom, 'mouseup')
+        this.init()
+    }
+}
 
 export class SelectionChangeContext extends EventContextBase {
     static defaultDom = document
-    text
-
-    constructor(dom) {
-        super(dom, 'selectionchange')
-        this.init()
-    }
-
-    listener(e) {
-        const selection = document.getSelection()
-        this.events.next({
-            event: e,
-            selection: selection
-        })
-        this.text = selection.toString()
-    }
-}
-
-export const SelectionDirection = {
-    forward: 'forward',
-    backward: 'backward'
-}
-
-export class SelectionEndContext extends EventContextBase {
-    static defaultDom = document
-    delay = 500
     text
 
     constructor(dom) {
@@ -150,4 +141,14 @@ export class SelectionEndContext extends EventContextBase {
             return SelectionDirection.backward
         }
     }
+}
+
+export const SelectionDirection = {
+    forward: 'forward',
+    backward: 'backward'
+}
+
+// todo: detect next mouse move event as selection end, then get that position as mouse end coordinate
+export class SelectionEndContext extends SelectionChangeContext {
+    delay = 500
 }

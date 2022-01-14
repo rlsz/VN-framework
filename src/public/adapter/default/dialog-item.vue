@@ -7,7 +7,7 @@ import {findParent, getAllScrollParent, getScrollParent} from "../../base/utils"
 import {ConfigService} from "../../config.service";
 import {
   getContext,
-  MouseClickContext,
+  MouseClickContext, MouseDownContext,
   RealTimeScrollContext,
   ResizeContext,
   ScrollContext
@@ -230,7 +230,7 @@ export default {
       }
     },
     watchBodyClick() {
-      const mouseClickContext = getContext(MouseClickContext)
+      const mouseClickContext = getContext(MouseDownContext)
       let currentEvent = window.event
       this.subs.push(
           mouseClickContext.events.subscribe(ev => {
