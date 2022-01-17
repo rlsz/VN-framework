@@ -882,6 +882,7 @@ export function IsInFullScreen() {
 export const DownloadByUrl = throttle(function (url, fileName) {
     const link = document.createElement('a');
     link.href = url;
+    link.target='_blank'
     if(fileName) {
         link.download = fileName // doesn't work for cross-origin requests
     }
