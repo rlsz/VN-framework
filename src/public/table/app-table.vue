@@ -126,6 +126,7 @@ export default {
 .table-header {
   box-shadow: none;
   border-bottom: none;
+  background: #f2f2f2;
   > .row:last-child {
     /deep/ .cell {
       border-bottom: none;
@@ -133,6 +134,9 @@ export default {
   }
   &.header-scrollbar {
     overflow-y: scroll;
+    &::-webkit-scrollbar {
+      background: transparent;
+    }
   }
 }
 </style>
