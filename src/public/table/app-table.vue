@@ -135,7 +135,7 @@ export default {
   &.header-scrollbar {
     overflow-y: scroll;
     &::-webkit-scrollbar {
-      background: transparent;
+      //background: transparent;
     }
   }
 }
