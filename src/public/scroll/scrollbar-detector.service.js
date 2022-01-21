@@ -1,4 +1,5 @@
 import {getContext, ResizeContext} from "../base/event-context";
+import {debounceTime} from "../base/utils";
 
 export class ScrollbarDetectorService {
     targetGetter
@@ -6,11 +7,13 @@ export class ScrollbarDetectorService {
 
     context
     sub
+    detectRef
     diMounted(vm) {
-        this.detect()
+        this.detectRef = debounceTime(this.detect.bind(this), 150)
+        this.detectRef()
     }
     diUpdated(vm) {
-        this.detect()
+        this.detectRef()
     }
     diDestroyed() {
         if(this.sub) {
@@ -25,7 +28,7 @@ export class ScrollbarDetectorService {
                 if(!this.context) {
                     this.context = getContext(ResizeContext)
                     this.sub = this.context.events.subscribe(ev => {
-                        this.detect()
+                        this.detectRef()
                     })
                 }
                 const {scrollHeight, clientHeight} = target
@@ -33,6 +36,7 @@ export class ScrollbarDetectorService {
                 if(this.visible !== visible) {
                     this.visible = visible
                 }
+                // console.log(JSON.stringify({scrollHeight, clientHeight, visible}))
             }
         }
     }
