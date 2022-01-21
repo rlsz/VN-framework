@@ -4,6 +4,7 @@ import AppTableRow from './app-table-row.vue'
 import AppPagination from './app-pagination.vue'
 import {LoggerService} from "../logger/logger.service";
 import {Dialog} from "../dialogs/dialog";
+import {ScrollbarDetectorService} from "../scroll/scrollbar-detector.service";
 
 /**
  * data: any[] | Promise<any[]>
@@ -15,10 +16,11 @@ export default {
   props: ['data', 'query', 'size', 'tree-props'],
   components: {AppTableRow, AppPagination},
   di: {
-    providers: [AppTableService],
+    providers: [AppTableService, ScrollbarDetectorService],
     inject: {
       ats: AppTableService,
-      ls: LoggerService
+      ls: LoggerService,
+      sds: ScrollbarDetectorService
     }
   },
   data() {
@@ -49,7 +51,7 @@ export default {
 
     return (
         <div class="app-table flex vertical">
-          <div class="table flex vertical table-header">
+          <div class={`table flex vertical table-header ${this.sds.visible?'header-scrollbar':''}`}>
             <div class="hidden-columns" ref="hiddenColumns">{this.$slots.default}</div>
             <AppTableRow header></AppTableRow>
           </div>
@@ -61,6 +63,9 @@ export default {
           {this.$slots.pagination}
         </div>
     )
+  },
+  created() {
+    this.sds.targetGetter = () => this.$el.querySelector('.table-body')
   },
   updated() {
     if(this.dialog) {
@@ -125,6 +130,9 @@ export default {
     /deep/ .cell {
       border-bottom: none;
     }
+  }
+  &.header-scrollbar {
+    overflow-y: scroll;
   }
 }
 </style>

@@ -1,6 +1,7 @@
 import scroll from './app-scroll.vue'
 import listScrollable from './app-list-scrollable.vue'
 export * from './scroll-monitor.service'
+export * from './scrollbar-detector.service'
 
 /**
  *
