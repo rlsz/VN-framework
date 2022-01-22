@@ -1,7 +1,7 @@
 import axios from 'axios'
 import {LoggerService} from "../../logger/logger.service";
 import {LoadingService} from "../../base/services/loading.service";
-import {SimpleSubject} from "../../base/utils";
+import {serializeParams, SimpleSubject} from "../../base/utils";
 import ProgressBarDialog from "../../base/components/progress-bar-dialog.vue"
 import {DialogService} from "../../dialogs/dialog.service";
 import {Position} from "@/public/dialogs";
@@ -65,9 +65,7 @@ export class AjaxService {
             if (url.indexOf('?') < 0) {
                 url += '?'
             }
-            url += Object.keys(params).map((p) => {
-                return p + '=' + params[p]
-            }).join('&')
+            url += serializeParams(params)
         }
         return url
     }
@@ -76,6 +74,9 @@ export class AjaxService {
         return this.interceptor(headers => axios.get(
             this.getUrl(url),
             {
+                paramsSerializer: function (params) {
+                    return serializeParams(params)
+                },
                 validateStatus: function () {
                     return true
                 },

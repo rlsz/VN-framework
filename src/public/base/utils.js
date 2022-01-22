@@ -1,6 +1,7 @@
 import {MIME_TYPE} from "./mime/mime-type";
 
 let path = require('path')
+
 export function resolvePath(root, ...paths) {
     if (root.startsWith('http://') || root.startsWith('https://')) {
         return root.replace(/\/+$/, '') + path.resolve(...paths)
@@ -8,6 +9,7 @@ export function resolvePath(root, ...paths) {
         return path.resolve(root, ...paths)
     }
 }
+
 export function GetQuery(str) {
     const query = {};
     const search = str || location.search;
@@ -84,13 +86,13 @@ export function FormatDate(d, format = 'yyyy-MM-dd HH:mm:ss', timeZone) {
     if (!(date instanceof Date)) {
         return '-';
     }
-    if(typeof timeZone === 'string') {
+    if (typeof timeZone === 'string') {
         let offset
-        if(/^UTC([+\-\d]*)(?::(\d+))?$/.test(timeZone)) {
+        if (/^UTC([+\-\d]*)(?::(\d+))?$/.test(timeZone)) {
             // offset: minutes for time zone, e.g. -480 for UTC+8, 0 for UTC, 120 for UTC-2
             let temp = 60 * Number(RegExp.$1)
             const neg = temp < 0
-            if(neg) {
+            if (neg) {
                 temp -= Number(RegExp.$2)
             } else {
                 temp += Number(RegExp.$2)
@@ -348,7 +350,7 @@ export class SimpleSubject {
 }
 
 export function SimpleClone(obj) {
-    if(obj === undefined) {
+    if (obj === undefined) {
         return undefined
     }
     return JSON.parse(JSON.stringify(obj))
@@ -430,7 +432,7 @@ export function throttle(executor, bufferLength, compareKey) {
 
     return function (...args) {
         return new Promise((r, j) => {
-            const item = { r, j, ref: this, args }
+            const item = {r, j, ref: this, args}
             if (compareKey) {
                 const key = compareKey.apply(item.ref, item.args)
                 if ([...queue, ...buffer.filter(c => c !== undefined)].some(c => key === compareKey.apply(c.ref, c.args))) {
@@ -572,6 +574,29 @@ export function deserialize(val) {
         }
     }
     return val;
+}
+
+export function serializeParams(params) {
+    return Object.keys(params).map(p => {
+        let val = params[p]
+        if (typeof val === 'object' && GetJsType(val) === 'Array') {
+            return val.map((v, i) => serializeParamsItem(p, v, i)).join('&')
+        }
+        return serializeParamsItem(p, val)
+    }).filter(c => c).join('&')
+}
+
+export function serializeParamsItem(key, value, index) {
+    if (value === undefined) {
+        return ''
+    }
+    if (value === null) {
+        return ''
+    }
+    if (typeof value === 'object') {
+        return `${key}=${encodeURI(JSON.stringify(value))}`
+    }
+    return `${key}=${value}`
 }
 
 export function timer(span) {
@@ -725,14 +750,14 @@ export function getScrollParent(element) {
         }
     }
 
-    if(isScrollContainer(parent)) {
+    if (isScrollContainer(parent)) {
         return parent
     }
     return getScrollParent(element.parentNode);
 }
 
 export function getAllScrollParent(element) {
-    if(!element) {
+    if (!element) {
         return []
     }
     const parent = element.parentNode;
@@ -748,7 +773,7 @@ export function getAllScrollParent(element) {
             return [root.document.documentElement];
         }
     }
-    if(isScrollContainer(parent)) {
+    if (isScrollContainer(parent)) {
         return [parent, ...getAllScrollParent(parent)].distinct()
     }
     return getAllScrollParent(parent).distinct();
@@ -770,13 +795,13 @@ export function isScrollContainer(dom) {
 }
 
 export function findParent(el, className) {
-    if(!el || !el.parentNode) {
+    if (!el || !el.parentNode) {
         return null
     }
-    if(el.parentNode === document.documentElement) {
+    if (el.parentNode === document.documentElement) {
         return null
     }
-    if(el.parentNode.classList.contains(className)) {
+    if (el.parentNode.classList.contains(className)) {
         return el.parentNode
     } else {
         return findParent(el.parentNode, className)
@@ -847,19 +872,19 @@ export function getMiddleColor(c1, c2) {
 export function ToggleFullScreen(target = document.documentElement, status) {
     const isInFullScreen = IsInFullScreen();
     if (!isInFullScreen) {
-        if(status === false) {
+        if (status === false) {
             return Promise.resolve(true)
         }
         const enter = target.requestFullscreen || target.mozRequestFullScreen || target.webkitRequestFullScreen || target.msRequestFullscreen
-        if(enter) {
+        if (enter) {
             return enter.call(target)
         }
     } else {
-        if(status === true) {
+        if (status === true) {
             return Promise.resolve(true)
         }
         const exit = document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen || document.msExitFullscreen
-        if(exit) {
+        if (exit) {
             return exit.call(document)
         }
     }
@@ -882,8 +907,8 @@ export function IsInFullScreen() {
 export const DownloadByUrl = throttle(function (url, fileName) {
     const link = document.createElement('a');
     link.href = url;
-    link.target='_blank'
-    if(fileName) {
+    link.target = '_blank'
+    if (fileName) {
         link.download = fileName // doesn't work for cross-origin requests
     }
     link.click();
@@ -896,7 +921,7 @@ export function DownloadByBlob(blob, fileName) {
     } else {
         const link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob);
-        if(fileName) {
+        if (fileName) {
             link.download = fileName // doesn't work for cross-origin requests, works for blob download
         }
         link.click();
@@ -912,17 +937,18 @@ export function GetFileExtension(fileName, lower = true) {
 export const PART_SELECTION = Symbol('part-selection')
 
 export function InjectAdapter(key, vm) {
-    if(!key || !vm) {
+    if (!key || !vm) {
         return undefined
     }
-    if(vm._provided && vm._provided[key] !== undefined) {
+    if (vm._provided && vm._provided[key] !== undefined) {
         return vm._provided[key]
     }
     return InjectAdapter(key, vm.$parent)
 }
+
 export function getObjectId(obj, paths = []) {
     let proto
-    if(!paths.length && typeof obj === 'function') {
+    if (!paths.length && typeof obj === 'function') {
         proto = obj.prototype
     } else {
         proto = obj.__proto__
