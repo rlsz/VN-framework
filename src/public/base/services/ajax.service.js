@@ -10,6 +10,18 @@ const virtual_a = document.createElement('a')
 
 /**
  * reference: https://github.com/axios/axios
+ *
+ * 2022-0122 因java接收数组时不支持特殊符号'['和']'，所以使用axios的paramsSerializer配置修改params的序列化格式
+ * 预计将影响所有请求中params含有数组和嵌套object的数据，其他类型的数据不受影响(number、string、boolean转成string，undefined、null不传)
+ *
+ * 例如
+ * 参数 a:[1,3,5]
+ * 调整前 aaa[]=1&aaa[]=3&aaa[]=5
+ * 调整后 a=1&a=3&a=5
+ *
+ * 参数 bbb: {ccc: [2,4,6],ddd: 'asihdiow'}
+ * 调整前 bbb=%7B%22ccc%22:[2,4,6],%22ddd%22:%22asihdiow%22%7D
+ * 调整后 bbb=%7B%22ccc%22:%5B2,4,6%5D,%22ddd%22:%22asihdiow%22%7D
  */
 export class AjaxService {
 
@@ -103,6 +115,9 @@ export class AjaxService {
             this.getUrl(url),
             data,
             {
+                paramsSerializer: function (params) {
+                    return serializeParams(params)
+                },
                 validateStatus: function () {
                     return true
                 },
@@ -127,6 +142,9 @@ export class AjaxService {
             this.getUrl(url),
             data,
             {
+                paramsSerializer: function (params) {
+                    return serializeParams(params)
+                },
                 validateStatus: function () {
                     return true
                 },
@@ -140,6 +158,9 @@ export class AjaxService {
         return this.interceptor(headers => axios.delete(
             this.getUrl(url),
             {
+                paramsSerializer: function (params) {
+                    return serializeParams(params)
+                },
                 validateStatus: function () {
                     return true
                 },
