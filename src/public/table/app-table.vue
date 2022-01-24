@@ -132,11 +132,5 @@ export default {
       border-bottom: none;
     }
   }
-  &.header-scrollbar {
-    overflow-y: scroll;
-    &::-webkit-scrollbar {
-      //background: transparent;
-    }
-  }
 }
 </style>
