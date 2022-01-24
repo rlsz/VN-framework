@@ -107,6 +107,7 @@
       <el-select-menu
         ref="popper"
         :append-to-body="popperAppendToBody"
+        :anchor-max-width="inputWidth - 32"
         v-show="visible && emptyText !== false">
         <el-scrollbar
           tag="ul"
