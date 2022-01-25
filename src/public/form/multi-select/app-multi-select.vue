@@ -14,7 +14,7 @@ import {MultiSelectService} from "./multi-select.service";
 
 export default {
   name: "app-multi-select",
-  props: ['value', 'valueKey', 'remoteMethod', 'multiple'],
+  props: ['value', 'valueKey', 'remoteMethod', 'multiple', 'multipleLimit'],
   di: {
     providers: [MultiSelectService],
     inject: {

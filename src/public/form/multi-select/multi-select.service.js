@@ -1,5 +1,8 @@
+import {LoggerService} from "../../logger/logger.service";
+
 export class MultiSelectService {
     vm
+    injector
 
     value
     options = null
@@ -8,6 +11,13 @@ export class MultiSelectService {
     loading = false
     dropdownOption = null
 
+    constructor(injector) {
+        this.injector = injector
+    }
+
+    get ls() {
+        return this.injector.get(LoggerService)
+    }
     get multiple() {
         if(this.vm.multiple === undefined) {
             return true
@@ -19,6 +29,18 @@ export class MultiSelectService {
     }
     get remoteMethod() {
         return this.vm.remoteMethod
+    }
+    get multipleLimit() {
+        if(this.vm.multipleLimit) {
+            const num = Number(this.vm.multipleLimit)
+            if(isNaN(num)) {
+                return 0
+            } else {
+                return num
+            }
+        } else {
+            return 0
+        }
     }
 
     diCreated(vm) {
@@ -62,7 +84,15 @@ export class MultiSelectService {
         }
         if(!target) {
             if(this.multiple) {
-                this.value.push(option)
+                if(this.multipleLimit > 0) {
+                    if(this.value.length < this.multipleLimit) {
+                        this.value.push(option)
+                    } else {
+                        this.ls.error(`最多只能选择${this.multipleLimit}个`)
+                    }
+                } else {
+                    this.value.push(option)
+                }
             } else {
                 this.value = option
             }
