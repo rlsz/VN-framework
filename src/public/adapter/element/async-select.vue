@@ -36,6 +36,7 @@
 import {FormModelService, FormModel, FormControlService} from "../../form/form-model";
 import {Optional} from "../../di.service";
 import {Distinct} from "../../base/utils";
+import {FormInputAdapter} from "./form-input-adapter";
 
 export default {
   name: "async-select",
@@ -50,8 +51,9 @@ export default {
     'defaultKeyword'
   ], // asyncOptions: Promise instance
   di: {
-    providers: [FormControlService],
+    providers: [FormControlService, FormInputAdapter],
     inject: {
+      formInput: FormInputAdapter,
       fms: Optional(FormModelService)
     }
   },
@@ -115,6 +117,7 @@ export default {
     value(newVal, oldVal) {
       if (newVal !== oldVal) {
         this.refresh()
+        this.formInput.validate("change");
       }
     }
   },

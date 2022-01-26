@@ -14,7 +14,7 @@
 import {FormInputAdapter} from "../../adapter";
 import {Optional} from "../../di.service";
 import {FormModelService, FormModel, FormControlService} from "../../form/form-model";
-import {BenchmarkService} from "@/public/base";
+import {BenchmarkService} from "../../base/utils";
 
 function calcBoxStyle(target) {
   const style = window.getComputedStyle(target);

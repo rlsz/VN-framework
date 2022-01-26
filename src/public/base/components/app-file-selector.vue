@@ -15,6 +15,7 @@
 import {ReadImage, ConvertImageToCanvas, ConvertCanvasToBlob} from "../utils";
 import {MIME_TYPE} from '../mime/mime-type';
 import {LoggerService} from "../../logger";
+import {FormInputAdapter} from "../../adapter";
 
 /**
  type MaxWidthOrHeight = { maxWidth?: number; maxHeight?: number; };
@@ -30,7 +31,9 @@ export default {
     return {}
   },
   di: {
+    providers: [FormInputAdapter],
     inject: {
+      formInput: FormInputAdapter,
       ls: LoggerService
     }
   },
@@ -55,6 +58,7 @@ export default {
     },
     setValue(v) {
       this.$emit('input', v)
+      this.formInput.validate("change");
     },
     onSelectFolder(input) {
       if (input.files && input.files.length) {
