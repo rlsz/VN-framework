@@ -54,19 +54,43 @@ export function CombineValidators(...args) {
 //     })
 //     return Promise.all(pArr)
 // }
+
+// export function TriggerValidator(formRef, props) {
+//     if(typeof props === "string") {
+//         props = [props]
+//     }
+//     const pArr = props.map(prop => {
+//         return new Promise((r, j) => {
+//             formRef.validateField(prop, err => {
+//                 if (err) {
+//                     j(err)
+//                 } else {
+//                     r()
+//                 }
+//             })
+//         })
+//     })
+//     return Promise.all(pArr)
+// }
+
 export function TriggerValidator(formRef, props) {
     if(typeof props === "string") {
         props = [props]
     }
     const pArr = props.map(prop => {
         return new Promise((r, j) => {
-            formRef.validateField(prop, err => {
-                if (err) {
-                    j(err)
-                } else {
-                    r()
-                }
-            })
+            const field = formRef.fields.find(field => prop === field.prop);
+            if (field) {
+                field.validate('', err => {
+                    if (err) {
+                        j(err)
+                    } else {
+                        r()
+                    }
+                });
+            } else {
+                j(`unknown prop ${prop}`)
+            }
         })
     })
     return Promise.all(pArr)
