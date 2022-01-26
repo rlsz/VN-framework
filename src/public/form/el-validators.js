@@ -73,6 +73,15 @@ export function CombineValidators(...args) {
 //     return Promise.all(pArr)
 // }
 
+/**
+ * 解决问题点：分析源码可以看出，validateField方法如果prop找不到对应的el-form-item的话，callback将不会被调用，
+ *           本次优化将这个feature调整为校验失败
+ *           ps: 按照该方法的设计目的，这类问题通常只在开发阶段暴露出来，所以使用校验失败的方式处理
+ * @param formRef
+ * @param props
+ * @returns {Promise<unknown[]>}
+ * @constructor
+ */
 export function TriggerValidator(formRef, props) {
     if(typeof props === "string") {
         props = [props]
