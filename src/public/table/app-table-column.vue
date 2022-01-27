@@ -43,8 +43,8 @@ export default {
   name: "app-table-column",
   props: [
     'type', 'property', 'prop', 'label', 'align', 'width', 'min-width',
-    'vertical', 'limit-line', 'highlight',
-    'expend-column'
+    'vertical', 'limit-line', 'highlight', 'selectable'
+    // 'expend-column'
   ],
   di: {
     inject: {
@@ -60,24 +60,21 @@ export default {
   computed: {
     propConfig() {
       let {
-        id,
         type, label, align, width, minWidth, property, prop,
-        vertical,
-        limitLine,
-        highlight
+        vertical, limitLine, highlight, selectable
       } = this
       property = property || prop
       vertical = vertical === '' || !!vertical
       limitLine = limitLine === '' ? 1 : limitLine
       highlight = typeof highlight === 'string' ? [highlight] : highlight
       return {
-        id,
+        id: this.id,
         type, label, align, width, minWidth, property,
-        vertical, limitLine, highlight
+        vertical, limitLine, highlight, selectable
       }
     },
     isShowExpendIcon() {
-      if(!this.ats.treeProps) {
+      if (!this.ats.treeProps) {
         return false
       }
       const {type} = this.propConfig
@@ -87,7 +84,7 @@ export default {
       if (type === 'expend') {
         return true
       }
-      if(this.ats.columnsConfig.find(c => c.type === 'expend')) {
+      if (this.ats.columnsConfig.find(c => c.type === 'expend')) {
         return false
       }
       if (this.ats.columnsConfig.find(c => c.type !== 'selection') === this.config) {
@@ -102,10 +99,11 @@ export default {
         if ($scopedSlots.header) {
           children = $scopedSlots.header(scope)
         } else if (type === 'selection') {
+          const disabled = !this.ats.list || !this.ats.list.filter((c, index) => this.ats.selectable(c, index)).length
           children = (
               <app-checkbox value={scope.selected}
                             on-input={$event => this.ats.toggleSelectAll($event)}
-                            disabled={!this.ats.list || !this.ats.list.length}
+                            disabled={disabled}
               ></app-checkbox>
           )
         } else {
@@ -119,8 +117,13 @@ export default {
         if ($scopedSlots.default) {
           children = $scopedSlots.default(scope)
         } else if (type === 'selection') {
-          children = (<app-checkbox value={scope.selected}
-                                    on-input={$event => this.ats.toggleSelectRow(scope, $event)}></app-checkbox>)
+          const disabled = !this.ats.selectable(scope.row, scope.$index)
+          children = (
+              <app-checkbox value={scope.selected}
+                            on-input={$event => this.ats.toggleSelectRow(scope, $event)}
+                            disabled={disabled}
+              ></app-checkbox>
+          )
         } else if (type === 'drag') {
           children = (<app-drag-icon v-drag-start={scope}></app-drag-icon>)
         } else {
@@ -141,12 +144,13 @@ export default {
           const {children} = this.ats.treeProps || {}
           if (scope.row[children] && scope.row[children].length) {
             let status = this.ats.expendList.indexOf(scope.row) >= 0
-            expend = (<i class={status ? 'arrow down' : 'arrow right'} v-on:click={() => this.ats.toggleExpend(scope.row)}></i>)
+            expend = (<i class={status ? 'arrow down' : 'arrow right'}
+                         v-on:click={() => this.ats.toggleExpend(scope.row)}></i>)
           } else {
             expend = (<span class="app-table_expend_placeholder" style={'padding-left:21px'}></span>)
           }
-          if(scope.level) {
-            expendIndent = (<span class="app-table_indent" style={'padding-left:'+scope.level*21+'px'}></span>)
+          if (scope.level) {
+            expendIndent = (<span class="app-table_indent" style={'padding-left:' + scope.level * 21 + 'px'}></span>)
           }
         }
         return (
@@ -180,7 +184,7 @@ export default {
     calcCellStyle(column) {
       let style = {}
       if (column.minWidth) {
-        if(typeof column.minWidth === "number" || /\d+/.test(column.minWidth)) {
+        if (typeof column.minWidth === "number" || /\d+/.test(column.minWidth)) {
           style['flex'] = `1 0 ${column.minWidth}px`
           style['min-width'] = `${column.minWidth}px`
         } else {
@@ -189,7 +193,7 @@ export default {
         }
       }
       if (column.width) {
-        if(typeof column.width === "number" || /\d+/.test(column.width)) {
+        if (typeof column.width === "number" || /\d+/.test(column.width)) {
           style['flex'] = `0 0 ${column.width}px`
           style['width'] = `${column.width}px`
         } else {

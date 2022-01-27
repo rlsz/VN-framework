@@ -11,7 +11,11 @@ export class AppTableService {
         } else {
             this.columnsConfig.push(opts)
         }
+        if(opts.type === 'selection' && opts.selectable) {
+            this.selectable = opts.selectable
+        }
     }
+    selectable = (row, index) => true
 
     list = []
     total = 0
@@ -38,10 +42,11 @@ export class AppTableService {
         if(!this.checkedList.length) {
             return false
         }
-        if(this.checkedList.length === this.list.length) {
+        let list = this.list.filter((c, index) => this.selectable(c, index))
+        if(this.checkedList.length === list.length) {
             return true
         }
-        if(this.checkedList.length < this.list.length) {
+        if(this.checkedList.length < list.length) {
             return PART_SELECTION
         }
         return false
@@ -181,8 +186,11 @@ export class AppTableService {
         })
     }
 
-    toggleSelectRow({row}, status) {
+    toggleSelectRow({row, $index}, status) {
         if(status) {
+            if(!this.selectable(row, $index)) {
+                return
+            }
             this.checkedList.push(row)
         } else {
             this.checkedList.splice(this.checkedList.indexOf(row), 1)
@@ -190,7 +198,7 @@ export class AppTableService {
     }
     toggleSelectAll(status) {
         if(status) {
-            this.checkedList = this.list.map(c => c)
+            this.checkedList = this.list.filter((c, index) => this.selectable(c, index))
         } else {
             this.checkedList = []
         }
