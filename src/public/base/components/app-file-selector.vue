@@ -7,7 +7,11 @@
            :capture="capture"
            :webkitdirectory="isFolder"
     />
-    <span v-on:click="onClick()" class="file-selector-content"><slot></slot></span>
+    <span v-on:click="onClick()"
+          v-on:drop="onDrop"
+          v-on:dragover="onDragover"
+          class="file-selector-content"
+    ><slot></slot></span>
   </div>
 </template>
 
@@ -53,6 +57,13 @@ export default {
     }
   },
   methods: {
+    onDragover(ev) {
+      ev.preventDefault()
+    },
+    onDrop(ev) {
+      ev.preventDefault();
+      this.setValue(ev.dataTransfer.files[0])
+    },
     onClick() {
       this.$refs.input.click()
     },
