@@ -13,6 +13,9 @@ class VDragStartDirective extends DirectiveContext {
     }
     onDragEnterRef
     onDragEnter(ev) {
+        if(!window[DRAG_CONTEXT]) {
+            return
+        }
         if(this.el.contains( window[DRAG_CONTEXT].source)) {
             return
         }
@@ -23,6 +26,9 @@ class VDragStartDirective extends DirectiveContext {
     }
     onDragLeaveRef
     onDragLeave(ev) {
+        if(!window[DRAG_CONTEXT]) {
+            return
+        }
         if(this.el.contains( window[DRAG_CONTEXT].source)) {
             return
         }
@@ -33,6 +39,9 @@ class VDragStartDirective extends DirectiveContext {
     }
     onDragOverRef
     onDragOver(ev) {
+        if(!window[DRAG_CONTEXT]) {
+            return
+        }
         if(this.el.contains( window[DRAG_CONTEXT].source)) {
             return
         }
@@ -42,6 +51,9 @@ class VDragStartDirective extends DirectiveContext {
     }
     onDropRef
     onDrop(ev) {
+        if(!window[DRAG_CONTEXT]) {
+            return
+        }
         if(this.el.contains( window[DRAG_CONTEXT].source)) {
             return
         }
