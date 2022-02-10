@@ -18,6 +18,8 @@ export default {
       const temp = ['row']
       if(this.isHeader) {
         temp.push('header')
+      } else if(this.ats.highlightRow === this.data) {
+        temp.push('table-highlight')
       }
       if(this.isHidden) {
         temp.push('expend-hidden')
@@ -47,7 +49,7 @@ export default {
     }
   },
   render(h) {
-    return (<div class={ this.rowClass } v-drag-end={this.onDrop}>{
+    return (<div class={ this.rowClass } v-drag-end={this.onDrop} on-click={this.onClick}>{
       this.ats.columnsConfig.map((c, index) => {
         if (this.isHeader) {
           return c.renderHeader(h, {
@@ -74,6 +76,9 @@ export default {
   methods: {
     onDrop(fromScope, sourceElement) {
       timer(50).then(() => this.ats.moveRow(fromScope.indexes, this.indexes))
+    },
+    onClick(ev) {
+      this.ats.highlightRow = this.data
     }
   }
 }

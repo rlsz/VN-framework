@@ -30,6 +30,7 @@ export class AppTableService {
     get treeProps() {
         return this.vm.treeProps
     }
+    highlightRow = null
 
     injector
     vm
