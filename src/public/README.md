@@ -496,7 +496,7 @@ table-bridge 集成了分页功能的table组件，而且处理了树形结构�
 ```
 
 ###### element-ui resize observe issue
-element-ui的el-select组件监听this.$el的resize事件时，部分系统的浏览器会出现无限触发resize事件的问题，本框架使用ResizeContext重写了监听机制后修复该问题
+element-ui的el-select组件监听this.$el的resize事件时，部分操作系统的浏览器(windows chrome)会出现无限触发resize事件的问题，本框架使用ResizeContext重写了监听机制后修复该问题
 
 ###### default
 默认组件，未来开发自己的弹层相关组件，去除对第三方组件的依赖
