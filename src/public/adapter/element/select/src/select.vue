@@ -151,6 +151,7 @@
   import { getValueByPath, valueEquals, isIE, isEdge } from 'element-ui/src/utils/util';
   import NavigationMixin from './navigation-mixin';
   import { isKorean } from 'element-ui/src/utils/shared';
+  import {getContext, ResizeContext} from "../../../../base/event-context";
 
   export default {
     mixins: [Emitter, Locale, Focus('reference'), NavigationMixin],
@@ -330,7 +331,8 @@
         menuVisibleOnFocus: false,
         isOnComposition: false,
         isSilentBlur: false,
-        latestOptions: null
+        latestOptions: null,
+        resizeSub: null
       };
     },
 
@@ -867,7 +869,10 @@
       if (this.multiple && Array.isArray(this.value) && this.value.length > 0) {
         this.currentPlaceholder = '';
       }
-      addResizeListener(this.$el, this.handleResize);
+      // addResizeListener(this.$el, this.handleResize); // element-ui resize observe issue
+      this.resizeSub = getContext(ResizeContext, this.$el).events.subscribe(ev => {
+        this.handleResize()
+      })
 
       const reference = this.$refs.reference;
       if (reference && reference.$el) {
@@ -902,7 +907,11 @@
     },
 
     beforeDestroy() {
-      if (this.$el && this.handleResize) removeResizeListener(this.$el, this.handleResize);
+      // if (this.$el && this.handleResize) removeResizeListener(this.$el, this.handleResize); // element-ui resize observe issue
+      if(this.resizeSub) {
+        this.resizeSub.unsubscribe()
+        this.resizeSub = null
+      }
     }
   };
 </script>
