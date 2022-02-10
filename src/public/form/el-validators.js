@@ -328,12 +328,15 @@ export class ElFormValidators {
  */
 
 /** 获取字符串类型的文件大小，1 kb = 1024 b, 1 Mb = 1024 * 1024 b
- * 100, '10k', '20M', '20m'
+ * 100, '100b', '10k', '20M', '20m'
  * @param size
  * @constructor
  */
 function GetFileSize(size) {
     if (typeof size === 'string') {
+        if(/^(\d+)b$/i.test(size)) {
+            return Number(RegExp.$1)
+        }
         if(/^(\d+)k$/i.test(size)) {
             return Number(RegExp.$1) * 1024
         }
