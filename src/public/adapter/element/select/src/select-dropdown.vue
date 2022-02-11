@@ -29,7 +29,8 @@
       popperOptions: {
         default() {
           return {
-            gpuAcceleration: false
+            gpuAcceleration: false,
+            forceAbsolute: true // element-ui el-select dropdown issue
           };
         }
       },

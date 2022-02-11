@@ -498,6 +498,10 @@ table-bridge 集成了分页功能的table组件，而且处理了树形结构�
 ###### element-ui resize observe issue
 element-ui的el-select组件监听this.$el的resize事件时，部分操作系统的浏览器(windows chrome)会出现无限触发resize事件的问题，本框架使用ResizeContext重写了监听机制后修复该问题
 
+###### element-ui el-select dropdown issue
+element-ui的el-select组件下拉框默认使用fixed定位，当页面出现滚动条时，滚动到任意位置然后打开弹层，此时触发下拉框会发现下拉框错位；  
+通过分析源码得知`node_modules/element-ui/src/utils/popper.js`文件的`getOffsetRectRelativeToCustomParent`用于计算弹窗的最终位置，通过调整配置项forceAbsolute可以修复这个问题；  
+
 ###### default
 默认组件，未来开发自己的弹层相关组件，去除对第三方组件的依赖
 
