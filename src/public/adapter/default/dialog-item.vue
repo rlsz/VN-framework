@@ -330,7 +330,7 @@ export default {
           }
         }
         this.subs.push(
-            ...getAllScrollParent(anchor).map(c => getContext(RealTimeScrollContext, c).events.subscribe(ev => calcPosition())),
+            ...getAllScrollParent(container).map(c => getContext(RealTimeScrollContext, c).events.subscribe(ev => calcPosition())),
             getContext(ResizeContext).events.subscribe(ev => calcPosition())
         )
         this.watchBodyClick()
