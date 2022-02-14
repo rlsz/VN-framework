@@ -28,8 +28,8 @@ export class ScrollMonitorService {
         if(this.sub) {
             this.sub.unsubscribe()
         }
-        if(this.context?.scrollDom) {
-            this.visible = this.isVisible(dom, this.context.scrollDom)
+        if(this.context?.dom) {
+            this.visible = this.isVisible(dom, this.context.dom)
         }
         this.sub = this.context.events.subscribe(ev => {
             this.visible = this.isVisible(dom, ev.target)
