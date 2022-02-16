@@ -1,4 +1,5 @@
 import {Directive, DirectiveContext} from "./directive-base";
+import path from "path";
 
 const activeClass = 'v-link-active'
 
@@ -42,12 +43,20 @@ class VLinkDirective extends DirectiveContext {
         }
         const router = this.componentInstance.$router
         if (this.isBlank) {
-            const {href} = router.resolve({
-                path: this.value,
-            })
-            window.open(href, '_blank')
+            if (this.value.startsWith('http://') || this.value.startsWith('https://')) {
+                window.open(this.value, '_blank')
+            } else {
+                const {href} = router.resolve({
+                    path: this.value,
+                })
+                window.open(href, '_blank')
+            }
         } else {
-            router.push(this.value).catch(e => {})
+            if (this.value.startsWith('http://') || this.value.startsWith('https://')) {
+                location.href = this.value
+            } else {
+                router.push(this.value).catch(e => {})
+            }
         }
     }
 }
