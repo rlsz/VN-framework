@@ -6,7 +6,7 @@
         <span class="default-title">{{title}}</span>
       </slot>
       <span v-if="config && config.tip" class="tip">{{config.tip}}</span>
-      <template v-if="model===Model.float">
+      <template v-if="model===Model.float || model===Model.fixed">
         <span class="full-screen" :class="{active: this.isInFullScreen}" @click="toggleFullScreen"></span>
         <span class="close" @click="close"></span>
       </template>

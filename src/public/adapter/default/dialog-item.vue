@@ -361,11 +361,6 @@ export default {
       const mouseMove = getContext(RealTimeMouseMoveContext)
       const mouseUp = getContext(MouseUpContext)
       this.movingOffset = { x: 0, y: 0 }
-      const cancelMove = () => {
-        subMouseMove.unsubscribe()
-        subMouseUp.unsubscribe()
-        this.movingOffset = null
-      }
       const endMove = () => {
         subMouseMove.unsubscribe()
         subMouseUp.unsubscribe()
@@ -379,7 +374,7 @@ export default {
           this.movingOffset.x = ev.clientX - start.clientX
           this.movingOffset.y = ev.clientY - start.clientY
         } else if(this.movingOffset) {
-          cancelMove()
+          endMove()
         }
       })
       const subMouseUp = mouseUp.events.subscribe(ev => {
