@@ -964,3 +964,12 @@ export function getObjectId(obj, paths = []) {
     }
     return getObjectId(proto, paths)
 }
+
+export function mouseLeftPress(evt) {
+    evt = evt || window.event;
+    if ('buttons' in evt) {
+        return evt.buttons === 1;
+    }
+    const button = evt.which || evt.button;
+    return button === 1;
+}

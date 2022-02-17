@@ -3,11 +3,11 @@ import { Dialog, Model, Position } from "../../dialogs/dialog";
 import { DialogParent } from "../../dialogs/dialog-parent";
 import { PlatformService } from "../../platform/platform.service";
 import { Platform } from "../../platform/platform";
-import {findParent, getAllScrollParent, getScrollParent} from "../../base/utils";
+import {findParent, getAllScrollParent, getScrollParent, mouseLeftPress} from "../../base/utils";
 import {ConfigService} from "../../config.service";
 import {
   getContext,
-  MouseClickContext, MouseDownContext,
+  MouseClickContext, MouseDownContext, MouseUpContext, RealTimeMouseMoveContext,
   RealTimeScrollContext,
   ResizeContext,
   ScrollContext
@@ -104,6 +104,7 @@ export default {
   data() {
     return {
       transform: { x: 0, y: 0 },
+      movingOffset: null,
       transformPointer: { x: 0, y: 0 },
       listener: null,
       maxHeight: null,
@@ -163,6 +164,13 @@ export default {
       transform = `translateX(${this.transform.x}px) translateY(${this.transform.y}px)`;
       transformPointer = `translateX(${this.transformPointer.x}px) translateY(${this.transformPointer.y}px)`;
     }
+    if (this.model === Model.fixed) {
+      if(this.movingOffset) {
+        transform = `translateX(${this.transform.x + this.movingOffset.x}px) translateY(${this.transform.y + this.movingOffset.y}px)`;
+      } else {
+        transform = `translateX(${this.transform.x}px) translateY(${this.transform.y}px)`;
+      }
+    }
     return h(
         "div",
         {
@@ -193,7 +201,14 @@ export default {
                   maxHeight: this.maxHeight ? this.maxHeight + "px" : null,
                 },
               },
-              [h(this.options.vueComponent)]
+              [
+                this.model === Model.fixed ? (
+                    <app-drag-icon class={`dialog-drag-pointer ${this.movingOffset?'dragging':''}`}
+                                   on-mousedown={this.beginMove}
+                    ></app-drag-icon>
+                ): null,
+                h(this.options.vueComponent)
+              ]
           ),
           transformPointer
               ? h("i", {
@@ -206,7 +221,7 @@ export default {
                   transform: transformPointer,
                 },
               })
-              : null,
+              : null
         ]
     );
   },
@@ -338,6 +353,38 @@ export default {
         this.watchBodyClick()
         calcPosition()
       }
+      if(this.model === Model.fixed) {
+        // this.transform = { x: 100, y: 100 };
+      }
+    },
+    beginMove(start) {
+      const mouseMove = getContext(RealTimeMouseMoveContext)
+      const mouseUp = getContext(MouseUpContext)
+      this.movingOffset = { x: 0, y: 0 }
+      const cancelMove = () => {
+        subMouseMove.unsubscribe()
+        subMouseUp.unsubscribe()
+        this.movingOffset = null
+      }
+      const endMove = () => {
+        subMouseMove.unsubscribe()
+        subMouseUp.unsubscribe()
+        this.transform.x += this.movingOffset.x
+        this.transform.y += this.movingOffset.y
+        this.movingOffset = null
+      }
+
+      const subMouseMove = mouseMove.events.subscribe(ev => {
+        if(mouseLeftPress(ev)) {
+          this.movingOffset.x = ev.clientX - start.clientX
+          this.movingOffset.y = ev.clientY - start.clientY
+        } else if(this.movingOffset) {
+          cancelMove()
+        }
+      })
+      const subMouseUp = mouseUp.events.subscribe(ev => {
+        endMove()
+      })
     }
   },
 };
@@ -440,6 +487,19 @@ export default {
       border: 1px solid rgba(0, 0, 0, 0.1);
     }
   }
+  &.fixed {
+    pointer-events: none;
+    align-items: center;
+
+    > * {
+      margin: auto;
+    }
+
+    .dialog-panel {
+      pointer-events: auto;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+  }
 }
 i.dialog-anchor-pointer {
   display: inline-flex;
@@ -472,6 +532,24 @@ i.dialog-anchor-pointer {
   &.right:after {
     margin-left: -3px;
     transform: rotate(135deg);
+  }
+}
+.dialog-drag-pointer {
+  position: absolute;
+  z-index: 2;
+  //cursor: move !important;
+  cursor: grab !important;
+  width: 24px !important;
+  height: 24px !important;
+  margin: 2px;
+  align-self: center;
+
+  opacity: 0;
+  &:hover {
+    opacity: 1;
+  }
+  &.dragging {
+    cursor: grabbing !important;
   }
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <span class="app-drag-icon flex vertical">
+  <span class="app-drag-icon flex vertical" v-bind="{ ...$attrs }" v-on="{ ...$listeners }">
     <span></span>
     <span></span>
     <span></span>

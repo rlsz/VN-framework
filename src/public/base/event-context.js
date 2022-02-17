@@ -75,8 +75,18 @@ export class MouseMoveContext extends EventContextBase {
     }
 }
 
-export class RealTimeMouseMoveContext extends MouseMoveContext {
+export class RealTimeMouseMoveContext extends EventContextBase {
     delay = 0
+    target // reactive in di system, but not reactive in directive
+    constructor(dom) {
+        super(dom, 'mousemove')
+        this.init()
+    }
+
+    listener(e) {
+        this.events.next(e)
+        this.target = e.target
+    }
 }
 
 export class ResizeContext extends EventContextBase {

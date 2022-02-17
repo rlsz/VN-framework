@@ -4,7 +4,8 @@ export const Model = {
     float: 'float',
     fillAvailable: 'fill-available',
     transparent: 'transparent',
-    positionByAnchor: 'position-by-anchor'
+    positionByAnchor: 'position-by-anchor',
+    fixed: 'fixed'
 }
 
 export const Position = {

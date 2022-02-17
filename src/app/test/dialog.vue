@@ -11,6 +11,8 @@
     <button class="app-form" @click="parentDialogTest()">弹窗父组件测试</button>
     <button class="app-form" @click="fillBody()">填充模式-网页全屏</button>
     <button class="app-form" @click="fillContainer()">填充模式-dom填充</button>
+    <button class="app-form" @click="follow($event)">跟随</button>
+    <button class="app-form" @click="fixed()">固定位置</button>
   </div>
 </template>
 
@@ -18,7 +20,7 @@
 import TestDialog from "./components/TestDialog";
 import test1Dialog from "./components/test1Dialog";
 import {LoggerService} from "@/public/logger";
-import {DialogService, Model} from "@/public/dialogs";
+import {DialogService, Model, Position} from "@/public/dialogs";
 import {LoadingService} from "@/public/base";
 
 export default {
@@ -166,6 +168,22 @@ export default {
       this.ds.open(test1Dialog, {
         model: Model.fillAvailable,
         container: this.$el
+      })
+    },
+    follow(ev) {
+      this.ds.open(test1Dialog, {
+        anchor: ev.target,
+        position: Position.top
+      })
+    },
+    fixed() {
+      this.ds.open(test1Dialog, {
+        model: Model.fixed,
+        backgroundCover: false
+      })
+      this.ds.open(test1Dialog, {
+        model: Model.fixed,
+        backgroundCover: false
       })
     }
   }
