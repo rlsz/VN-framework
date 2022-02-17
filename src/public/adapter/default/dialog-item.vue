@@ -215,7 +215,9 @@ export default {
     this.watchPosition()
   },
   updated() {
-    this.fixPositionByAnchor();
+    setTimeout(() => {
+      this.fixPositionByAnchor();
+    }, 0)
   },
   destroyed() {
     this.subs.forEach(c => c.unsubscribe())
