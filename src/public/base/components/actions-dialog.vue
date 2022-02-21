@@ -6,6 +6,7 @@
           :class="{disabled:action.disabled}"
           @click="action.handler(dialog)"
     >{{action.text}}</span>
+    <span class="empty" v-if="!actions.length">无数据</span>
   </div>
 </template>
 
@@ -63,6 +64,10 @@ export default {
     //& ~ .action {
     //  margin-top: 9px;
     //}
+  }
+  .empty {
+    color: rgba(0,0,0,0.3);
+    padding: 2px 12px;
   }
 }
 </style>

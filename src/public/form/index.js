@@ -13,6 +13,7 @@ import option from './multi-select/app-option'
 import optionDropdown from './multi-select/app-option-dropdown'
 
 import "./form.less"
+import select from './select'
 
 export default function (Vue) {
     Vue.component(tabs.name, tabs)
@@ -23,4 +24,5 @@ export default function (Vue) {
     Vue.component(optionInput.name, optionInput)
     Vue.component(option.name, option)
     Vue.component(optionDropdown.name, optionDropdown)
+    Vue.use(select)
 }

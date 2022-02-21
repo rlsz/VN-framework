@@ -283,5 +283,12 @@ export default {
                 title: 'scope测试'
             }
         },
+        {
+            path: 'selectTest',
+            component: () => import(/* webpackChunkName: "test" */ './selectTest.vue'),
+            meta: {
+                title: 'select测试'
+            }
+        },
     ]
 }
