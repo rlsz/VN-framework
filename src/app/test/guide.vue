@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import {GuideService} from "@/components/guide";
+import {GuideService} from "@/modules/guide";
 
 export default {
   name: "guide",

@@ -7,8 +7,8 @@ import "@/public/styles/global.less"
 import publicModule, {RootProviders} from '@/public'
 Vue.use(publicModule, router)
 
-import comps from './components'
-import {GuideService} from "@/components/guide";
+import comps from './modules'
+import {GuideService} from "@/modules/guide";
 Vue.use(comps)
 
 Vue.config.productionTip = false
