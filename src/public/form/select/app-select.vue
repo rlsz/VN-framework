@@ -22,8 +22,8 @@ export default {
     onClick(ev) {
       const anchor = ev.currentTarget
       const { width } = anchor.getBoundingClientRect()
-      console.log('min-width', width + 'px')
-      console.log('max-width', Math.max(width - 32, 300) + 'px')
+      // console.log('min-width', width + 'px')
+      // console.log('max-width', Math.max(width - 32, 300) + 'px')
       Promise.resolve(this.options).then(options => {
         // return []
         return options.map(c => {
@@ -40,7 +40,10 @@ export default {
           anchor,
           position: Position.bottom,
           offset: 2,
-          actions: options
+          actions: options,
+          minWidth: width + 'px',
+          maxWidth: Math.max(width, 300) + 'px',
+          limitLine: 1
         })
       })
     },

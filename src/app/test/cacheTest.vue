@@ -29,12 +29,12 @@
 </template>
 
 <script>
-import {KeepAliveHelper} from "@/public/base";
+import {KeepAliveContainer, KeepAliveHelper} from "@/public/base";
 
 export default {
   name: "cacheTest",
   di: {
-    providers: [KeepAliveHelper],
+    providers: [KeepAliveHelper, KeepAliveContainer],
     inject: {
       kah: KeepAliveHelper
     }

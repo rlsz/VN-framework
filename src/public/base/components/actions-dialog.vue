@@ -1,11 +1,18 @@
 <template>
-  <div class="actions-dialog">
+  <div class="actions-dialog" :style="{minWidth: config.minWidth,maxWidth: config.maxWidth}">
     <span v-for="(action,index) in actions"
           :key="'dialog-action-item-'+index"
           class="action"
           :class="{disabled:action.disabled}"
           @click="action.handler(dialog)"
-    >{{action.text}}</span>
+    >
+      <template v-if="config.limitLine">
+        <span v-limit-line="config.limitLine">{{action.text}}</span>
+      </template>
+      <template v-else>
+        {{action.text}}
+      </template>
+    </span>
     <span class="empty" v-if="!actions.length">无数据</span>
   </div>
 </template>
