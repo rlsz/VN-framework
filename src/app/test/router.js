@@ -290,5 +290,35 @@ export default {
                 title: 'select测试'
             }
         },
+        {
+            path: 'cacheTest',
+            component: () => import(/* webpackChunkName: "test" */ './cacheTest.vue'),
+            meta: {
+                title: '缓存测试'
+            },
+            children: [
+                {
+                    path: 'cacheTest1',
+                    component: () => import(/* webpackChunkName: "test" */ './cache-test-1.vue'),
+                    meta: {
+                        title: '缓存测试1'
+                    }
+                },
+                {
+                    path: 'cacheTest2',
+                    component: () => import(/* webpackChunkName: "test" */ './cache-test-2.vue'),
+                    meta: {
+                        title: '缓存测试2'
+                    }
+                },
+                {
+                    path: 'cacheTest3',
+                    component: () => import(/* webpackChunkName: "test" */ './cache-test-3.vue'),
+                    meta: {
+                        title: '缓存测试3'
+                    }
+                },
+            ]
+        },
     ]
 }
