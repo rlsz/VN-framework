@@ -8,7 +8,7 @@
                   v-model="testValue"
       ></app-select>
     </div>
-    <div class="flex">
+    <div class="flex cross-center">
       <span>label-key: label</span>
       <app-select placeholder="请选择"
                   :options="testOptions"
@@ -16,7 +16,7 @@
                   v-model="testValue"
       ></app-select>
     </div>
-    <div class="flex">
+    <div class="flex cross-center">
       <span>label-key: label; value-key: value</span>
       <app-select placeholder="请选择"
                   :options="testOptions"
@@ -25,13 +25,23 @@
                   v-model="testValue1"
       ></app-select>
     </div>
-    <div class="flex">
+    <div class="flex cross-center">
       <span>label-key: label; id-key: value</span>
       <app-select placeholder="请选择"
                   :options="testOptions"
                   label-key="label"
                   id-key="value"
                   v-model="testValue2"
+      ></app-select>
+    </div>
+    <div class="flex cross-center">
+      <span>label-key: label; id-key: value; max-width</span>
+      <app-select placeholder="请选择"
+                  :options="testOptions"
+                  label-key="label"
+                  id-key="value"
+                  v-model="testValue2"
+                  style="max-width: 250px"
       ></app-select>
     </div>
   </div>
@@ -50,6 +60,7 @@ export default {
       testValue: {label: "对齐语料", value: 2},
       testValue1: 2,
       testValue2: {label: "对齐语料", value: 2},
+      testValue3: [{label: "对齐语料", value: 2}, {label: "对齐语料", value: 2}]
     }
   }
 }

@@ -1,10 +1,10 @@
 <template>
   <div class="app-select flex inline cross-center" @click="onClick">
     <span v-if="ass.multiple">
-      {{ass.valueOptions}}
+      {{ ass.valueOptions }}
     </span>
-    <span v-else-if="!ass.isEmpty()">{{ass.getLabel(ass.valueOptions[0])}}</span>
-    <span v-else class="app-select_placeholder">{{placeholder}}</span>
+    <span v-else-if="!ass.isEmpty()" v-limit-line>{{ ass.getLabel(ass.valueOptions[0]) }}</span>
+    <span v-else class="app-select_placeholder">{{ placeholder }}</span>
     <i class="arrow down"></i>
   </div>
 </template>
@@ -16,12 +16,21 @@ import ActionsDialog from "../../base/components/actions-dialog";
 import {FormControlService, FormModel, FormModelService} from "../form-model";
 import {Optional} from "../../di.service";
 import {FormInputAdapter} from "../../adapter/element/form-input-adapter";
-import {Distinct} from "../../base/utils";
 import {AppSelectService} from "./app-select.service";
 
 export default {
   name: "app-select",
-  props: ['placeholder', 'options', 'value', 'labelKey', 'valueKey', 'idKey', 'multiple'],
+  props: [
+    'placeholder',
+    'options',
+    'remoteMethod',
+    'value',
+    'labelKey',
+    'valueKey',
+    'idKey',
+    'multiple',
+    'multipleLimit'
+  ],
   di: {
     providers: [FormControlService, FormInputAdapter, AppSelectService],
     inject: {
@@ -45,7 +54,7 @@ export default {
   methods: {
     onClick(ev) {
       const anchor = ev.currentTarget
-      const { width } = anchor.getBoundingClientRect()
+      const {width} = anchor.getBoundingClientRect()
       this.ass.getData().then(() => {
         return this.ass.allOptions.map(c => {
           return {
@@ -53,7 +62,8 @@ export default {
             handler: dialog => {
               dialog.close()
               this.ass.onSelectOption(c)
-            }
+            },
+            active: this.ass.isActive(c)
           }
         })
       }).then(actions => {

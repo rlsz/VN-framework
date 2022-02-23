@@ -3,7 +3,7 @@
     <span v-for="(action,index) in actions"
           :key="'dialog-action-item-'+index"
           class="action"
-          :class="{disabled:action.disabled}"
+          :class="{disabled:action.disabled, active:action.active}"
           @click="action.handler(dialog)"
     >
       <template v-if="config.limitLine">

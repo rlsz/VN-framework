@@ -182,13 +182,11 @@ export class AppSelectService {
     }
 
     isActive(option) {
+        console.log(JSON.stringify(option), JSON.stringify(this.valueOptions), this.getId(option))
         if (!this.valueOptions.length) {
             return false
         }
-        if (this.valueKey) {
-            return this.valueOptions.some(item => item[this.valueKey] === option[this.valueKey])
-        }
-        return this.valueOptions.indexOf(option) >= 0
+        return this.valueOptions.some(item => this.getId(item) === this.getId(option))
     }
 
     isEmpty() {
