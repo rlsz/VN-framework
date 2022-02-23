@@ -1,7 +1,13 @@
 <template>
   <div class="app-select flex inline cross-center" @click="onClick">
-    <span v-if="ass.multiple">
-      {{ ass.valueOptions }}
+    <span v-if="ass.multiple" class="multiple-selections flex wrap">
+      <slot name="label"
+            v-for="(item,index) in ass.valueOptions"
+            v-bind:value="item"
+            v-bind:index="index"
+      >
+        <span v-limit-line>{{ ass.getLabel(item) }}</span>
+      </slot>
     </span>
     <span v-else-if="!ass.isEmpty()" v-limit-line>{{ ass.getLabel(ass.valueOptions[0]) }}</span>
     <span v-else class="app-select_placeholder">{{ placeholder }}</span>
@@ -83,5 +89,21 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
+.multiple-selections {
+  max-width: 100%;
+  min-width: 0px;
+  > * {
+    background-color: #f4f4f5;
+    border-color: #e9e9eb;
+    color: #909399;
+    height: 24px;
+    padding: 0 8px;
+    line-height: 22px;
+    font-size: 12px;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 4px;
+    margin: 2px 3px 2px 3px;
+  }
+}
 </style>

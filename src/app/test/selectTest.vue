@@ -44,6 +44,17 @@
                   style="max-width: 250px"
       ></app-select>
     </div>
+    <div class="flex cross-center">
+      <span>label-key: label; id-key: value; max-width</span>
+      <app-select placeholder="请选择"
+                  :options="testOptions"
+                  label-key="label"
+                  id-key="value"
+                  v-model="testValue3"
+                  style="max-width: 250px"
+                  multiple
+      ></app-select>
+    </div>
   </div>
 </template>
 
@@ -60,7 +71,7 @@ export default {
       testValue: {label: "对齐语料", value: 2},
       testValue1: 2,
       testValue2: {label: "对齐语料", value: 2},
-      testValue3: [{label: "对齐语料", value: 2}, {label: "对齐语料", value: 2}]
+      testValue3: [{label: "普通语料", value: 1}, {label: "对齐语料", value: 2}]
     }
   }
 }
