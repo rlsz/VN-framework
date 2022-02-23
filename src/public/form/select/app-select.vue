@@ -1,6 +1,10 @@
 <template>
   <div class="app-select flex inline cross-center" @click="onClick">
-    <span class="app-select_placeholder">{{placeholder}}</span>
+    <span v-if="ass.multiple">
+      {{ass.valueOptions}}
+    </span>
+    <span v-else-if="!ass.isEmpty()">{{ass.getLabel(ass.valueOptions[0])}}</span>
+    <span v-else class="app-select_placeholder">{{placeholder}}</span>
     <i class="arrow down"></i>
   </div>
 </template>
@@ -9,46 +13,60 @@
 import {DialogService} from "../../dialogs/dialog.service";
 import {Position} from "../../dialogs/dialog";
 import ActionsDialog from "../../base/components/actions-dialog";
+import {FormControlService, FormModel, FormModelService} from "../form-model";
+import {Optional} from "../../di.service";
+import {FormInputAdapter} from "../../adapter/element/form-input-adapter";
+import {Distinct} from "../../base/utils";
+import {AppSelectService} from "./app-select.service";
 
 export default {
   name: "app-select",
-  props: ['placeholder', 'options'],
+  props: ['placeholder', 'options', 'value', 'labelKey', 'valueKey', 'idKey', 'multiple'],
   di: {
+    providers: [FormControlService, FormInputAdapter, AppSelectService],
     inject: {
-      ds: DialogService
+      ds: DialogService,
+      formInput: FormInputAdapter,
+      fms: Optional(FormModelService),
+      ass: AppSelectService
+    }
+  },
+  computed: {
+    editable() {
+      if (this.fms?.formModel === FormModel.detail) {
+        return false
+      }
+      if (this.$listeners.input) {
+        return true
+      }
+      return false
     }
   },
   methods: {
     onClick(ev) {
       const anchor = ev.currentTarget
       const { width } = anchor.getBoundingClientRect()
-      // console.log('min-width', width + 'px')
-      // console.log('max-width', Math.max(width - 32, 300) + 'px')
-      Promise.resolve(this.options).then(options => {
-        // return []
-        return options.map(c => {
+      this.ass.getData().then(() => {
+        return this.ass.allOptions.map(c => {
           return {
-            text: c.label,
+            text: this.ass.getLabel(c),
             handler: dialog => {
               dialog.close()
-              this.selectOption(c)
+              this.ass.onSelectOption(c)
             }
           }
         })
-      }).then(options => {
+      }).then(actions => {
         this.ds.open(ActionsDialog, {
           anchor,
           position: Position.bottom,
           offset: 2,
-          actions: options,
+          actions,
           minWidth: width + 'px',
           maxWidth: Math.max(width, 300) + 'px',
           limitLine: 1
         })
       })
-    },
-    selectOption(option) {
-      console.log(option.label)
     }
   }
 }

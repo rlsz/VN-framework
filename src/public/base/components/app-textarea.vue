@@ -11,10 +11,10 @@
 </template>
 
 <script>
-import {FormInputAdapter} from "../../adapter";
+import {FormInputAdapter} from "../../adapter/element/form-input-adapter";
 import {Optional} from "../../di.service";
 import {FormModelService, FormModel, FormControlService} from "../../form/form-model";
-import {BenchmarkService} from "../../base/utils";
+import {BenchmarkService} from "../services/benchmark.service";
 
 function calcBoxStyle(target) {
   const style = window.getComputedStyle(target);

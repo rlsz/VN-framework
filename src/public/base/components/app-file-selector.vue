@@ -19,7 +19,7 @@
 import {ReadImage, ConvertImageToCanvas, ConvertCanvasToBlob} from "../utils";
 import {MIME_TYPE} from '../mime/mime-type';
 import {LoggerService} from "../../logger";
-import {FormInputAdapter} from "../../adapter";
+import {FormInputAdapter} from "../../adapter/element/form-input-adapter";
 
 /**
  type MaxWidthOrHeight = { maxWidth?: number; maxHeight?: number; };
