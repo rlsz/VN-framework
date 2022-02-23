@@ -1,16 +1,19 @@
 <template>
   <div class="app-select flex inline cross-center" @click="onClick">
-    <span v-if="ass.multiple" class="multiple-selections flex wrap">
+    <span v-if="ass.isEmpty()" class="app-select_placeholder">{{ placeholder }}</span>
+    <span v-else-if="ass.multiple" class="multiple-selections flex wrap">
       <slot name="label"
             v-for="(item,index) in ass.valueOptions"
             v-bind:value="item"
             v-bind:index="index"
       >
-        <span v-limit-line>{{ ass.getLabel(item) }}</span>
+        <span class="flex">
+          <span v-limit-line>{{ ass.getLabel(item) }}</span>
+          <i class="close" @click.stop="ass.onSelectOption(item)"></i>
+        </span>
       </slot>
     </span>
-    <span v-else-if="!ass.isEmpty()" v-limit-line>{{ ass.getLabel(ass.valueOptions[0]) }}</span>
-    <span v-else class="app-select_placeholder">{{ placeholder }}</span>
+    <span v-else v-limit-line>{{ ass.getLabel(ass.valueOptions[0]) }}</span>
     <i class="arrow down"></i>
   </div>
 </template>
@@ -104,6 +107,12 @@ export default {
     border-style: solid;
     border-radius: 4px;
     margin: 2px 3px 2px 3px;
+    cursor: auto;
+    i.close {
+      margin-left: 4px;
+      width: 8px;
+      height: 8px;
+    }
   }
 }
 </style>
