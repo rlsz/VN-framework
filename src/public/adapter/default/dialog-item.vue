@@ -138,13 +138,12 @@ export default {
     return {
       transform: {x: 0, y: 0},
       movingOffset: null,
-      transformPointer: {x: 0, y: 0},
+      transformPointer: {x: 0, y: 0, position: Position.bottom},
       listener: null,
       maxHeight: null,
       hide: false,
       fixPosition: {left: '0', right: '0', top: '0', bottom: '0'},
-      subs: [],
-      dynamicPosition: null
+      subs: []
     };
   },
   computed: {
@@ -205,10 +204,6 @@ export default {
         transform = `translateX(${this.transform.x}px) translateY(${this.transform.y}px)`;
       }
     }
-    let position = this.position
-    if (position === Position.auto) {
-      position = this.dynamicPosition
-    }
     return h(
         "div",
         {
@@ -252,7 +247,7 @@ export default {
               ? h("i", {
                 class: {
                   "dialog-anchor-pointer": true,
-                  [position]: true,
+                  [this.transformPointer.position]: true,
                 },
                 ref: "dialogAnchorPointer",
                 style: {
@@ -337,9 +332,6 @@ export default {
       if (transform.maxHeight !== this.maxHeight) {
         this.maxHeight = transform.maxHeight;
       }
-      if (this.position === Position.auto) {
-        this.dynamicPosition = transform.position
-      }
       if (Math.abs(transform.x) > 1 || Math.abs(transform.y) > 1) {
         const {x, y} = this.transform;
         this.transform = {x: x + transform.x, y: y + transform.y};
@@ -351,7 +343,7 @@ export default {
           {...this.calcTransformParams, position: transform.position}
       );
       if (!transformPointer) {
-        this.transformPointer = {x: 0, y: 0};
+        this.transformPointer = {x: 0, y: 0, position: Position.bottom};
         return;
       }
       if (
@@ -362,6 +354,7 @@ export default {
         this.transformPointer = {
           x: x + transformPointer.x,
           y: y + transformPointer.y,
+          position: transformPointer.position
         };
       }
     },
