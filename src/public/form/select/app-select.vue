@@ -5,7 +5,7 @@
       <span v-else class="app-select_placeholder">{{ placeholder }}</span>
     </template>
     <template v-else-if="ass.multiple">
-      <span class="multiple-selections flex wrap">
+      <span class="multiple-selections fill-content flex wrap">
         <slot name="label"
               v-for="(item,index) in ass.valueOptions"
               v-bind:value="item"
@@ -129,6 +129,7 @@ export default {
     border-radius: 4px;
     margin: 2px 3px 2px 3px;
     cursor: auto;
+    //max-width: calc(100% - 26px);
 
     i.close {
       margin-left: 4px;
@@ -148,7 +149,7 @@ input.app-select_filter {
   border: none;
   text-overflow: ellipsis;
   &.multiple_mode {
-    width: 10px;
+    width: 20px;
     flex: 1 0 auto;
     &:focus {
       width: 50px;
