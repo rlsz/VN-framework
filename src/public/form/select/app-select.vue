@@ -78,7 +78,6 @@ export default {
       }).then(actions => {
         this.ds.open(ActionsDialog, {
           anchor,
-          position: Position.bottom,
           offset: 2,
           actions,
           minWidth: width + 'px',

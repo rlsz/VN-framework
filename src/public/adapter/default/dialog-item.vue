@@ -1,8 +1,8 @@
 <script>
-import { Dialog, Model, Position } from "../../dialogs/dialog";
-import { DialogParent } from "../../dialogs/dialog-parent";
-import { PlatformService } from "../../platform/platform.service";
-import { Platform } from "../../platform/platform";
+import {Dialog, Model, Position} from "../../dialogs/dialog";
+import {DialogParent} from "../../dialogs/dialog-parent";
+import {PlatformService} from "../../platform/platform.service";
+import {Platform} from "../../platform/platform";
 import {findParent, getAllScrollParent, getScrollParent, mouseLeftPress} from "../../base/utils";
 import {ConfigService} from "../../config.service";
 import {
@@ -32,7 +32,40 @@ function calcTransform(anchorEl, targetEl, params) {
   }
   let translateX = 0;
   let translateY = 0;
-  const { position, offset, container } = params
+  let {position, offset, container} = params
+  const body = container.getBoundingClientRect();
+  if (position === Position.auto) {
+    const gapLimit = Math.min(300, self.height)
+    const gap = {
+      bottom: body.y + body.height - anchor.y - anchor.height,
+      right: body.x + body.width - anchor.x - anchor.width,
+      top: anchor.y - body.y,
+      left: anchor.x - body.x
+    }
+    if (gap.bottom > gapLimit) {
+      position = Position.bottom
+    } else if (gap.top > gapLimit) {
+      position = Position.top
+    } else if (gap.right > gapLimit) {
+      position = Position.right
+    } else if (gap.left > gapLimit) {
+      position = Position.left
+    } else {
+      const maxGap = Math.max(gap.bottom, gap.right, gap.top, gap.left)
+      if (gap.bottom === maxGap) {
+        position = Position.bottom
+      } else if (gap.top === maxGap) {
+        position = Position.top
+      } else if (gap.right === maxGap) {
+        position = Position.right
+      } else if (gap.left === maxGap) {
+        position = Position.left
+      } else {
+        throw new Error('unknown error')
+      }
+    }
+  }
+
   if ([Position.bottom, Position.bottomStrict].indexOf(position) >= 0) {
     // x = -((sx + sw/2) - (ax + aw/2))
     translateX = anchor.x + anchor.width / 2 - self.x - self.width / 2;
@@ -61,7 +94,7 @@ function calcTransform(anchorEl, targetEl, params) {
     translateY = anchor.y + anchor.height / 2 - self.y - self.height / 2;
     translateX += offset
   }
-  const body = container.getBoundingClientRect();
+
   translateY = Math.min(body.height + body.y - self.height - self.y, translateY)
   translateY = Math.max(body.y - self.y, translateY)
   translateX = Math.min(body.width + body.x - self.width - self.x, translateX)
@@ -75,7 +108,7 @@ function calcTransform(anchorEl, targetEl, params) {
 
   translateX = round(translateX);
   translateY = round(translateY);
-  return { x: translateX, y: translateY, maxHeight };
+  return {x: translateX, y: translateY, maxHeight, position};
 }
 
 export default {
@@ -103,14 +136,15 @@ export default {
   },
   data() {
     return {
-      transform: { x: 0, y: 0 },
+      transform: {x: 0, y: 0},
       movingOffset: null,
-      transformPointer: { x: 0, y: 0 },
+      transformPointer: {x: 0, y: 0},
       listener: null,
       maxHeight: null,
       hide: false,
-      fixPosition: { left: '0', right: '0', top: '0', bottom: '0' },
-      subs: []
+      fixPosition: {left: '0', right: '0', top: '0', bottom: '0'},
+      subs: [],
+      dynamicPosition: null
     };
   },
   computed: {
@@ -134,7 +168,7 @@ export default {
       if (config && config.position) {
         return config.position;
       }
-      return Position.bottom;
+      return Position.auto;
     },
     calcTransformParams() {
       const config = this.options.instance.config;
@@ -165,11 +199,15 @@ export default {
       transformPointer = `translateX(${this.transformPointer.x}px) translateY(${this.transformPointer.y}px)`;
     }
     if (this.model === Model.fixed) {
-      if(this.movingOffset) {
+      if (this.movingOffset) {
         transform = `translateX(${this.transform.x + this.movingOffset.x}px) translateY(${this.transform.y + this.movingOffset.y}px)`;
       } else {
         transform = `translateX(${this.transform.x}px) translateY(${this.transform.y}px)`;
       }
+    }
+    let position = this.position
+    if (position === Position.auto) {
+      position = this.dynamicPosition
     }
     return h(
         "div",
@@ -203,10 +241,10 @@ export default {
               },
               [
                 this.model === Model.fixed ? (
-                    <app-drag-icon class={`dialog-drag-pointer ${this.movingOffset?'dragging':''}`}
+                    <app-drag-icon class={`dialog-drag-pointer ${this.movingOffset ? 'dragging' : ''}`}
                                    on-mousedown={this.beginMove}
                     ></app-drag-icon>
-                ): null,
+                ) : null,
                 h(this.options.vueComponent)
               ]
           ),
@@ -214,7 +252,7 @@ export default {
               ? h("i", {
                 class: {
                   "dialog-anchor-pointer": true,
-                  [this.position]: true,
+                  [position]: true,
                 },
                 ref: "dialogAnchorPointer",
                 style: {
@@ -251,7 +289,7 @@ export default {
       let currentEvent = window.event
       this.subs.push(
           mouseClickContext.events.subscribe(ev => {
-            if(currentEvent && ev === currentEvent) {
+            if (currentEvent && ev === currentEvent) {
               currentEvent = null
               return
             }
@@ -265,15 +303,15 @@ export default {
           event.target &&
           !this.$el.contains(event.target)
       ) {
-        if(document.body.querySelector("#app").contains(event.target)) {
+        if (document.body.querySelector("#app").contains(event.target)) {
           this.options.instance.close();
         }
-        if(document.body.querySelector(".dialog-root").contains(event.target)) {
+        if (document.body.querySelector(".dialog-root").contains(event.target)) {
           /**
            * https://stackoverflow.com/questions/56680928/compare-order-of-two-html-elements/56681103
            * https://developer.mozilla.org/en-US/docs/Web/API/Node/compareDocumentPosition
            */
-          if(event.target.compareDocumentPosition(this.$el) & Node.DOCUMENT_POSITION_FOLLOWING) {
+          if (event.target.compareDocumentPosition(this.$el) & Node.DOCUMENT_POSITION_FOLLOWING) {
             this.options.instance.close();
           }
         }
@@ -284,7 +322,7 @@ export default {
         return;
       }
       if (!this.options.instance.config?.anchor) {
-        this.transform = { x: 0, y: 0 };
+        this.transform = {x: 0, y: 0};
         return;
       }
       const transform = calcTransform(
@@ -293,31 +331,34 @@ export default {
           this.calcTransformParams
       );
       if (!transform) {
-        this.transform = { x: 0, y: 0 };
+        this.transform = {x: 0, y: 0};
         return;
       }
       if (transform.maxHeight !== this.maxHeight) {
         this.maxHeight = transform.maxHeight;
       }
+      if (this.position === Position.auto) {
+        this.dynamicPosition = transform.position
+      }
       if (Math.abs(transform.x) > 1 || Math.abs(transform.y) > 1) {
-        const { x, y } = this.transform;
-        this.transform = { x: x + transform.x, y: y + transform.y };
+        const {x, y} = this.transform;
+        this.transform = {x: x + transform.x, y: y + transform.y};
       }
 
       const transformPointer = calcTransform(
           this.options.instance.config.anchor,
           this.$refs.dialogAnchorPointer,
-          this.calcTransformParams
+          {...this.calcTransformParams, position: transform.position}
       );
       if (!transformPointer) {
-        this.transformPointer = { x: 0, y: 0 };
+        this.transformPointer = {x: 0, y: 0};
         return;
       }
       if (
           Math.abs(transformPointer.x) > 1 ||
           Math.abs(transformPointer.y) > 1
       ) {
-        const { x, y } = this.transformPointer;
+        const {x, y} = this.transformPointer;
         this.transformPointer = {
           x: x + transformPointer.x,
           y: y + transformPointer.y,
@@ -326,7 +367,7 @@ export default {
     },
     watchPosition() {
       const anchor = this.options.instance.config?.anchor
-      if(this.model === Model.positionByAnchor && anchor) {
+      if (this.model === Model.positionByAnchor && anchor) {
         this.subs.push(
             ...getAllScrollParent(anchor).map(c => getContext(RealTimeScrollContext, c).events.subscribe(ev => this.fixPositionByAnchor())),
             getContext(ResizeContext).events.subscribe(ev => this.fixPositionByAnchor())
@@ -335,14 +376,19 @@ export default {
         this.fixPositionByAnchor()
       }
       const container = this.options.instance.config?.container
-      if(this.model === Model.fillAvailable && container && container !== document.body) {
+      if (this.model === Model.fillAvailable && container && container !== document.body) {
         const calcPosition = () => {
           const {left, top, right, bottom} = container.getBoundingClientRect()
-          const {left: bodyLeft, top: bodyTop, right: bodyRight, bottom: bodyBottom} = document.body.getBoundingClientRect()
+          const {
+            left: bodyLeft,
+            top: bodyTop,
+            right: bodyRight,
+            bottom: bodyBottom
+          } = document.body.getBoundingClientRect()
           this.fixPosition = {
             left: Math.max(round(left), 0) + 'px',
             top: Math.max(round(top), 0) + 'px',
-            right: Math.max(round(bodyRight - right ), 0)+ 'px',
+            right: Math.max(round(bodyRight - right), 0) + 'px',
             bottom: Math.max(round(bodyBottom - bottom), 0) + 'px'
           }
         }
@@ -353,14 +399,14 @@ export default {
         this.watchBodyClick()
         calcPosition()
       }
-      if(this.model === Model.fixed) {
+      if (this.model === Model.fixed) {
         // this.transform = { x: 100, y: 100 };
       }
     },
     beginMove(start) {
       const mouseMove = getContext(RealTimeMouseMoveContext)
       const mouseUp = getContext(MouseUpContext)
-      this.movingOffset = { x: 0, y: 0 }
+      this.movingOffset = {x: 0, y: 0}
       const endMove = () => {
         subMouseMove.unsubscribe()
         subMouseUp.unsubscribe()
@@ -370,10 +416,10 @@ export default {
       }
 
       const subMouseMove = mouseMove.events.subscribe(ev => {
-        if(mouseLeftPress(ev)) {
+        if (mouseLeftPress(ev)) {
           this.movingOffset.x = ev.clientX - start.clientX
           this.movingOffset.y = ev.clientY - start.clientY
-        } else if(this.movingOffset) {
+        } else if (this.movingOffset) {
           endMove()
         }
       })
@@ -440,9 +486,10 @@ export default {
           top: 18px;
         }
       }
+
       > * {
         flex: 1 1 0px;
-        border: 1px dashed rgba(0,0,0,0.1)
+        border: 1px dashed rgba(0, 0, 0, 0.1)
       }
     }
   }
@@ -482,6 +529,7 @@ export default {
       border: 1px solid rgba(0, 0, 0, 0.1);
     }
   }
+
   &.fixed {
     pointer-events: none;
     align-items: center;
@@ -496,9 +544,11 @@ export default {
     }
   }
 }
+
 i.dialog-anchor-pointer {
   display: inline-flex;
   align-items: center;
+
   &:after {
     cursor: pointer;
     content: "";
@@ -529,6 +579,7 @@ i.dialog-anchor-pointer {
     transform: rotate(135deg);
   }
 }
+
 .dialog-drag-pointer {
   position: absolute;
   z-index: 2;
@@ -540,9 +591,11 @@ i.dialog-anchor-pointer {
   align-self: center;
 
   opacity: 0;
+
   &:hover {
     opacity: 1;
   }
+
   &.dragging {
     cursor: grabbing !important;
   }

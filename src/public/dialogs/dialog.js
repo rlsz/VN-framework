@@ -9,6 +9,7 @@ export const Model = {
 }
 
 export const Position = {
+    auto: 'auto',
     left: 'left',
     top: 'top',
     bottom: 'bottom',
