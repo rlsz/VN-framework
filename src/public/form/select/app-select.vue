@@ -17,7 +17,7 @@
             <i class="close" @click.stop="ass.onSelectOption(item)"></i>
           </span>
         </slot>
-        <input v-if="query" class="app-select_filter multiple_mode"></input>
+        <input v-if="query" class="app-select_filter multiple_mode" v-model="filterText"></input>
       </span>
     </template>
     <template v-else>
@@ -41,6 +41,7 @@ import {FormControlService, FormModel, FormModelService} from "../form-model";
 import {Optional} from "../../di.service";
 import {FormInputAdapter} from "../../adapter/element/form-input-adapter";
 import {AppSelectService} from "./app-select.service";
+import {debounceTime} from "../../base/utils";
 
 export default {
   name: "app-select",
@@ -67,7 +68,11 @@ export default {
   },
   data() {
     return {
-      filterText: ''
+      filterText: '',
+      queryRef: debounceTime((keyword) => {
+        this.ass.getData(keyword)
+      }, 200),
+      dropdown: null
     }
   },
   computed: {
@@ -81,11 +86,31 @@ export default {
       return false
     }
   },
+  watch: {
+    filterText(val, oldVal) {
+      this.queryRef(val)
+    },
+    'ass.allOptions'(val) {
+      if(this.dropdown) {
+        const actions = val.map(c => {
+          return {
+            text: this.ass.getLabel(c),
+            handler: dialog => {
+              dialog.close()
+              this.ass.onSelectOption(c)
+            },
+            active: this.ass.isActive(c)
+          }
+        })
+        this.dropdown.config.actions = actions
+      }
+    }
+  },
   methods: {
     onClick(ev) {
       const anchor = ev.currentTarget
       const {width} = anchor.getBoundingClientRect()
-      this.ass.getData().then(() => {
+      this.ass.getData(this.filterText).then(() => {
         return this.ass.allOptions.map(c => {
           return {
             text: this.ass.getLabel(c),
@@ -97,13 +122,16 @@ export default {
           }
         })
       }).then(actions => {
-        this.ds.open(ActionsDialog, {
+        this.dropdown = this.ds.open(ActionsDialog, {
           anchor,
           offset: 2,
           actions,
           minWidth: width + 'px',
           maxWidth: Math.max(width, 300) + 'px',
           limitLine: 1
+        })
+        this.dropdown.afterClosed().finally(() => {
+          this.dropdown = null
         })
       })
     }

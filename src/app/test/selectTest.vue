@@ -116,7 +116,7 @@ export default {
   },
   methods: {
     query(keyword) {
-      console.log(keyword, this, this.$el)
+      console.log('query', keyword, this, this.$el)
       return Promise.resolve(this.testOptions).then(arr => {
         return arr.filter(c => !keyword || c.label.indexOf(keyword) >= 0)
       })

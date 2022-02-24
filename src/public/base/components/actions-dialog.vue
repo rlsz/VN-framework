@@ -34,6 +34,13 @@ export default {
       // action: { text, handler }
       return this.config.actions || []
     }
+  },
+  watch: {
+    actions() {
+      this.$nextTick(() => {
+        this.dialog._vm.fixPositionByAnchor()
+      })
+    }
   }
 }
 </script>

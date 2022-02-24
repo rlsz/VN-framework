@@ -182,7 +182,6 @@ export class AppSelectService {
     }
 
     isActive(option) {
-        console.log(JSON.stringify(option), JSON.stringify(this.valueOptions), this.getId(option))
         if (!this.valueOptions.length) {
             return false
         }
