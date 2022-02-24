@@ -1,7 +1,12 @@
 <template>
   <div class="app-select flex inline cross-center" @click="onClick">
     <template v-if="ass.isEmpty()">
-      <input v-if="query" class="app-select_filter empty" :placeholder="placeholder" v-model="filterText"></input>
+      <input v-if="query"
+             class="app-select_filter empty"
+             :placeholder="placeholder"
+             v-model="filterText"
+             @blur="onBlur"
+      ></input>
       <span v-else class="app-select_placeholder">{{ placeholder }}</span>
     </template>
     <template v-else-if="ass.multiple">
@@ -17,7 +22,11 @@
             <i class="close" @click.stop="ass.onSelectOption(item)"></i>
           </span>
         </slot>
-        <input v-if="query" class="app-select_filter multiple_mode" v-model="filterText"></input>
+        <input v-if="query"
+               class="app-select_filter multiple_mode"
+               v-model="filterText"
+               @blur="onBlur"
+        ></input>
       </span>
     </template>
     <template v-else>
@@ -25,6 +34,7 @@
              class="app-select_filter"
              :placeholder="ass.getLabel(ass.valueOptions[0])"
              v-model="filterText"
+             @blur="onBlur"
       ></input>
       <span v-else v-limit-line>{{ ass.getLabel(ass.valueOptions[0]) }}</span>
     </template>
@@ -88,51 +98,47 @@ export default {
   },
   watch: {
     filterText(val, oldVal) {
-      this.queryRef(val)
+      if(val !== null) {
+        this.queryRef(val)
+      }
     },
     'ass.allOptions'(val) {
       if(this.dropdown) {
-        const actions = val.map(c => {
-          return {
-            text: this.ass.getLabel(c),
-            handler: dialog => {
-              dialog.close()
-              this.ass.onSelectOption(c)
-            },
-            active: this.ass.isActive(c)
-          }
-        })
+        const actions = this.getActions()
         this.dropdown.config.actions = actions
       }
     }
   },
   methods: {
+    onBlur(ev) {
+      this.filterText = null
+    },
+    getActions() {
+      return this.ass.allOptions.map(c => {
+        return {
+          text: this.ass.getLabel(c),
+          handler: dialog => {
+            // dialog.close()
+            this.ass.onSelectOption(c)
+          },
+          active: this.ass.isActive(c)
+        }
+      })
+    },
     onClick(ev) {
       const anchor = ev.currentTarget
       const {width} = anchor.getBoundingClientRect()
-      this.ass.getData(this.filterText).then(() => {
-        return this.ass.allOptions.map(c => {
-          return {
-            text: this.ass.getLabel(c),
-            handler: dialog => {
-              dialog.close()
-              this.ass.onSelectOption(c)
-            },
-            active: this.ass.isActive(c)
-          }
-        })
-      }).then(actions => {
-        this.dropdown = this.ds.open(ActionsDialog, {
-          anchor,
-          offset: 2,
-          actions,
-          minWidth: width + 'px',
-          maxWidth: Math.max(width, 300) + 'px',
-          limitLine: 1
-        })
-        this.dropdown.afterClosed().finally(() => {
-          this.dropdown = null
-        })
+      const actions = this.getActions()
+      this.dropdown = this.ds.open(ActionsDialog, {
+        anchor,
+        offset: 2,
+        actions,
+        minWidth: width + 'px',
+        maxWidth: Math.max(width, 300) + 'px',
+        limitLine: 1
+      })
+      this.dropdown.afterClosed().finally(() => {
+        this.dropdown = null
       })
     }
   }
