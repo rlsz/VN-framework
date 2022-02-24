@@ -95,6 +95,17 @@
                   multiple
       ></app-select>
     </div>
+    <div class="flex cross-center">
+      <span>label-key: label; id-key: value; width; multiple; query</span>
+      <app-select placeholder="请选择"
+                  :query="query"
+                  label-key="label"
+                  id-key="value"
+                  v-model="testValue3"
+                  style="width: 250px"
+                  multiple
+      ></app-select>
+    </div>
   </div>
 </template>
 
