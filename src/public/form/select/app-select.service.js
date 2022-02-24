@@ -169,8 +169,8 @@ export class AppSelectService {
         let $data
         if (this.vm.options) {
             $data = Promise.resolve(this.vm.options)
-        } else if (this.vm.remoteMethod) {
-            $data = Promise.resolve(this.vm.remoteMethod(keyword))
+        } else if (this.vm.query) {
+            $data = Promise.resolve(this.vm.query(keyword))
         } else {
             $data = Promise.resolve([])
         }

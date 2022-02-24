@@ -45,9 +45,49 @@
       ></app-select>
     </div>
     <div class="flex cross-center">
-      <span>label-key: label; id-key: value; max-width</span>
+      <span>label-key: label; id-key: value; max-width; multiple</span>
       <app-select placeholder="请选择"
                   :options="testOptions"
+                  label-key="label"
+                  id-key="value"
+                  v-model="testValue3"
+                  style="max-width: 250px"
+                  multiple
+      ></app-select>
+    </div>
+    <div class="flex cross-center">
+      <span>label-key: label; id-key: value; query</span>
+      <app-select placeholder="请选择"
+                  :query="query"
+                  label-key="label"
+                  id-key="value"
+                  v-model="testValue2"
+      ></app-select>
+    </div>
+    <div class="flex cross-center">
+      <span>label-key: label; id-key: value; max-width; query</span>
+      <app-select placeholder="请选择"
+                  :query="query"
+                  label-key="label"
+                  id-key="value"
+                  v-model="testValue2"
+                  style="max-width: 250px"
+      ></app-select>
+    </div>
+    <div class="flex cross-center">
+      <span>label-key: label; id-key: value; multiple; query</span>
+      <app-select placeholder="请选择"
+                  :query="query"
+                  label-key="label"
+                  id-key="value"
+                  v-model="testValue3"
+                  multiple
+      ></app-select>
+    </div>
+    <div class="flex cross-center">
+      <span>label-key: label; id-key: value; max-width; multiple; query</span>
+      <app-select placeholder="请选择"
+                  :query="query"
                   label-key="label"
                   id-key="value"
                   v-model="testValue3"
@@ -72,6 +112,14 @@ export default {
       testValue1: 2,
       testValue2: {label: "对齐语料", value: 2},
       testValue3: [{label: "普通语料", value: 1}, {label: "对齐语料", value: 2}]
+    }
+  },
+  methods: {
+    query(keyword) {
+      console.log(keyword, this, this.$el)
+      return Promise.resolve(this.testOptions).then(arr => {
+        return arr.filter(c => !keyword || c.label.indexOf(keyword) >= 0)
+      })
     }
   }
 }
