@@ -39,7 +39,7 @@
       <span v-else v-limit-line>{{ ass.getLabel(ass.valueOptions[0]) }}</span>
     </template>
 
-    <i class="arrow down"></i>
+    <i class="arrow" :class="{down: !dropdown, up: !!dropdown}"></i>
   </div>
 </template>
 
