@@ -125,8 +125,10 @@ export default {
         return {
           text: this.ass.getLabel(c),
           handler: dialog => {
-            // dialog.close()
             this.ass.onSelectOption(c)
+            if(!this.ass.multiple) {
+              dialog.close()
+            }
           },
           active: this.ass.isActive(c)
         }
