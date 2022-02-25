@@ -102,11 +102,11 @@ export default {
         this.queryRef(val)
       }
     },
-    'ass.value'(val, oldVal) {
-      if(this.ass.isEmpty() && this.filterText === null) {
-        this.filterText = ''
-      }
-    },
+    // 'ass.value'(val, oldVal) {
+    //   if(this.ass.isEmpty() && this.filterText === null) {
+    //     this.filterText = ''
+    //   }
+    // },
     'ass.allOptions'(val) {
       if(this.dropdown) {
         const actions = this.getActions()
@@ -133,6 +133,9 @@ export default {
       })
     },
     onClick(ev) {
+      if(this.ass.isEmpty() && this.filterText === null) {
+        this.filterText = ''
+      }
       const anchor = ev.currentTarget
       const {width} = anchor.getBoundingClientRect()
       const actions = this.getActions()
