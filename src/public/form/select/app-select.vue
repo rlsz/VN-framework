@@ -78,7 +78,7 @@ export default {
   },
   data() {
     return {
-      filterText: '',
+      filterText: '', // null - reserve latest query; '' - reset original options
       queryRef: debounceTime((keyword) => {
         this.ass.getData(keyword)
       }, 200),
@@ -102,6 +102,11 @@ export default {
         this.queryRef(val)
       }
     },
+    'ass.value'(val, oldVal) {
+      if(this.ass.isEmpty() && this.filterText === null) {
+        this.filterText = ''
+      }
+    },
     'ass.allOptions'(val) {
       if(this.dropdown) {
         const actions = this.getActions()
@@ -111,7 +116,9 @@ export default {
   },
   methods: {
     onBlur(ev) {
-      this.filterText = null
+      if(this.filterText) {
+        this.filterText = null
+      }
     },
     getActions() {
       return this.ass.allOptions.map(c => {

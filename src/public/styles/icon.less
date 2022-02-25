@@ -257,6 +257,50 @@ i {
     background: url('../../assets/public/done_pic@2x.png') center/contain no-repeat;
     display: inline-block;
   }
+
+  &.correct-css {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: rgba(82, 196, 26, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &:after {
+      content: "";
+      position: relative;
+      width: 6px;
+      height: 12px;
+      margin-top: -3px;
+      border: solid rgba(30, 30, 30, 1);
+      border-width: 0 0.2px 0.2px 0;
+      -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      transform: rotate(45deg);
+    }
+  }
+  &.correct-css-thin {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    --fill-color: currentColor;
+    &:after {
+      content: "";
+      position: relative;
+      width: 6px;
+      height: 12px;
+      margin-top: -3px;
+      border: solid var(--fill-color); // rgba(30, 30, 30, 1)
+      border-width: 0 0.2px 0.2px 0;
+      -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      transform: rotate(45deg);
+    }
+  }
 }
 
 

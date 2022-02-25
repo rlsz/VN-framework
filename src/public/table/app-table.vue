@@ -120,9 +120,9 @@ export default {
 .table-loading {
   padding: 40px 20px;
 }
-.table {
-  min-width: fit-content;
-}
+//.table {
+//  min-width: fit-content;
+//}
 .table-header {
   box-shadow: none;
   border-bottom: none;

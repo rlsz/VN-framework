@@ -106,6 +106,16 @@
                   multiple
       ></app-select>
     </div>
+    <div class="flex vertical">
+      <span>label-key: label; id-key: value; multiple; query; vertical</span>
+      <app-select placeholder="请选择"
+                  :query="query"
+                  label-key="label"
+                  id-key="value"
+                  v-model="testValue3"
+                  multiple
+      ></app-select>
+    </div>
   </div>
 </template>
 
@@ -117,7 +127,12 @@ export default {
       testOptions: Promise.resolve([
         {label: "普通语料", value: 1},
         {label: "对齐语料", value: 2},
-        {label: "long text test long text test long text test long text test long text test long text test long text test", value: 3}
+        {label: "long text test long text test long text test long text test long text test long text test long text test", value: 3},
+        {label: "test-4", value: 4},
+        {label: "test-5", value: 5},
+        {label: "test-6", value: 6},
+        {label: "test-7", value: 7},
+        {label: "test-8", value: 8}
       ]),
       testValue: {label: "对齐语料", value: 2},
       testValue1: 2,

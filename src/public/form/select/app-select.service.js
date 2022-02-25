@@ -188,11 +188,11 @@ export class AppSelectService {
         return this.valueOptions.some(item => this.getId(item) === this.getId(option))
     }
 
-    isEmpty() {
+    isEmpty(value = this.value) {
         if (this.multiple) {
-            return !this.value || !this.value.length
+            return !value || !value.length
         } else {
-            return this.value === undefined || this.value === null || this.value === ''
+            return value === undefined || value === null || value === ''
         }
     }
 }

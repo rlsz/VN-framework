@@ -2,16 +2,17 @@
   <div class="actions-dialog" :style="{minWidth: config.minWidth,maxWidth: config.maxWidth}">
     <span v-for="(action,index) in actions"
           :key="'dialog-action-item-'+index"
-          class="action"
+          class="action flex cross-center"
           :class="{disabled:action.disabled, active:action.active}"
           @click="action.handler(dialog)"
     >
       <template v-if="config.limitLine">
-        <span v-limit-line="config.limitLine">{{action.text}}</span>
+        <span class="fill-content" v-limit-line="config.limitLine">{{action.text}}</span>
       </template>
       <template v-else>
-        {{action.text}}
+        <span class="fill-content">{{action.text}}</span>
       </template>
+      <i class="correct-css-thin"></i>
     </span>
     <span class="empty" v-if="!actions.length">无数据</span>
   </div>
@@ -59,6 +60,10 @@ export default {
     cursor: pointer;
     text-decoration: none;
     padding: 7px 12px;
+    .correct-css-thin {
+      height: auto;
+      opacity: 0;
+    }
 
     &:hover {
       color: #3667D4;
@@ -68,6 +73,9 @@ export default {
 
     &.active {
       color: #3667D4;
+      .correct-css-thin {
+        opacity: 1;
+      }
     }
 
     &.disabled {
