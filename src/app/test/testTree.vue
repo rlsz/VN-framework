@@ -110,4 +110,7 @@ export default {
   //align-items: flex-start;
   max-height: 100vh;
 }
+.app-tree-root {
+  padding-right: 40px;
+}
 </style>
