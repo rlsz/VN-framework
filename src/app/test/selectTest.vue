@@ -132,7 +132,11 @@ export default {
         {label: "test-5", value: 5},
         {label: "test-6", value: 6},
         {label: "test-7", value: 7},
-        {label: "test-8", value: 8}
+        {label: "test-8", value: 8},
+        {label: "test-9", value: 9},
+        {label: "test-10", value: 10},
+        {label: "test-11", value: 11},
+        {label: "test-12", value: 12}
       ]),
       testValue: {label: "对齐语料", value: 2},
       testValue1: 2,

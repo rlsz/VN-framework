@@ -43,9 +43,9 @@ function calcTransform(anchorEl, targetEl, params) {
       left: anchor.x - body.x
     }
     if (gap.bottom > gapLimit) {
-      position = Position.bottom
+      position = Position.bottomStrict
     } else if (gap.top > gapLimit) {
-      position = Position.top
+      position = Position.topStrict
     } else if (gap.right > gapLimit) {
       position = Position.right
     } else if (gap.left > gapLimit) {
@@ -53,9 +53,9 @@ function calcTransform(anchorEl, targetEl, params) {
     } else {
       const maxGap = Math.max(gap.bottom, gap.right, gap.top, gap.left)
       if (gap.bottom === maxGap) {
-        position = Position.bottom
+        position = Position.bottomStrict
       } else if (gap.top === maxGap) {
-        position = Position.top
+        position = Position.topStrict
       } else if (gap.right === maxGap) {
         position = Position.right
       } else if (gap.left === maxGap) {
@@ -73,21 +73,21 @@ function calcTransform(anchorEl, targetEl, params) {
     translateY = anchor.y + anchor.height - self.y;
     translateY += offset
   }
-  if (position === Position.top) {
+  if ([Position.top, Position.topStrict].indexOf(position) >= 0) {
     // x = -((sx + sw/2) - (ax + aw/2))
     translateX = anchor.x + anchor.width / 2 - self.x - self.width / 2;
     // y = -(sy + sh - ay)
     translateY = anchor.y - self.y - self.height;
     translateY -= offset
   }
-  if (position === Position.left) {
+  if ([Position.left].indexOf(position) >= 0) {
     // x = - (sx + sw - ax)
     translateX = anchor.x - self.x - self.width;
     // y = - ((sy + sh/2) - (ay + ah/2))
     translateY = anchor.y + anchor.height / 2 - self.y - self.height / 2;
     translateX -= offset
   }
-  if (position === Position.right) {
+  if ([Position.right].indexOf(position) >= 0) {
     // x = - (sx - ax - aw)
     translateX = anchor.x + anchor.width - self.x;
     // y = - ((sy + sh/2) - (ay + ah/2))
@@ -105,6 +105,16 @@ function calcTransform(anchorEl, targetEl, params) {
     translateY = Math.max(anchor.y + anchor.height - self.y + offset, translateY);
     maxHeight = body.height - anchor.y - anchor.height - 4 - offset;
   }
+  if (position === Position.topStrict) {
+    translateY = Math.min(anchor.y - self.y - self.height + offset, translateY);
+    maxHeight = anchor.y - body.y - 4 - offset;
+  }
+  // if (position === Position.leftStrict) {
+  //
+  // }
+  // if (position === Position.rightStrict) {
+  //
+  // }
 
   translateX = round(translateX);
   translateY = round(translateY);
@@ -551,7 +561,8 @@ i.dialog-anchor-pointer {
     background: white;
   }
 
-  &.top:after {
+  &.top:after,
+  &.topStrict:after {
     margin-bottom: -3px;
     transform: rotate(45deg) translateY(-2px);
   }
@@ -562,12 +573,14 @@ i.dialog-anchor-pointer {
     transform: rotate(-135deg) translateY(-2px);
   }
 
-  &.left:after {
+  &.left:after,
+  &.leftStrict:after {
     margin-right: -3px;
     transform: rotate(-45deg);
   }
 
-  &.right:after {
+  &.right:after,
+  &.rightStrict:after {
     margin-left: -3px;
     transform: rotate(135deg);
   }

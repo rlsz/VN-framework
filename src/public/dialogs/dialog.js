@@ -14,7 +14,10 @@ export const Position = {
     top: 'top',
     bottom: 'bottom',
     right: 'right',
-    bottomStrict: 'bottomStrict'
+    // leftStrict: 'leftStrict',
+    topStrict: 'topStrict',
+    bottomStrict: 'bottomStrict',
+    // rightStrict: 'rightStrict'
 }
 
 export const State = {

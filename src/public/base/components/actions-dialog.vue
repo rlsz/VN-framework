@@ -55,6 +55,7 @@ export default {
 
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
 
   .action {
     cursor: pointer;
