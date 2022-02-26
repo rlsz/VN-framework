@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>ic_cnacel</title>
+    <g id="在线翻译" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="1.2.1在线翻译-文档翻译" transform="translate(-250.000000, -107.000000)">
+            <g id="ic_cnacel" transform="translate(250.000000, 107.000000)">
+                <rect id="矩形" stroke="#979797" fill="#D8D8D8" opacity="0" x="0.5" y="0.5" width="15" height="15"></rect>
+                <g id="编组-4" transform="translate(8.000000, 8.014719) rotate(-315.000000) translate(-8.000000, -8.014719) translate(3.403806, 3.418525)" fill="#FFFFFF">
+                    <polygon id="矩形" transform="translate(4.596194, 4.596194) rotate(315.000000) translate(-4.596194, -4.596194) " points="10.4943422 3.99434223 10.4943422 5.19804593 -1.30195407 5.19804593 -1.30195407 3.99434223"></polygon>
+                    <polygon id="矩形备份-2" transform="translate(4.596194, 4.596194) rotate(315.000000) translate(-4.596194, -4.596194) " points="5.19804593 10.4943422 3.99434223 10.4943422 3.99434223 -1.30195407 5.19804593 -1.30195407"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

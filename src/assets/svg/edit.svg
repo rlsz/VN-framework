@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组</title>
+    <g id="在线翻译" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="语料对齐-新建任务" transform="translate(-518.000000, -150.000000)">
+            <g id="编组" transform="translate(518.000000, 150.000000)">
+                <rect id="矩形" fill-opacity="0.01" fill="#FFFFFF" fill-rule="nonzero" x="0" y="0" width="14" height="14"></rect>
+                <line x1="2.04166667" y1="12.25" x2="12.5416667" y2="12.25" id="路径" stroke="#009688" stroke-linecap="round" stroke-linejoin="round"></line>
+                <polygon id="路径" stroke="#009688" stroke-linejoin="round" points="3.20833333 7.79330417 3.20833333 9.91666667 5.34251667 9.91666667 11.375 3.88152917 9.24440417 1.75"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

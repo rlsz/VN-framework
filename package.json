@@ -30,7 +30,8 @@
     "eslint-plugin-vue": "^6.2.2",
     "less": "^4.0.0",
     "less-loader": "^7.2.1",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.11",
+    "vue-svg-loader": "^0.16.0"
   },
   "eslintConfig": {
     "root": true,

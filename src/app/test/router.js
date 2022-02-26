@@ -320,5 +320,12 @@ export default {
                 },
             ]
         },
+        {
+            path: 'svgViewer',
+            component: () => import(/* webpackChunkName: "test" */ './svgViewer.vue'),
+            meta: {
+                title: 'svg测试'
+            }
+        },
     ]
 }
