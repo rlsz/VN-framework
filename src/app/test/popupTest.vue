@@ -8,6 +8,7 @@
     <div ref="test" class="flex vertical" style="background: rgba(0,0,0,0.1);align-self: stretch;align-items: flex-start;">
       <div style="height: 500px;width: 10px;"></div>
       <button class="app-form" @click="basic({anchor:$event.target,position: Position.bottom, offset: 20})">bottom offset popup</button>
+      <button class="app-form" @click="basic({anchor:$event.target,container:$el,position: Position.topStrict, offset: 20})">topStrict container offset popup</button>
       <button class="app-form" @click="basic({anchor:$event.target,container:$el,position: Position.bottom, offset: 20})">container popup</button>
       <div style="height: 1500px;width: 10px;"></div>
     </div>
