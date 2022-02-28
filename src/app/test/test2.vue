@@ -1,5 +1,8 @@
 <template>
   <div class="test2-root">
+    <div>
+      <span>H<sub>2</sub>O X<sup>2</sup></span>
+    </div>
     <div class="flex">
       <!-- 后端给的html内容中含有样式链接，会污染页面样式(例如导致所有页面a链接失效)，所以使用v-html-new来把样式内容处理掉 -->
       <!--      <span class="test-box-1 html-new-general" v-html="$options.filters.highlight(test1)"></span>-->
