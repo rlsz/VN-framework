@@ -549,9 +549,11 @@ export function flattenTreeToArray(tree, subTreeSelector, seed = []) {
 }
 
 if (!Array.prototype.distinct) {
-    Array.prototype.distinct = function (compare) {
-        return Distinct(this, compare)
-    }
+    Object.defineProperty(Array.prototype, 'distinct', {
+        value: function distinct(compare) {
+            return Distinct(this, compare)
+        }
+    });
 }
 
 export function serialize(val) {
