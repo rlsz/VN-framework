@@ -174,6 +174,8 @@ export function Distinct(arr, compare = (a, b) => a === b) {
 /**
  * export type JsType = 'Array' | 'String' | 'Symbol' | 'Number' | 'Null' | 'Undefined' |
  *                      'Object' | 'RegExp' | 'Date' | 'Boolean' | 'HTMLAnchorElement' | string;
+ *
+ * GetJsType(val) === 'Array' can be replaced with Array.isArray(val)
  * @param val
  * @returns {string}
  * @constructor
