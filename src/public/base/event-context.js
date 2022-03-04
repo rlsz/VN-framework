@@ -158,7 +158,7 @@ export const SelectionDirection = {
     backward: 'backward'
 }
 
-// todo: detect next mouse move event as selection end, then get that position as mouse end coordinate
+// todo: detect next mouse move event or mouse up event as selection end, then get that position as mouse end coordinate
 export class SelectionEndContext extends SelectionChangeContext {
     delay = 500
 }
