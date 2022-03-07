@@ -85,6 +85,9 @@ class DependencyInjection {
                 value = this.get(provider.useExisting)
             } else if (provider.useFactory) {
                 value = provider.useFactory.call(this.vm, this)
+                if(provider.lifecycle) {
+                    this.ownProviders.push(value)
+                }
             } else {
                 throw new Error(`provider configuration error: ${provider}`)
             }
@@ -185,7 +188,8 @@ class DependencyInjection {
  *      },
  *      {
  *          provide: Token,
- *          useFactory: injector => instance // 使用自定义回调方法创建实例，需要注意的是返回undefined会导致实例查询报错(遍历搜索时将被跳过导致查询失败)，建议使用null表达空值
+ *          useFactory: injector => instance, // 使用自定义回调方法创建实例，需要注意的是返回undefined会导致实例查询报错(遍历搜索时将被跳过导致查询失败)，建议使用null表达空值
+ *          lifecycle: Boolean
  *      }
  *     ],
  *     inject: {

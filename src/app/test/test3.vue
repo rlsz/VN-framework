@@ -10,9 +10,30 @@
 import {LoggerService} from "@/public/logger";
 import {DialogService} from "@/public/dialogs";
 
+class Hello {
+  static generate(text) {
+    return {
+      provide: Hello,
+      useFactory(injector) {
+        return new Hello(injector, text)
+      },
+      lifecycle: true
+    }
+  }
+  text
+  constructor(injector, text) {
+    this.text = text
+    console.log('Hello constructor', this.text)
+  }
+  diCreated(vm) {
+    console.log('Hello created', this.text)
+  }
+}
+
 export default {
   name: "test3",
   di: {
+    providers: [Hello.generate('test')],
     inject: {
       ls: LoggerService,
       ds: DialogService
