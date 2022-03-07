@@ -11,11 +11,11 @@ import {LoggerService} from "@/public/logger";
 import {DialogService} from "@/public/dialogs";
 
 class Hello {
-  static generate(text) {
+  static config(opts) {
     return {
       provide: Hello,
       useFactory(injector) {
-        return new Hello(injector, text)
+        return new Hello(injector, opts.text)
       },
       lifecycle: true
     }
@@ -33,7 +33,7 @@ class Hello {
 export default {
   name: "test3",
   di: {
-    providers: [Hello.generate('test')],
+    providers: [Hello.config({text: 'test'})],
     inject: {
       ls: LoggerService,
       ds: DialogService
