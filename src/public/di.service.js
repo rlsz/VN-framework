@@ -66,6 +66,9 @@ class DependencyInjection {
      * @param opts
      */
     set(provider) {
+        if(!provider) {
+            throw new Error(`provider reference error: ${provider}`)
+        }
         let token, value
         if (typeof provider === 'function') {
             token = provider
@@ -76,6 +79,9 @@ class DependencyInjection {
                 throw new Error(`configuration error: please use provide instead of provider`)
             }
             token = provider.provide
+            if(!token) {
+                throw new Error(`provide reference error: ${token}`)
+            }
             if (provider.useValue) {
                 value = provider.useValue
             } else if (provider.useClass) {
