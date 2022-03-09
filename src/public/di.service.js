@@ -60,7 +60,8 @@ class DependencyInjection {
      *
      *      {
      *          provide: Token,
-     *          useFactory: injector => instance
+     *          useFactory: injector => instance,
+     *          lifecycle?: Boolean
      *      }
      *
      * @param opts
@@ -195,7 +196,7 @@ class DependencyInjection {
  *      {
  *          provide: Token,
  *          useFactory: injector => instance, // 使用自定义回调方法创建实例，需要注意的是返回undefined会导致实例查询报错(遍历搜索时将被跳过导致查询失败)，建议使用null表达空值
- *          lifecycle: Boolean
+ *          lifecycle?: Boolean
  *      }
  *     ],
  *     inject: {
