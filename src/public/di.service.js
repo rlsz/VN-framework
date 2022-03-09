@@ -110,6 +110,7 @@ class DependencyInjection {
             symbol = token.InjectionSymbol
         }
         this.instanceMap[symbol] = value
+        return value
     }
 
     /**
