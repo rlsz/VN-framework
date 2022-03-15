@@ -13,10 +13,14 @@ class DependencyInjection {
             for (let key in inject) {
                 const token = inject[key]
                 if (token) {
-                    data[key] = this.get(token, {
-                        checkProxy: true,
-                        proxyBridge: this
-                    })
+                    if(token[ContentChildFlag] || token[ContentChildrenFlag]) {
+                        data[key] = undefined
+                    } else {
+                        data[key] = this.get(token, {
+                            checkProxy: true,
+                            proxyBridge: this
+                        })
+                    }
                 } else {
                     console.error('token must be given for inject key "' + key + '"')
                     data[key] = undefined
@@ -114,35 +118,48 @@ class DependencyInjection {
     }
 
     /**
-     *
-     * @param token
-     * @param opts { mute?: boolean, checkProxy?: boolean, proxyBridge: DependencyInjection }
+     * @param opts token or
+     *          {
+     *              provide: token,
+     *              checkProxy?: boolean,
+     *              proxyBridge?: DependencyInjection ,
+     *              [MuteFlag]?: boolean,
+     *              [OptionalFlag]?: boolean,
+     *              [ContentChildFlag]?: boolean,
+     *              [ContentChildrenFlag]?: boolean,
+     *          }
      * @returns {*|undefined}
      */
-    get(token, opts = {}) {
-        if(typeof opts === 'boolean') {
-            opts = {
-                mute: opts
-            }
+    get(opts) {
+        if(!opts) {
+            throw new Error(`opts reference error: ${opts}`)
         }
-        if(token && token[OptionalFlag]) {
-            opts.optional = true
-            token = token.provide
+        let token
+        if (typeof opts === 'function' || typeof opts === 'symbol') {
+            token = opts
+            opts = {
+                provide: token
+            }
+        } else {
+            if (!opts.provide && opts.provider) {
+                throw new Error(`configuration error: please use provide instead of provider`)
+            }
+            token = opts.provide
+            if(!token) {
+                throw new Error(`provide reference error: ${token}`)
+            }
         }
         try {
-            if(!token) {
-                throw new Error(`invalid token ${token}`)
-            }
             let symbol
             if(typeof token === 'symbol') {
                 symbol = token
             } else {
                 symbol = token.InjectionSymbol
                 if (!symbol || (token.name && symbol.description !== token.name)) {
-                    if(opts.optional) {
+                    if(opts[OptionalFlag]) {
                         return null
                     } else {
-                        throw new Error(`target token is not generated for now: ${token && token.toString()}`)
+                        throw new Error(`target token is not generated for now: ${token.toString()}`)
                     }
                 }
             }
@@ -160,22 +177,49 @@ class DependencyInjection {
                 }
                 return target
             }
-            if (!this.vm.$parent) {
-                if(opts.optional) {
-                    return null
-                } else {
-                    throw new Error(`token instance can't be found: ${token && token.toString()}`)
+            if (opts[ContentChildFlag]) {
+                for (let child of this.vm.$children) {
+                    const inc = child.$injector.get(opts)
+                    if(inc) {
+                        return inc
+                    }
                 }
+                return undefined
+            } else {
+                if (!this.vm.$parent) {
+                    if(opts[OptionalFlag]) {
+                        return null
+                    } else {
+                        throw new Error(`token instance can't be found: ${token.toString()}`)
+                    }
+                }
+                return this.vm.$parent.$injector.get(opts)
             }
-            return this.vm.$parent.$injector.get(token, opts)
         } catch (e) {
-            if(!opts.mute) {
+            if(!opts[MuteFlag]) {
                 console.error(e)
             }
             return undefined
         }
     }
 
+    detectContent() {
+        const {inject} = this.config
+        for (let key in inject) {
+            const token = inject[key]
+            if (token) {
+                if(token[ContentChildFlag] || token[ContentChildrenFlag]) {
+                    const inc = this.get(token, {
+                        checkProxy: true,
+                        proxyBridge: this
+                    })
+                    if(inc) {
+                        this.vm.$set(this.vm, key, inc)
+                    }
+                }
+            }
+        }
+    }
 }
 
 /** 在vue组件配置如下参数:
@@ -240,6 +284,7 @@ export default function (Vue) {
             })
         },
         mounted() {
+            this.$injector.detectContent()
             this.$injector.ownProviders.forEach(providerInstance => {
                 providerInstance?.diMounted && providerInstance.diMounted(this)
             })
@@ -288,10 +333,37 @@ export class SimpleServiceProxyHandler {
         return Reflect.set(...arguments);
     }
 }
+export const MuteFlag = Symbol('MuteFlag')
 export const OptionalFlag = Symbol('OptionalFlag')
-export function Optional(token) {
-    return {
-        provide: token,
-        [OptionalFlag]: true
+export const ContentChildFlag = Symbol('ContentChildFlag')
+export const ContentChildrenFlag = Symbol('ContentChildrenFlag')
+
+
+function decorator(opts, flag) {
+    if(!opts) {
+        throw new Error(`opts reference error: ${opts}`)
     }
+    if (typeof opts === 'function' || typeof opts === 'symbol') {
+        return {
+            provide: opts,
+            [flag]: true
+        }
+    } else {
+        return {
+            ...opts,
+            [flag]: true
+        }
+    }
+}
+export function Mute(token) {
+    return decorator(token, MuteFlag)
+}
+export function Optional(token) {
+    return decorator(token, OptionalFlag)
+}
+export function ContentChild(token) {
+    return decorator(token, ContentChildFlag)
+}
+export function ContentChildren(token) {
+    return decorator(token, ContentChildrenFlag)
 }
