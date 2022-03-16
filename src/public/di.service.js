@@ -185,6 +185,21 @@ class DependencyInjection {
                     }
                 }
                 return undefined
+            } else if (opts[ContentChildrenFlag]) {
+                let temp = []
+                for (let child of this.vm.$children) {
+                    const res = child.$injector.get(opts)
+                    if(res) {
+                        if(Array.isArray(res)) {
+                            if(res.length) {
+                                temp = temp.concat(res)
+                            }
+                        } else {
+                            temp.push(res)
+                        }
+                    }
+                }
+                return temp
             } else {
                 if (!this.vm.$parent) {
                     if(opts[OptionalFlag]) {
