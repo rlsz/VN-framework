@@ -295,6 +295,7 @@ export default function (Vue) {
             })
         },
         updated() {
+            this.$injector.detectContent()
             this.$injector.ownProviders.forEach(providerInstance => {
                 providerInstance?.diUpdated && providerInstance.diUpdated(this)
             })
