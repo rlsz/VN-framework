@@ -35,6 +35,7 @@ export class Directive {
 export class DirectiveContext {
     value
     onClickReference
+    vm
 
     // eslint-disable-next-line no-unused-vars
     constructor(directive) {
@@ -44,6 +45,7 @@ export class DirectiveContext {
     // eslint-disable-next-line no-unused-vars
     bind(el, binding, vnode, oldVnode) {
         this.value = binding.value
+        this.vm = vnode.componentInstance || vnode.context
         el.addEventListener('click', this.onClickReference)
     }
 
