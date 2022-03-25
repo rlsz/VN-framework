@@ -91,6 +91,7 @@ export default {
   .empty {
     color: rgba(0,0,0,0.3);
     padding: 2px 12px;
+    text-align: center;
   }
 }
 </style>
