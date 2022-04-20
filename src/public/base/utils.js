@@ -583,7 +583,7 @@ export function deserialize(val) {
 export function serializeParams(params) {
     return Object.keys(params).map(p => {
         let val = params[p]
-        if (typeof val === 'object' && GetJsType(val) === 'Array') {
+        if (typeof val === 'object' && Array.isArray(val)) {
             return val.map((v, i) => serializeParamsItem(p, v, i)).join('&')
         }
         return serializeParamsItem(p, val)
