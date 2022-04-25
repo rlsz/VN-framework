@@ -17,7 +17,6 @@ class DependencyInjection {
                         data[key] = undefined
                     } else {
                         data[key] = this.get(token, {
-                            checkProxy: true,
                             proxyBridge: this
                         })
                     }
@@ -121,7 +120,6 @@ class DependencyInjection {
      * @param opts token or
      *          {
      *              provide: token,
-     *              checkProxy?: boolean,
      *              proxyBridge?: DependencyInjection ,
      *              [MuteFlag]?: boolean,
      *              [OptionalFlag]?: boolean,
@@ -165,7 +163,7 @@ class DependencyInjection {
             }
             const target = this.instanceMap[symbol]
             if (target !== undefined) {
-                if(opts.checkProxy && target && target[ServiceProxyHandlerProperty]) {
+                if(opts.proxyBridge && target && target[ServiceProxyHandlerProperty]) {
                     if(typeof target[ServiceProxyHandlerProperty] === "function") {
                         const handler = new target[ServiceProxyHandlerProperty](opts.proxyBridge)
                         const revocable = Proxy.revocable(target, handler)
@@ -225,7 +223,6 @@ class DependencyInjection {
             if (token) {
                 if(token[ContentChildFlag] || token[ContentChildrenFlag]) {
                     const inc = this.get(token, {
-                        checkProxy: true,
                         proxyBridge: this
                     })
                     if(inc) {
