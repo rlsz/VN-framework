@@ -16,9 +16,7 @@ class DependencyInjection {
                     if(token[ContentChildFlag] || token[ContentChildrenFlag]) {
                         data[key] = undefined
                     } else {
-                        data[key] = this.get(token, {
-                            proxyBridge: this
-                        })
+                        data[key] = this.get(decorator(token, 'proxyBridge', this))
                     }
                 } else {
                     console.error('token must be given for inject key "' + key + '"')
@@ -148,16 +146,18 @@ class DependencyInjection {
             }
         }
         try {
-            let symbol
+            let symbol, desc
             if(typeof token === 'symbol') {
                 symbol = token
+                desc = token.toString()
             } else {
                 symbol = token.InjectionSymbol
-                if (!symbol || (token.name && symbol.description !== token.name)) {
+                desc = token.name
+                if (!symbol || (desc && symbol.description !== desc)) {
                     if(opts[OptionalFlag]) {
                         return null
                     } else {
-                        throw new Error(`target token is not generated for now: ${token.toString()}`)
+                        throw new Error(`target token is not generated for now: ${desc}`)
                     }
                 }
             }
@@ -203,7 +203,7 @@ class DependencyInjection {
                     if(opts[OptionalFlag]) {
                         return null
                     } else {
-                        throw new Error(`token instance can't be found: ${token.toString()}`)
+                        throw new Error(`token instance can't be found: ${desc}`)
                     }
                 }
                 return this.vm.$parent.$injector.get(opts)
@@ -222,9 +222,7 @@ class DependencyInjection {
             const token = inject[key]
             if (token) {
                 if(token[ContentChildFlag] || token[ContentChildrenFlag]) {
-                    const inc = this.get(token, {
-                        proxyBridge: this
-                    })
+                    const inc = this.get(decorator(token, 'proxyBridge', this))
                     if(inc) {
                         this.vm.$set(this.vm, key, inc)
                     }
@@ -352,19 +350,19 @@ export const ContentChildFlag = Symbol('ContentChildFlag')
 export const ContentChildrenFlag = Symbol('ContentChildrenFlag')
 
 
-function decorator(opts, flag) {
+function decorator(opts, key, value = true) {
     if(!opts) {
         throw new Error(`opts reference error: ${opts}`)
     }
     if (typeof opts === 'function' || typeof opts === 'symbol') {
         return {
             provide: opts,
-            [flag]: true
+            [key]: value
         }
     } else {
         return {
             ...opts,
-            [flag]: true
+            [key]: value
         }
     }
 }
