@@ -24,6 +24,12 @@ const virtual_a = document.createElement('a')
  * 调整后 bbb=%7B%22ccc%22:%5B2,4,6%5D,%22ddd%22:%22asihdiow%22%7D
  */
 export class AjaxService {
+    static useClass(token) {
+        return {
+            provide: AjaxService,
+            useClass: token
+        }
+    }
 
     injector
 
