@@ -24,7 +24,7 @@ Vue.component('el-select', Select);
  *
  */
 import {Table} from './fixTableBug'
-Vue.component('el-table', Table);
+// Vue.component('el-table', Table);
 import NewElInput from './el-input.vue'
 Vue.component('el-input', NewElInput);
 import NewElFormItem from './el-form-item.vue'
