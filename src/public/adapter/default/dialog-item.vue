@@ -12,6 +12,8 @@ import {
   ResizeContext,
   ScrollContext
 } from "../../base/event-context";
+import {Optional} from "../../di.service";
+import {DialogContainerTarget} from "../../dialogs/dialog-container-target";
 
 function round(num) {
   if (num >= 0) {
@@ -141,7 +143,8 @@ export default {
     ],
     inject: {
       dialog: Dialog,
-      configService: ConfigService
+      configService: ConfigService,
+      parent: Optional(DialogParent)
     },
   },
   data() {
@@ -378,29 +381,31 @@ export default {
         this.watchBodyClick()
         this.fixPositionByAnchor()
       }
-      const container = this.options.instance.config?.container
-      if (this.model === Model.fillAvailable && container && container !== document.body) {
-        const calcPosition = () => {
-          const {left, top, right, bottom} = container.getBoundingClientRect()
-          const {
-            left: bodyLeft,
-            top: bodyTop,
-            right: bodyRight,
-            bottom: bodyBottom
-          } = document.body.getBoundingClientRect()
-          this.fixPosition = {
-            left: Math.max(round(left), 0) + 'px',
-            top: Math.max(round(top), 0) + 'px',
-            right: Math.max(round(bodyRight - right), 0) + 'px',
-            bottom: Math.max(round(bodyBottom - bottom), 0) + 'px'
+      if (this.model === Model.fillAvailable) {
+        const container = this.options.instance.config?.container || this.parent?.$injector.get(Optional(DialogContainerTarget))
+        if(container && container !== document.body) {
+          const calcPosition = () => {
+            const {left, top, right, bottom} = container.getBoundingClientRect()
+            const {
+              left: bodyLeft,
+              top: bodyTop,
+              right: bodyRight,
+              bottom: bodyBottom
+            } = document.body.getBoundingClientRect()
+            this.fixPosition = {
+              left: Math.max(round(left), 0) + 'px',
+              top: Math.max(round(top), 0) + 'px',
+              right: Math.max(round(bodyRight - right), 0) + 'px',
+              bottom: Math.max(round(bodyBottom - bottom), 0) + 'px'
+            }
           }
+          this.subs.push(
+              ...getAllScrollParent(container).map(c => getContext(RealTimeScrollContext, c).events.subscribe(ev => calcPosition())),
+              getContext(ResizeContext).events.subscribe(ev => calcPosition())
+          )
+          this.watchBodyClick()
+          calcPosition()
         }
-        this.subs.push(
-            ...getAllScrollParent(container).map(c => getContext(RealTimeScrollContext, c).events.subscribe(ev => calcPosition())),
-            getContext(ResizeContext).events.subscribe(ev => calcPosition())
-        )
-        this.watchBodyClick()
-        calcPosition()
       }
       if (this.model === Model.fixed) {
         // this.transform = { x: 100, y: 100 };
