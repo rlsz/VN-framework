@@ -145,6 +145,9 @@ class DependencyInjection {
                 throw new Error(`provide reference error: ${token}`)
             }
         }
+        if(!opts.source) {
+            opts.source = this
+        }
         try {
             let symbol, desc
             if(typeof token === 'symbol') {
@@ -157,7 +160,7 @@ class DependencyInjection {
                     if(opts[OptionalFlag]) {
                         return null
                     } else {
-                        throw new Error(`target token is not generated for now: ${desc}`)
+                        throw new Error(`target token is not generated for now: ${desc}, current component ${getComponentDesc(opts.source.vm)}`)
                     }
                 }
             }
@@ -203,7 +206,7 @@ class DependencyInjection {
                     if(opts[OptionalFlag]) {
                         return null
                     } else {
-                        throw new Error(`token instance can't be found: ${desc}`)
+                        throw new Error(`token instance can't be found: ${desc}, current component ${getComponentDesc(opts.source.vm)}`)
                     }
                 }
                 return this.vm.$parent.$injector.get(opts)
@@ -377,4 +380,13 @@ export function ContentChild(token) {
 }
 export function ContentChildren(token) {
     return decorator(token, ContentChildrenFlag)
+}
+
+function getComponentDesc(vm, paths = []) {
+    if(!vm || !vm.$vnode || !vm.$vnode.tag) {
+        return paths.join(' > ')
+    }
+    const path = vm.$vnode.tag.replace(/vue-component-\d+-/, '')
+    paths.unshift(path)
+    return getComponentDesc(vm.$parent, paths)
 }
