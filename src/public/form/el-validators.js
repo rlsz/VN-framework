@@ -164,7 +164,7 @@ export class ElFormValidators {
                             return callback(new Error(label + '长度不能超过' + max + '位'))
                         }
                     } else {
-                        if (value.length > max) {
+                        if (value.length >= max) {
                             return callback(new Error(label + '长度必须小于' + max + '位'))
                         }
                     }
@@ -195,7 +195,7 @@ export class ElFormValidators {
                             return callback(new Error(label + '长度不能少于' + min + '位'))
                         }
                     } else {
-                        if (value.length < min) {
+                        if (value.length <= min) {
                             return callback(new Error(label + '长度必须大于' + min + '位'))
                         }
                     }
