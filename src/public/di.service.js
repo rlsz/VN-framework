@@ -233,6 +233,12 @@ class DependencyInjection {
             }
         }
     }
+
+    lifecycle(method) {
+        this.ownProviders.forEach(providerInstance => {
+            providerInstance && providerInstance[method] && providerInstance[method](this.vm)
+        })
+    }
 }
 
 /** 在vue组件配置如下参数:
@@ -286,51 +292,50 @@ export default function (Vue) {
     }
     Vue.mixin({
         beforeCreate() {
+            // console.log('beforeCreate', this)
             this.$injector = new DependencyInjection(this)
         },
         data() {
             return this.$injector.mixinData
         },
         created() {
-            this.$injector.ownProviders.forEach(providerInstance => {
-                providerInstance?.diCreated && providerInstance.diCreated(this)
-            })
+            this.$injector.lifecycle('diCreated')
         },
         mounted() {
             this.$injector.detectContent()
-            this.$injector.ownProviders.forEach(providerInstance => {
-                providerInstance?.diMounted && providerInstance.diMounted(this)
-            })
+            this.$injector.lifecycle('diMounted')
         },
         beforeUpdate() {
-            this.$injector.ownProviders.forEach(providerInstance => {
-                providerInstance?.diBeforeUpdate && providerInstance.diBeforeUpdate(this)
-            })
+            this.$injector.lifecycle('diBeforeUpdate')
         },
         updated() {
             this.$injector.detectContent()
-            this.$injector.ownProviders.forEach(providerInstance => {
-                providerInstance?.diUpdated && providerInstance.diUpdated(this)
-            })
+            this.$injector.lifecycle('diUpdated')
         },
         destroyed() {
-            this.$injector.ownProviders.forEach(providerInstance => {
-                providerInstance?.diDestroyed && providerInstance.diDestroyed(this)
-            })
+            this.$injector.lifecycle('diDestroyed')
             // this.$injector.revocableProxy.forEach(revocable => {
             //     revocable.revoke();
             // })
         },
         activated() {
-            this.$injector.ownProviders.forEach(providerInstance => {
-                providerInstance?.diActivated && providerInstance.diActivated(this)
-            })
+            this.$injector.lifecycle('diActivated')
         },
         deactivated() {
-            this.$injector.ownProviders.forEach(providerInstance => {
-                providerInstance?.diDeactivated && providerInstance.diDeactivated(this)
-            })
-        }
+            this.$injector.lifecycle('diDeactivated')
+        },
+        // beforeRouteLeave() {
+        //     this.$injector.lifecycle('diBeforeRouteLeave')
+        // },
+        // beforeRouteUpdate() {
+        //     this.$injector.lifecycle('diBeforeRouteUpdate')
+        // }
+        // beforeRouteEnter(to, from, next) {
+        //     console.log('beforeRouteEnter')
+        //     next(vm => {
+        //         console.log('beforeRouteEnter next', vm)
+        //     })
+        // }
     })
 }
 
