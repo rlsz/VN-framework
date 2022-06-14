@@ -164,19 +164,21 @@ class DependencyInjection {
                     }
                 }
             }
-            const target = this.instanceMap[symbol]
-            if (target !== undefined) {
-                if(opts.proxyBridge && target && target[ServiceProxyHandlerProperty]) {
-                    if(typeof target[ServiceProxyHandlerProperty] === "function") {
-                        const handler = new target[ServiceProxyHandlerProperty](opts.proxyBridge)
-                        const revocable = Proxy.revocable(target, handler)
-                        opts.proxyBridge.revocableProxy.push(revocable)
-                        return revocable.proxy
-                    } else {
-                        throw new Error('ServiceProxyHandlerProperty must be set with a class')
+            if(opts.source !== this || !opts[SkipSelfFlag]) {
+                const target = this.instanceMap[symbol]
+                if (target !== undefined) {
+                    if(opts.proxyBridge && target && target[ServiceProxyHandlerProperty]) {
+                        if(typeof target[ServiceProxyHandlerProperty] === "function") {
+                            const handler = new target[ServiceProxyHandlerProperty](opts.proxyBridge)
+                            const revocable = Proxy.revocable(target, handler)
+                            opts.proxyBridge.revocableProxy.push(revocable)
+                            return revocable.proxy
+                        } else {
+                            throw new Error('ServiceProxyHandlerProperty must be set with a class')
+                        }
                     }
+                    return target
                 }
-                return target
             }
             if (opts[ContentChildFlag]) {
                 for (let child of this.vm.$children) {
@@ -356,7 +358,7 @@ export const MuteFlag = Symbol('MuteFlag')
 export const OptionalFlag = Symbol('OptionalFlag')
 export const ContentChildFlag = Symbol('ContentChildFlag')
 export const ContentChildrenFlag = Symbol('ContentChildrenFlag')
-
+export const SkipSelfFlag = Symbol('SkipSelfFlag')
 
 function decorator(opts, key, value = true) {
     if(!opts) {
@@ -385,6 +387,9 @@ export function ContentChild(token) {
 }
 export function ContentChildren(token) {
     return decorator(token, ContentChildrenFlag)
+}
+export function SkipSelf(token) {
+    return decorator(token, SkipSelfFlag)
 }
 
 function getComponentDesc(vm, paths = []) {
