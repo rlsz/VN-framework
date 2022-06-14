@@ -977,3 +977,8 @@ export function mouseLeftPress(evt) {
     const button = evt.which || evt.button;
     return button === 1;
 }
+
+const escapeRe = /[-/\\^$*+?.()|[\]{}]/g;
+export function EscapeRegexCharacter(s) {
+    return s.replace(escapeRe, '\\$&');
+}

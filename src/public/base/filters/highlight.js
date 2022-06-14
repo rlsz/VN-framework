@@ -1,10 +1,5 @@
 import {PlatformService} from "../../platform/platform.service";
-
-const escapeRe = /[-/\\^$*+?.()|[\]{}]/g;
-
-function EscapeRegexCharacter(s) {
-    return s.replace(escapeRe, '\\$&');
-}
+import {EscapeRegexCharacter} from "../utils";
 
 function IsValidColor(strColor) {
     if (!strColor) {

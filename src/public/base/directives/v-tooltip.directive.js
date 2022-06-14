@@ -14,6 +14,7 @@ class VTooltipDirective extends DirectiveContext {
     subs = []
     componentInstance
     position
+    theme
 
     hover
     dialog
@@ -21,6 +22,7 @@ class VTooltipDirective extends DirectiveContext {
     get ds() {
         return this.componentInstance.$injector.get(DialogService)
     }
+
     inserted(el, binding, vnode) {
         super.inserted(...arguments);
         this.el = el
@@ -50,6 +52,8 @@ class VTooltipDirective extends DirectiveContext {
         if(binding.modifiers.debug) {
             this.onShow()
         }
+        const attrs = vnode?.data?.attrs
+        this.theme = attrs && attrs['theme']
     }
 
     unbind(el, binding, vnode) {
@@ -80,9 +84,9 @@ class VTooltipDirective extends DirectiveContext {
             let comp
             let options = {
                 anchor: this.el,
-                position: this.position || Position.bottom,
+                position: this.position || Position.auto,
                 offset: 4,
-                theme: 'theme-dark'
+                theme: this.theme || 'theme-dark'
             }
             if(typeof value === 'string') {
                 comp = {
