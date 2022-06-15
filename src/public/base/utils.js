@@ -397,7 +397,7 @@ export function debounceTime(func, time = 500) {
  * @param bufferLength
  * @returns {function(*=): void}
  */
-export function throttle(executor, bufferLength, compareKey) {
+export function throttle(executor, bufferLength = 1, compareKey = null) {
     const queue = []
     let buffer = new Array(bufferLength).fill(undefined)
 
