@@ -25,6 +25,7 @@ export class AppTreeService {
             children: 'children',
             hasChildren: 'hasChildren',
             indent: 16,
+            multiSelect: true,
             ...this.vm.treeProps
         }
         this.unwatch.push(
@@ -61,7 +62,12 @@ export class AppTreeService {
             this.checkedList.splice(index, 1);
         }
         if(index < 0 && status !== false) {
-            this.checkedList.push(node)
+            const {multiSelect} = this.treeProps
+            if(multiSelect) {
+                this.checkedList.push(node)
+            } else {
+                this.checkedList = [node]
+            }
         }
     }
 

@@ -360,7 +360,7 @@ export const ContentChildFlag = Symbol('ContentChildFlag')
 export const ContentChildrenFlag = Symbol('ContentChildrenFlag')
 export const SkipSelfFlag = Symbol('SkipSelfFlag')
 
-function decorator(opts, key, value = true) {
+export function decorator(opts, key, value = true) {
     if(!opts) {
         throw new Error(`opts reference error: ${opts}`)
     }
@@ -390,6 +390,9 @@ export function ContentChildren(token) {
 }
 export function SkipSelf(token) {
     return decorator(token, SkipSelfFlag)
+}
+export function Bridge(token, injector) {
+    return decorator(token, 'proxyBridge', injector)
 }
 
 function getComponentDesc(vm, paths = []) {
